@@ -1,4 +1,5 @@
 //This is the updated (November 2020) version of huh.js from Danielle Wang (2017)
+
 var CircularDoublyLinkedList, Node, PriorityQueue, SLAV,
   indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
