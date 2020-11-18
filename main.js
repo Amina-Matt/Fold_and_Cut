@@ -1815,6 +1815,8 @@ isReflex = function(v) {
   }
 };
 
+
+//Modified angle bisector function
 angleBisector = function(vert, inDirSeg, outDirSeg) {
   var bisector, bisectorDir, theta, x, y;
   if (inDirSeg != null && outDirSeg != null){
