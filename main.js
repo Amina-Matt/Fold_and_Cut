@@ -1445,17 +1445,17 @@ computeEvents = function(mySLAV, node, pq, infEdges) {
   var I, allCandidates, allEdgeEvents, dE, dS, i, j, len, len1, ref, ref1, splitPoint, v;
   v = node.content;
   allEdgeEvents = computeI(mySLAV, node);
-  // for (i = 0, len = allEdgeEvents.length; i < len; i++) {
-  //   ref = allEdgeEvents[i], I = ref[0], dE = ref[1];
-  //   pq.add(I, dE);
-  // }
-  // //if (isReflex(v)) {
-    // allCandidates = computeB(mySLAV, node);
-    // for (j = 0, len1 = allCandidates.length; j < len1; j++) {
-    //   ref1 = allCandidates[j], splitPoint = ref1[0], dS = ref1[1];
-    //   pq.add(splitPoint, dS);
-    // }
-  // }
+  for (i = 0, len = allEdgeEvents.length; i < len; i++) {
+     ref = allEdgeEvents[i], I = ref[0], dE = ref[1];
+     pq.add(I, dE);
+  }
+  if (isReflex(v)) {
+    allCandidates = computeB(mySLAV, node);
+    for (j = 0, len1 = allCandidates.length; j < len1; j++) {
+      ref1 = allCandidates[j], splitPoint = ref1[0], dS = ref1[1];
+      pq.add(splitPoint, dS);
+    }
+  }
 };
 //use computeI 
 //use computeB
@@ -1556,6 +1556,7 @@ computeB = function(mySLAV, node) {
   }
   return candidates;
 };
+//uses weakTestOpposite
 
 testOpposite = function(node, testNode) {
   var B, X, d, inV, lineInV, lineOutU, lineOutV, outU, outV, p, q, r, rayOutU, u, v, w;
@@ -1599,20 +1600,24 @@ weakTestOpposite = function(node, testNode) {
   q = v.point;
   outV = v.outEdge;
   inV = v.inEdge;
+  //treat cases with null edge
   lineOutV = line(outV);
   lineInV = line(inV);
   u = testNode.content;
   w = testNode.succ.content;
   p = u.point;
+  //what if no outEdge
   outU = u.outEdge;
   rayOutU = new LineOrRay(p, p.plus(outU.dir()), true);
   lineOutU = line(outU);
+  //what is succ or pred content == null
   if (setIntersect([p, w.point], [q, node.succ.content.point, node.pred.content.point]) != null) {
     return null;
   }
   if (side(q, outU) === "right") {
     return null;
   }
+  //line
   l = line(outU);
   rayInV = new LineOrRay(q, q.plus(inV.dir()), true);
   reverseRayOutV = new LineOrRay(q, q.minus(outV.dir()), true);
@@ -1630,6 +1635,9 @@ weakTestOpposite = function(node, testNode) {
   }
   return null;
 };
+
+
+
 var stepTwo;
 
 stepTwo = function(mySLAV, pq, processed, skelEdges, skelVtxs, infEdges) {
