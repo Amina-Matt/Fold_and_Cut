@@ -1467,50 +1467,78 @@ computeI = function(mySLAV, node) {
   u = node.pred.content;
   w = node.succ.content;
   
-  // //add initial vertex case
-  // if (v.inEdge == null){
-  //   e = line(v.outEdge);
-  //   I1 = intersect(v.bbbisector()[0], w.bbbisector());
-  //   I2 = intersect(v.bbbisector()[1], w.bbbisector());
-  //   if (I1 != null) {
-  //     d1 = dist(I1, e);
-  //     allEdgeEvents.push([["e", I1, node, node.succ], d1]);
-  //   }
-  //   if (I2 != null) {
-  //     d2 = dist(I2, e);
-  //     allEdgeEvents.push([["e", I2, node, node.succ], d2]);
-  //   }
-  // }
-  // //add initial vertex case
-  // if (v.outEdge == null){
-  //   e = line(v.inEdge);
-  //   I1 = intersect(v.bbbisector()[0], u.bbbisector());
-  //   I2 = intersect(v.bbbisector()[1], u.bbbisector());
-  //   if (I1 != null) {
-  //     d1 = dist(I1, e);
-  //     allEdgeEvents.push([["e", I1, node.pred, node], d1]);
-  //   }
-  //   if (I2 != null) {
-  //     d2 = dist(I2, e);
-  //     allEdgeEvents.push([["e", I2, node.pred, node], d2]);
-  //   } 
-  // }
-  //general case
-  if (v.inEdge != null && v.outEdge != null){
-    e = line(v.inEdge);
-    I1 = intersect(u.bbbisector(), v.bbbisector());
-    I2 = intersect(v.bbbisector(), w.bbbisector());
+  //add initial vertex case
+  if (v.inEdge == null){
+    e = line(v.outEdge);
+    I1 = intersect(v.bbbisector()[0], w.bbbisector());
+    I2 = intersect(v.bbbisector()[1], w.bbbisector());
     if (I1 != null) {
       d1 = dist(I1, e);
-      allEdgeEvents.push([["e", I1, node.pred, node], d1]);
+      allEdgeEvents.push([["e", I1, node, node.succ], d1]);
     }
     if (I2 != null) {
       d2 = dist(I2, e);
       allEdgeEvents.push([["e", I2, node, node.succ], d2]);
     }
   }
-  return [test3]
-  //return allEdgeEvents;
+  //add initial vertex case
+  if (v.outEdge == null){
+    e = line(v.inEdge);
+    I1 = intersect(v.bbbisector()[0], u.bbbisector());
+    I2 = intersect(v.bbbisector()[1], u.bbbisector());
+    if (I1 != null) {
+      d1 = dist(I1, e);
+      allEdgeEvents.push([["e", I1, node.pred, node], d1]);
+    }
+    if (I2 != null) {
+      d2 = dist(I2, e);
+      allEdgeEvents.push([["e", I2, node.pred, node], d2]);
+    } 
+  }
+  //general case
+  if (v.inEdge != null && v.outEdge != null){
+    e = line(v.inEdge);
+    //Case where the vertex from inEdge is terminal
+    if (u.bbbisector().length >=2) {
+        bis = u.bbbisector();
+        I1array= bis.map(bis => intersect(bis,v.bbbisector()));
+        //Push all the intersections
+        for  (i = 0, len = I1array.length; i < len; i++) {
+          I1=I1array[i];
+          if (I1 != null) {
+            d1 = dist(I1, e);
+            allEdgeEvents.push([["e", I1, node.pred, node], d1]);
+          }
+        }
+    }else{
+      I1 = intersect(u.bbbisector(), v.bbbisector());
+      if (I1 != null) {
+        d1 = dist(I1, e);
+        allEdgeEvents.push([["e", I1, node.pred, node], d1]);
+      }
+    }
+    
+     //Case where the vertex of outEdge is terminal
+    if (w.bbbisector().length >=2) {
+      bis=w.bbbisector();
+      I2array= bis.map(bis => intersect(v.bbbisector(),bis));
+      //Push all the intersections
+      for  (i = 0, len = I2array.length; i < len; i++) {
+        I2=I2array[i];
+        if (I2 != null) {
+          d2 = dist(I2, e);
+          allEdgeEvents.push([["e", I2, node, node.succ], d2]);
+        }
+      }
+    }else{
+    I2 = intersect(v.bbbisector(), w.bbbisector());
+      if (I2 != null) {
+        d2 = dist(I2, e);
+        allEdgeEvents.push([["e", I2, node, node.succ], d2]);
+      }
+    }
+  }
+  return allEdgeEvents;
 };
 
 
