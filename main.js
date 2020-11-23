@@ -1457,6 +1457,8 @@ computeEvents = function(mySLAV, node, pq, infEdges) {
     }
   }
 };
+//use computeI 
+//use computeB
 
 computeI = function(mySLAV, node) {
   var I1, I2, allEdgeEvents, d1, d2, e, u, v, w;
@@ -1464,22 +1466,37 @@ computeI = function(mySLAV, node) {
   v = node.content;
   u = node.pred.content;
   w = node.succ.content;
+  //add initial vertex case
+  if (v.inEdge === null){
+    //e = line(v.inEdge);
+    //I1 = intersect(u.bbbisector(), v.bbbisector());
+    I1 = intersect(v.bbbisector()[0], w.bbbisector());
+    I1 = intersect(v.bbbisector()[1], w.bbbisector());
+    if (I1 != null) {
+      d1 = dist(I1, e);
+      allEdgeEvents.push([["e", I1, node, node.succ], d1]);
+    }
+    if (I2 != null) {
+      d2 = dist(I2, e);
+      allEdgeEvents.push([["e", I2, node, node.succ], d2]);
+    }
+
+
+  if (v.inEdge != null){
   e = line(v.inEdge);
   I1 = intersect(u.bbbisector(), v.bbbisector());
   I2 = intersect(v.bbbisector(), w.bbbisector());
   if (I1 != null) {
     d1 = dist(I1, e);
-  }
-  if (I2 != null) {
-    d2 = dist(I2, e);
-  }
-  if (I1 != null) {
     allEdgeEvents.push([["e", I1, node.pred, node], d1]);
   }
   if (I2 != null) {
+    d2 = dist(I2, e);
     allEdgeEvents.push([["e", I2, node, node.succ], d2]);
   }
-  return allEdgeEvents;
+  
+  return [e,I1,I2]
+  //return allEdgeEvents;
 };
 
 computeB = function(mySLAV, node) {
@@ -1755,7 +1772,7 @@ Vertex = (function() {
   return Vertex;
 
 })();
-
+//What to do when we don't have a segment, i.e. inEdge = null
 line = function(segment) {
   if (segment.isRay != null) {
     return new LineOrRay(segment.origin, segment.origin.plus(segment.dir), false);
