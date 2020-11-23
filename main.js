@@ -1468,10 +1468,9 @@ computeI = function(mySLAV, node) {
   w = node.succ.content;
   //add initial vertex case
   if (v.inEdge === null){
-    //e = line(v.inEdge);
-    //I1 = intersect(u.bbbisector(), v.bbbisector());
+    e = line(v.outEdge);
     I1 = intersect(v.bbbisector()[0], w.bbbisector());
-    I1 = intersect(v.bbbisector()[1], w.bbbisector());
+    I2 = intersect(v.bbbisector()[1], w.bbbisector());
     if (I1 != null) {
       d1 = dist(I1, e);
       allEdgeEvents.push([["e", I1, node, node.succ], d1]);
@@ -1480,24 +1479,39 @@ computeI = function(mySLAV, node) {
       d2 = dist(I2, e);
       allEdgeEvents.push([["e", I2, node, node.succ], d2]);
     }
-
-
-  if (v.inEdge != null){
-  e = line(v.inEdge);
-  I1 = intersect(u.bbbisector(), v.bbbisector());
-  I2 = intersect(v.bbbisector(), w.bbbisector());
-  if (I1 != null) {
-    d1 = dist(I1, e);
-    allEdgeEvents.push([["e", I1, node.pred, node], d1]);
   }
-  if (I2 != null) {
-    d2 = dist(I2, e);
-    allEdgeEvents.push([["e", I2, node, node.succ], d2]);
+   //add initial vertex case
+  if (v.outEdge === null){
+    e = line(v.inEdge);
+    I1 = intersect(v.bbbisector()[0], u.bbbisector());
+    I2 = intersect(v.bbbisector()[1], u.bbbisector());
+    if (I1 != null) {
+      d1 = dist(I1, e);
+      allEdgeEvents.push([["e", I1, node.pred, node], d1]);
+    }
+    if (I2 != null) {
+      d2 = dist(I2, e);
+      allEdgeEvents.push([["e", I2, node.pred, node], d2]);
+    } 
   }
-  
-  return [e,I1,I2]
-  //return allEdgeEvents;
+  //general case
+  if (v.inEdge != null && v.outEdge != null){
+    e = line(v.inEdge);
+    I1 = intersect(u.bbbisector(), v.bbbisector());
+    I2 = intersect(v.bbbisector(), w.bbbisector());
+    if (I1 != null) {
+      d1 = dist(I1, e);
+      allEdgeEvents.push([["e", I1, node.pred, node], d1]);
+    }
+    if (I2 != null) {
+      d2 = dist(I2, e);
+      allEdgeEvents.push([["e", I2, node, node.succ], d2]);
+    }
+  }
+  return allEdgeEvents;
 };
+
+
 
 computeB = function(mySLAV, node) {
   var B, candidates, d, i, len, outU, ref, ref1, testNode;
