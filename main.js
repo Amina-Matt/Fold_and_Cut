@@ -1445,17 +1445,17 @@ computeEvents = function(mySLAV, node, pq, infEdges) {
   var I, allCandidates, allEdgeEvents, dE, dS, i, j, len, len1, ref, ref1, splitPoint, v;
   v = node.content;
   allEdgeEvents = computeI(mySLAV, node);
-  for (i = 0, len = allEdgeEvents.length; i < len; i++) {
-    ref = allEdgeEvents[i], I = ref[0], dE = ref[1];
-    pq.add(I, dE);
-  }
-  if (isReflex(v)) {
-    allCandidates = computeB(mySLAV, node);
-    for (j = 0, len1 = allCandidates.length; j < len1; j++) {
-      ref1 = allCandidates[j], splitPoint = ref1[0], dS = ref1[1];
-      pq.add(splitPoint, dS);
-    }
-  }
+  // for (i = 0, len = allEdgeEvents.length; i < len; i++) {
+  //   ref = allEdgeEvents[i], I = ref[0], dE = ref[1];
+  //   pq.add(I, dE);
+  // }
+  // //if (isReflex(v)) {
+    // allCandidates = computeB(mySLAV, node);
+    // for (j = 0, len1 = allCandidates.length; j < len1; j++) {
+    //   ref1 = allCandidates[j], splitPoint = ref1[0], dS = ref1[1];
+    //   pq.add(splitPoint, dS);
+    // }
+  // }
 };
 //use computeI 
 //use computeB
@@ -1466,34 +1466,35 @@ computeI = function(mySLAV, node) {
   v = node.content;
   u = node.pred.content;
   w = node.succ.content;
-  //add initial vertex case
-  if (v.inEdge === null){
-    e = line(v.outEdge);
-    I1 = intersect(v.bbbisector()[0], w.bbbisector());
-    I2 = intersect(v.bbbisector()[1], w.bbbisector());
-    if (I1 != null) {
-      d1 = dist(I1, e);
-      allEdgeEvents.push([["e", I1, node, node.succ], d1]);
-    }
-    if (I2 != null) {
-      d2 = dist(I2, e);
-      allEdgeEvents.push([["e", I2, node, node.succ], d2]);
-    }
-  }
-   //add initial vertex case
-  if (v.outEdge === null){
-    e = line(v.inEdge);
-    I1 = intersect(v.bbbisector()[0], u.bbbisector());
-    I2 = intersect(v.bbbisector()[1], u.bbbisector());
-    if (I1 != null) {
-      d1 = dist(I1, e);
-      allEdgeEvents.push([["e", I1, node.pred, node], d1]);
-    }
-    if (I2 != null) {
-      d2 = dist(I2, e);
-      allEdgeEvents.push([["e", I2, node.pred, node], d2]);
-    } 
-  }
+  
+  // //add initial vertex case
+  // if (v.inEdge == null){
+  //   e = line(v.outEdge);
+  //   I1 = intersect(v.bbbisector()[0], w.bbbisector());
+  //   I2 = intersect(v.bbbisector()[1], w.bbbisector());
+  //   if (I1 != null) {
+  //     d1 = dist(I1, e);
+  //     allEdgeEvents.push([["e", I1, node, node.succ], d1]);
+  //   }
+  //   if (I2 != null) {
+  //     d2 = dist(I2, e);
+  //     allEdgeEvents.push([["e", I2, node, node.succ], d2]);
+  //   }
+  // }
+  // //add initial vertex case
+  // if (v.outEdge == null){
+  //   e = line(v.inEdge);
+  //   I1 = intersect(v.bbbisector()[0], u.bbbisector());
+  //   I2 = intersect(v.bbbisector()[1], u.bbbisector());
+  //   if (I1 != null) {
+  //     d1 = dist(I1, e);
+  //     allEdgeEvents.push([["e", I1, node.pred, node], d1]);
+  //   }
+  //   if (I2 != null) {
+  //     d2 = dist(I2, e);
+  //     allEdgeEvents.push([["e", I2, node.pred, node], d2]);
+  //   } 
+  // }
   //general case
   if (v.inEdge != null && v.outEdge != null){
     e = line(v.inEdge);
@@ -1508,7 +1509,8 @@ computeI = function(mySLAV, node) {
       allEdgeEvents.push([["e", I2, node, node.succ], d2]);
     }
   }
-  return allEdgeEvents;
+  return [test3]
+  //return allEdgeEvents;
 };
 
 
