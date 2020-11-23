@@ -1433,9 +1433,13 @@ stepOneC = function(mySLAV, infEdges) {
     node = ref[i];
     computeEvents(mySLAV, node, pq, infEdges);
   }
-  console.log("HELLOoO");
-  return pq;
+  console.log("in the stepOneC");
+  return ref;
 };
+//create a PriorityQueue object, initialized with allNodes.
+//allNodes
+//computeEvents is bugging
+//PriorityQueue
 
 computeEvents = function(mySLAV, node, pq, infEdges) {
   var I, allCandidates, allEdgeEvents, dE, dS, i, j, len, len1, ref, ref1, splitPoint, v;
@@ -1592,6 +1596,7 @@ straightSkeleton = function(clickSequence) {
     stepTwo(mySLAV, pq, processed, skelEdges, skelVtxs, infEdges);
   }
   ref1 = mySLAV.allNodes();
+  //for each nodes, test if the leftover is in the processed, if not (not processed) go and add the bisector to the list of infEdges
   for (i = 0, len = ref1.length; i < len; i++) {
     leftOver = ref1[i];
     if (!(indexOf.call(processed, leftOver) >= 0)) {
