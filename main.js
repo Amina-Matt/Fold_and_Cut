@@ -1607,9 +1607,13 @@ weakTestOpposite = function(node, testNode) {
   inV = v.inEdge;
   //edge of interest (e is between u and w)
   u = testNode.content;
-  w = testNode.succ.content;//
+  //If u is a terminal vertex there isn't any edge to test
+  if (u.outEdge === null){
+    return null;
+  }
+  w = testNode.succ.content;
   p = u.point;
-  outU = u.outEdge;//
+  outU = u.outEdge;
   rayOutU = new LineOrRay(p, p.plus(outU.dir()), true);//
   lineOutU = line(outU);//
   
