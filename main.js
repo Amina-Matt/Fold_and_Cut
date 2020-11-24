@@ -1628,14 +1628,14 @@ weakTestOpposite = function(node, testNode) {
   if (side(q, outU) === "right") {
     return null;
   }
-  //line
-  l = line(outU);
-  lineOutV = line(outV);
-  rayInV = new LineOrRay(q, q.plus(inV.dir()), true);
-  reverseRayOutV = new LineOrRay(q, q.minus(outV.dir()), true);
-  if (!(intersect(l, rayInV) != null) || !(intersect(l, reverseRayOutV) != null)) {
-    return null;
-  }
+  // //line
+  // l = line(outU);
+  // lineOutV = line(outV);
+  // rayInV = new LineOrRay(q, q.plus(inV.dir()), true);
+  // reverseRayOutV = new LineOrRay(q, q.minus(outV.dir()), true);
+  // if (!(intersect(l, rayInV) != null) || !(intersect(l, reverseRayOutV) != null)) {
+  //   return null;
+  // }
 
   //For a terminal vertex v, the property bbbisector is an array of two bisector
   if (v.bbbisector().length>0){
