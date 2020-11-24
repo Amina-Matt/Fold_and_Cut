@@ -1459,6 +1459,7 @@ computeEvents = function(mySLAV, node, pq, infEdges) {
 };
 //use computeI 
 //use computeB
+//use isReflex
 
 computeI = function(mySLAV, node) {
   var I1, I2, allEdgeEvents, d1, d2, e, u, v, w;
@@ -1706,6 +1707,7 @@ straightSkeleton = function(clickSequence) {
       infEdges.push(leftOver.content.bbbisector());
     }
   }
+  console.log('Here here')
   return [skelEdges, skelVtxs, infEdges, gVtxs, gEdges];
 };
 var DirectedSegment, GraphEdge, LineOrRay, Point, Vertex, angle, angleBisector, dist, foot, intersect, isReflex, line, perp, reflect;
@@ -1917,11 +1919,15 @@ angle = function(inDirSeg, outDirSeg) {
 };
 
 isReflex = function(v) {
-  if (angle(v.inEdge, v.outEdge) > Math.PI) {
+  if (v.inEdge == null || v.outEdge == null){
     return true;
-  } else {
-    return false;
+  }else{
+    if (angle(v.inEdge, v.outEdge) > Math.PI) {
+      return true;
+    } else {
+      return false;
   }
+}
 };
 
 
