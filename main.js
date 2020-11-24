@@ -1600,7 +1600,7 @@ testOpposite = function(node, testNode) {
 //dist
 
 weakTestOpposite = function(node, testNode) {
-  var B, X, d, inV, l, lineInV, lineOutU, lineOutV, outU, outV, p, q, r, rayInV, rayOutU, reverseRayOutV, u, v, w;
+  var B, X, d, inV, l, lineInV, lineOutU, lineOutV, outU, outV, p, q, r, rayInV, rayOutU, reverseRayOutV, u, v, w, list;
   v = node.content;
   q = v.point;
   outV = v.outEdge;
@@ -1618,7 +1618,10 @@ weakTestOpposite = function(node, testNode) {
   lineOutU = line(outU);//
   
   //setIntersect tests if there are points in both the opposite and the set 
-  if (setIntersect([p, w.point], [q, node.succ.content.point, node.pred.content.point]) != null) {
+  list = [q];
+  if(node.succ != null){list.push(node.succ.content.point)};
+  if(node.pred != null){list.push(node.pred.content.point)};
+  if (setIntersect([p, w.point], list) != null) {
     return null;
   }
   //Side tests if q is in the open or closed 
@@ -1633,7 +1636,6 @@ weakTestOpposite = function(node, testNode) {
   if (!(intersect(l, rayInV) != null) || !(intersect(l, reverseRayOutV) != null)) {
     return null;
   }
-  //Test for case where parallel or behind
 
   //For a terminal vertex v, the property bbbisector is an array of two bisector
   if (v.bbbisector().length>0){
