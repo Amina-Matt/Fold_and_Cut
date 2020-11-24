@@ -1593,6 +1593,11 @@ testOpposite = function(node, testNode) {
   }
   return null;
 };
+//use setIntersect
+//use intersect
+//angleBisector
+//side
+//dist
 
 weakTestOpposite = function(node, testNode) {
   var B, X, d, inV, l, lineInV, lineOutU, lineOutV, outU, outV, p, q, r, rayInV, rayOutU, reverseRayOutV, u, v, w;
@@ -1600,38 +1605,59 @@ weakTestOpposite = function(node, testNode) {
   q = v.point;
   outV = v.outEdge;
   inV = v.inEdge;
-  //treat cases with null edge
-  lineOutV = line(outV);
-  lineInV = line(inV);
+  //edge of interest (e is between u and w)
   u = testNode.content;
-  w = testNode.succ.content;
+  w = testNode.succ.content;//
   p = u.point;
-  //what if no outEdge
-  outU = u.outEdge;
-  rayOutU = new LineOrRay(p, p.plus(outU.dir()), true);
-  lineOutU = line(outU);
-  //what is succ or pred content == null
+  outU = u.outEdge;//
+  rayOutU = new LineOrRay(p, p.plus(outU.dir()), true);//
+  lineOutU = line(outU);//
+  
+  //setIntersect tests if there are points in both the opposite and the set 
   if (setIntersect([p, w.point], [q, node.succ.content.point, node.pred.content.point]) != null) {
     return null;
   }
+  //Side tests if q is in the open or closed 
   if (side(q, outU) === "right") {
     return null;
   }
   //line
   l = line(outU);
+  lineOutV = line(outV);
   rayInV = new LineOrRay(q, q.plus(inV.dir()), true);
   reverseRayOutV = new LineOrRay(q, q.minus(outV.dir()), true);
   if (!(intersect(l, rayInV) != null) || !(intersect(l, reverseRayOutV) != null)) {
     return null;
   }
-  if ((intersect(v.bbbisector(), lineOutU) != null) && (intersect(lineInV, lineOutU) != null) && (intersect(lineOutV, lineOutU) != null)) {
-    X = intersect(lineInV, lineOutU);
-    r = angleBisector(X, inV, outU);
-    B = intersect(r, v.bbbisector());
-  }
-  if (B != null) {
-    d = dist(B, outV);
-    return [B, outU, d];
+  //Test for case where parallel or behind
+
+  //For a terminal vertex v, the property bbbisector is an array of two bisector
+  if (v.bbbisector().length>0){
+    for (var vBis of v.bbbisector()){
+      //a terminal edge has by definition an null edge. Thus we will make the calculations with the other edge.
+    ( inV === null ) ? (edgeV = v.outEdge ) : (edgeV = v.inEdge);
+    lineV = line(edgeV);
+      if ((intersect(vBis, lineOutU) != null) && (intersect(lineV, lineOutU) != null)) {
+        X = intersect(lineV, lineOutU);
+        r = angleBisector(X, edgeV, outU);
+        B = intersect(r, vBis);
+      }
+      if (B != null) {
+        d = dist(B, edgeV);
+        return [B, outU, d];
+      }
+    }
+  }else{
+    lineInV = line(inV);
+    if ((intersect(v.bbbisector(), lineOutU) != null) && (intersect(lineInV, lineOutU) != null) && (intersect(lineOutV, lineOutU) != null)) {
+      X = intersect(lineInV, lineOutU);
+      r = angleBisector(X, inV, outU);
+      B = intersect(r, v.bbbisector());
+    }
+    if (B != null) {
+      d = dist(B, outV);
+      return  [B, outU, d];
+    }
   }
   return null;
 };
@@ -2662,6 +2688,7 @@ incident = function(cPV, cPE) {
   return false;
 };
 
+//if a is into b
 setIntersect = function(A, B) {
   var a, k, len;
   for (k = 0, len = A.length; k < len; k++) {
@@ -2682,6 +2709,7 @@ otherVertex = function(cPV, cPE) {
 };
 var inside, side;
 
+//Side indicate if a point is inside the polygon (right) or outside in the open half-plane (left)
 side = function(point, dirSeg) {
   var d, endpt1, endpt2, ref;
   if ((dirSeg.isRay != null) && dirSeg.isRay) {
