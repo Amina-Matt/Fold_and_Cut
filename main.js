@@ -1614,9 +1614,9 @@ weakTestOpposite = function(node, testNode) {
   w = testNode.succ.content;
   p = u.point;
   outU = u.outEdge;
-  rayOutU = new LineOrRay(p, p.plus(outU.dir()), true);//
-  lineOutU = line(outU);//
+  rayOutU = new LineOrRay(p, p.plus(outU.dir()), true);
   
+  lineOutU = line(outU);//
   //setIntersect tests if there are points in both the opposite and the set 
   list = [q];
   if(node.succ != null){list.push(node.succ.content.point)};
@@ -1624,6 +1624,7 @@ weakTestOpposite = function(node, testNode) {
   if (setIntersect([p, w.point], list) != null) {
     return null;
   }
+
   //Side tests if q is in the open or closed 
   if (side(q, outU) === "right") {
     return null;
@@ -1650,11 +1651,12 @@ weakTestOpposite = function(node, testNode) {
       }
       if (B != null) {
         d = dist(B, edgeV);
-        return [B, outU, d];
+        return [B, outU, d];  
       }
     }
   }else{
     lineInV = line(inV);
+    lineOutV = line(outV);
     if ((intersect(v.bbbisector(), lineOutU) != null) && (intersect(lineInV, lineOutU) != null) && (intersect(lineOutV, lineOutU) != null)) {
       X = intersect(lineInV, lineOutU);
       r = angleBisector(X, inV, outU);
