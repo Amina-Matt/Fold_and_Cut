@@ -247,12 +247,12 @@ SLAV = (function() {
      for (k = 0, len1 = ref1.length; k < len1; k++) {
         element = ref1[k];
         //add condition for planargraph
-        if (element.outDirSeg != null){
+        if ((element.outEdge) != null){
         E.push(element.outEdge.undirect());
         }
       }
     }
-    return element;
+    return E;
   };
 
   SLAV.prototype.allNodes = function() {
@@ -1415,11 +1415,11 @@ stepOneAB = function (clickSeq) {
     }
   }
 mySLAV.orient();
-//gEdges = mySLAV.allEdges();
-//copySLAV = mySLAV.copy();
-//copySLAV.reverse();
-//mySLAV.join(copySLAV);
-return [mySLAV, gVtxs, gEdges,LAV];
+gEdges = mySLAV.allEdges();
+copySLAV = mySLAV.copy();
+copySLAV.reverse();
+mySLAV.join(copySLAV);
+return [mySLAV, gVtxs, gEdges];
 };
 
 // ---
@@ -1447,12 +1447,14 @@ computeEvents = function(mySLAV, node, pq, infEdges) {
   for (i = 0, len = allEdgeEvents.length; i < len; i++) {
      ref = allEdgeEvents[i], I = ref[0], dE = ref[1];
      pq.add(I, dE);
+     console.log(I,dE);
   }
   if (isReflex(v)) {
     allCandidates = computeB(mySLAV, node);
     for (j = 0, len1 = allCandidates.length; j < len1; j++) {
       ref1 = allCandidates[j], splitPoint = ref1[0], dS = ref1[1];
       pq.add(splitPoint, dS);
+      console.log(splitPoint,dS);
     }
   }
 };
@@ -1630,13 +1632,19 @@ weakTestOpposite = function(node, testNode) {
     return null;
   }
   // //line
-  // l = line(outU);
-  // lineOutV = line(outV);
-  // rayInV = new LineOrRay(q, q.plus(inV.dir()), true);
-  // reverseRayOutV = new LineOrRay(q, q.minus(outV.dir()), true);
-  // if (!(intersect(l, rayInV) != null) || !(intersect(l, reverseRayOutV) != null)) {
-  //   return null;
-  // }
+  l = line(outU);
+  if (outV != null){
+    reverseRayOutV = new LineOrRay(q, q.minus(outV.dir()), true);
+    if (!(intersect(l, reverseRayOutV) != null)) {
+      return null;
+    }
+  }
+  if (inV != null){
+      rayInV = new LineOrRay(q, q.plus(inV.dir()), true);
+    if (!(intersect(l, rayInV) != null)) {
+      return null;
+    }
+  }
 
   //For a terminal vertex v, the property bbbisector is an array of two bisector
   if (v.bbbisector().length>0){
@@ -1695,8 +1703,12 @@ straightSkeleton = function(clickSequence) {
   processed = [];
   ref = stepOneAB(clickSequence), mySLAV = ref[0], gVtxs = ref[1], gEdges = ref[2];
   console.log('Done stepOneAB in straight skeleton function');
+  console.log('StepOneAB returns:');
+  console.log(ref);
   pq = stepOneC(mySLAV, infEdges);
   console.log('Done stepOneC in straight skeleton function');
+  console.log('StepOneC returns:');
+  console.log(pq);
   while (pq.length() !== 0) {
     stepTwo(mySLAV, pq, processed, skelEdges, skelVtxs, infEdges);
   }
