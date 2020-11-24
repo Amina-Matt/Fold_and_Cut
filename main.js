@@ -1433,12 +1433,11 @@ stepOneC = function(mySLAV, infEdges) {
     node = ref[i];
     computeEvents(mySLAV, node, pq, infEdges);
   }
-  console.log("in the stepOneC");
-  return ref;
+  return pq;
 };
 //create a PriorityQueue object, initialized with allNodes.
 //allNodes
-//computeEvents is bugging
+//computeEvents 
 //PriorityQueue
 
 computeEvents = function(mySLAV, node, pq, infEdges) {
@@ -1695,7 +1694,9 @@ straightSkeleton = function(clickSequence) {
   infEdges = [];
   processed = [];
   ref = stepOneAB(clickSequence), mySLAV = ref[0], gVtxs = ref[1], gEdges = ref[2];
+  console.log('Done stepOneAB in straight skeleton function');
   pq = stepOneC(mySLAV, infEdges);
+  console.log('Done stepOneC in straight skeleton function');
   while (pq.length() !== 0) {
     stepTwo(mySLAV, pq, processed, skelEdges, skelVtxs, infEdges);
   }
