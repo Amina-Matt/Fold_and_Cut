@@ -782,6 +782,7 @@ var edgeHandle, edgeTwoC, edgeTwoD, edgeTwoE, edgeTwoF,
 
 edgeHandle = function(mySLAV, pq, I, processed, skelEdges, skelVtxs, infEdges) {
   var N, e, endpt1, endpt2, error1, i, j, len, len1, ref, ref1, v, x, y;
+  //Takes Va and Vb of I and check if processed return
   if ((ref = I[2], indexOf.call(processed, ref) >= 0) || (ref1 = I[3], indexOf.call(processed, ref1) >= 0)) {
     return;
   }
@@ -811,7 +812,26 @@ edgeHandle = function(mySLAV, pq, I, processed, skelEdges, skelVtxs, infEdges) {
   }
   return edgeTwoF(mySLAV, N, pq, infEdges);
 };
+//use indexOf.call
+//use edgeTwoC
+//use edgeTwoD
+//use edgeTwoE
+//use beginPath
+//use arc
+//use stroke
+//use moveTo
+//use lineTo
+//use stroke
+//use edgeTwoF
 
+
+
+
+// function edgeTwoC checks if I is a peak of roof
+// # if it is, return true and add 3 edges to skelEdges and a fancyVertex to skelVtxs
+// # and we don't need to do steps d - f
+// # otherwise it returns false
+// # also adds I's parents to processed
 edgeTwoC = function(mySLAV, I, processed, skelEdges, skelVtxs) {
   var Na, Nb, Nc, Pa, Pb, Pc, aOut, bOut, cOut;
   Na = I[2];
@@ -836,6 +856,7 @@ edgeTwoC = function(mySLAV, I, processed, skelEdges, skelVtxs) {
   return false;
 };
 
+//if simple edge event add the two edges from the intersection point to the initial vertices to the skeleton
 edgeTwoD = function(I, skelEdges) {
   var Na, Nb, Pa, Pb;
   Na = I[2];
@@ -1254,6 +1275,9 @@ splitHandle = function(mySLAV, pq, I, processed, skelEdges, skelVtxs, infEdges) 
   }
   return splitTwoF(mySLAV, N1, N2, pq, infEdges);
 };
+//use splitTwoD
+//use splitTwoE
+//use splitTwoF
 
 splitTwoD = function(I, skelEdges) {
   var N, P;
@@ -1684,6 +1708,7 @@ var stepTwo;
 
 stepTwo = function(mySLAV, pq, processed, skelEdges, skelVtxs, infEdges) {
   var I;
+  //last point of pq
   I = pq.pop();
   if (I[0] === "e") {
     return edgeHandle(mySLAV, pq, I, processed, skelEdges, skelVtxs, infEdges);
@@ -1691,6 +1716,11 @@ stepTwo = function(mySLAV, pq, processed, skelEdges, skelVtxs, infEdges) {
     return splitHandle(mySLAV, pq, I, processed, skelEdges, skelVtxs, infEdges);
   }
 };
+//use pop
+//use edgeHandle
+//use splitHandle
+
+
 var straightSkeleton,
   indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
@@ -1702,12 +1732,12 @@ straightSkeleton = function(clickSequence) {
   infEdges = [];
   processed = [];
   ref = stepOneAB(clickSequence), mySLAV = ref[0], gVtxs = ref[1], gEdges = ref[2];
-  console.log('Done stepOneAB in straight skeleton function');
-  console.log('StepOneAB returns:');
-  console.log(ref);
+  //console.log('Done stepOneAB in straight skeleton function');
+  //console.log('StepOneAB returns:');
+  //console.log(ref);
   pq = stepOneC(mySLAV, infEdges);
-  console.log('Done stepOneC in straight skeleton function');
-  console.log('StepOneC returns:');
+  // console.log('Done stepOneC in straight skeleton function');
+  // console.log('StepOneC returns:');
   console.log(pq);
   while (pq.length() !== 0) {
     stepTwo(mySLAV, pq, processed, skelEdges, skelVtxs, infEdges);
@@ -3108,7 +3138,7 @@ a = rect.left;
 b = rect.top;
 
 c = rect.bottom;
-
+//Wait for your document to be loaded
 $(document).ready(function() {
   var CP, clickSeq, gEdges, live, previous, repeat, show, skeletonOnly, start, text;
   clickSeq = ["marker"];
