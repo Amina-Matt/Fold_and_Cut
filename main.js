@@ -823,36 +823,28 @@ edgeHandle = function(mySLAV, pq, I, processed, skelEdges, skelVtxs, infEdges) {
 //use lineTo
 //use stroke
 //use edgeTwoF
-
-
-
-
-// function edgeTwoC checks if I is a peak of roof
-// # if it is, return true and add 3 edges to skelEdges and a fancyVertex to skelVtxs
-// # and we don't need to do steps d - f
-// # otherwise it returns false
-// # also adds I's parents to processed
+var isNodeTerminal;
 
 isNodeTerminal = function(node){
   if (node.content.inEdge === null || node.content.outEdge === null){
-    return true
+    return true;
   }else{
-    return false
+    return false;
   }
-}
+};
 
 edgeTwoC = function(mySLAV, I, processed, skelEdges, skelVtxs) {
   var Na, Nb, Nc, Nd, Pa, Pb, Pc, aOut, bOut, cOut;
   Na = I[2];
-  //If Na is terminal return
-   Na.content.outEdge === null || Na.content.inEdge === null
-  //If pred.Na is terminal return
-
-  Nc = Na.pred;//pred Va
+  Nc = Na.pred; //pred Va
   Nd = Nc.pred; //pred of pred Va
+  Nb = I[3];
+  //Don't try to find a roof if one of the nodes is a terminal nodes
+  if ( isNodeTerminal(Nc) || isNodeTerminal(Nd) || isNodeTerminal(Nb)){
+    return; 
+  }
   Pa = Na.content.point;
   aOut = Na.content.outEdge;
-  Nb = I[3];
   Pb = Nb.content.point;
   bOut = Nb.content.outEdge;
   Pc = Nc.content.point;
