@@ -1295,6 +1295,7 @@ splitHandle = function(mySLAV, pq, I, processed, skelEdges, skelVtxs, infEdges) 
 //use splitTwoF
 
 splitTwoD = function(I, skelEdges) {
+  //new graph edge between intersection I[1] and the vertex itself [2]
   var N, P;
   N = I[2];
   P = N.content.point;
@@ -1599,41 +1600,77 @@ computeB = function(mySLAV, node) {
 };
 //uses weakTestOpposite
 
-testOpposite = function(node, testNode) {
+testOpposite = function (node, testNode) {
   var B, X, d, inV, lineInV, lineOutU, lineOutV, outU, outV, p, q, r, rayOutU, u, v, w;
   v = node.content;
   q = v.point;
-  outV = v.outEdge;
-  inV = v.inEdge;
-  lineOutV = line(outV);
-  lineInV = line(inV);
   u = testNode.content;
   w = testNode.succ.content;
+  //with terminal vertices
+  if(isNodeTerminal(u)){
+    //no edge associated with this vertex
+    return null;
+  }
+  
+  outV = v.outEdge;
+  inV = v.inEdge;
   p = u.point;
   outU = u.outEdge;
   rayOutU = new LineOrRay(p, p.plus(outU.dir()), true);
   lineOutU = line(outU);
-  if (setIntersect([p, w.point], [q, node.succ.content.point, node.pred.content.point]) != null) {
+
+  //setIntersect tests if there are points in both the opposite and the set 
+  list = [q];
+  if (node.succ != null) { list.push(node.succ.content.point) };
+  if (node.pred != null) { list.push(node.pred.content.point) };
+  if (setIntersect([p, w.point], list) != null) {
     return null;
   }
   if (side(q, outU) === "right") {
     return null;
   }
-  if ((intersect(v.bbbisector(), lineOutU) != null) && (intersect(lineInV, lineOutU) != null) && (intersect(lineOutV, lineOutU) != null)) {
-    X = intersect(lineInV, lineOutU);
-    r = angleBisector(X, inV, outU);
-    B = intersect(r, v.bbbisector());
-    if ((B != null) && side(B, rayOutU) === "left") {
-      if (side(B, w.bbbisector()) === "left") {
-        if (side(B, u.bbbisector()) === "right") {
-          d = dist(B, outV);
-          return [B, outU, d];
+  //same as asking is v isTerminal
+  if (v.bbbisector().length > 0) {
+    for (var vBis of v.bbbisector()) {
+      //a terminal edge has by definition an null edge. Thus we will make the calculations with the other edge.
+      (inV === null) ? (edgeV = v.outEdge) : (edgeV = v.inEdge);
+      lineV = line(edgeV);
+      if ((intersect(vBis, lineOutU) != null) && (intersect(lineV, lineOutU) != null)) {
+        X = intersect(lineV, lineOutU);
+        r = angleBisector(X, edgeV, outU);
+        B = intersect(r, vBis);
+        if ((B != null) && side(B, rayOutU) === "left") {
+          //if w is terminal we have two bisectors
+          if (w.bbbisector().length > 0) {
+            for (var wBis of w.bbbisector()) {
+              if (side(B, wBis) === "left") {
+                if (side(B, u.bbbisector()) === "right") {
+                  d = dist(B, edgeV);
+                  return [B, outU, d];
+                }
+              }
+            }
+          }//This loop might return two vertices...
+        }
+      }
+      return null;
+    }
+  } else {
+    if ((intersect(v.bbbisector(), lineOutU) != null) && (intersect(lineInV, lineOutU) != null) && (intersect(lineOutV, lineOutU) != null)) {
+      X = intersect(lineInV, lineOutU);
+      r = angleBisector(X, inV, outU);
+      B = intersect(r, v.bbbisector());
+      if ((B != null) && side(B, rayOutU) === "left") {
+        if (side(B, w.bbbisector()) === "left") {
+          if (side(B, u.bbbisector()) === "right") {
+            d = dist(B, outV);
+            return [B, outU, d];
+          }
         }
       }
     }
-  }
-  return null;
-};
+
+  };
 //use setIntersect
 //use intersect
 //angleBisector
@@ -1670,7 +1707,7 @@ weakTestOpposite = function(node, testNode) {
   if (side(q, outU) === "right") {
     return null;
   }
-  // //line
+  // 
   l = line(outU);
   if (outV != null){
     reverseRayOutV = new LineOrRay(q, q.minus(outV.dir()), true);
