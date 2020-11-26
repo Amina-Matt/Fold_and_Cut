@@ -874,16 +874,20 @@ edgeTwoD = function(I, skelEdges) {
   return skelEdges.push(new GraphEdge(Pb, I[1]));
 };
 
+
 edgeTwoE = function(mySLAV, I, processed, skelVtxs) {
   var N, Na, Nb, Va, Vb, currLAV, fancyVertex, newV;
   Na = I[2];
   Nb = I[3];
   Va = Na.content;
   Vb = Nb.content;
+  //Add Na and Nb to processed nodes
   processed.push(Na);
   processed.push(Nb);
+  // # add a FancyVertex to skelVtxs
   fancyVertex = [I[1], Va.inEdge, Va.outEdge, Vb.outEdge];
   skelVtxs.push(fancyVertex);
+  //get the LAV containing Na and Nb
   currLAV = mySLAV.LAVContaining(Na);
   if (Nb !== Na.succ) {
     console.log("Nb != Na.succ :(");
@@ -892,10 +896,14 @@ edgeTwoE = function(mySLAV, I, processed, skelVtxs) {
     console.log("couldn't find LAV containing " + Na.content.print());
     throw error;
   }
+  //Create a new vertex connected to Va and Vb
+  //note that if Va or Vb is terminal then the null edge is passed to newV
   newV = new Vertex(I[1], Va.inEdge, Vb.outEdge);
+  //insert create a node from the vertex
   N = currLAV.insert(newV, Na.pred);
   currLAV.remove(Na);
   currLAV.remove(Nb);
+  //output the new node
   return N;
 };
 
