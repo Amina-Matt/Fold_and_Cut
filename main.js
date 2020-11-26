@@ -832,18 +832,33 @@ edgeHandle = function(mySLAV, pq, I, processed, skelEdges, skelVtxs, infEdges) {
 // # and we don't need to do steps d - f
 // # otherwise it returns false
 // # also adds I's parents to processed
+
+isNodeTerminal = function(node){
+  if (node.content.inEdge === null || node.content.outEdge === null){
+    return true
+  }else{
+    return false
+  }
+}
+
 edgeTwoC = function(mySLAV, I, processed, skelEdges, skelVtxs) {
-  var Na, Nb, Nc, Pa, Pb, Pc, aOut, bOut, cOut;
+  var Na, Nb, Nc, Nd, Pa, Pb, Pc, aOut, bOut, cOut;
   Na = I[2];
+  //If Na is terminal return
+   Na.content.outEdge === null || Na.content.inEdge === null
+  //If pred.Na is terminal return
+
+  Nc = Na.pred;//pred Va
+  Nd = Nc.pred; //pred of pred Va
   Pa = Na.content.point;
   aOut = Na.content.outEdge;
   Nb = I[3];
   Pb = Nb.content.point;
   bOut = Nb.content.outEdge;
-  Nc = Na.pred;
   Pc = Nc.content.point;
   cOut = Nc.content.outEdge;
-  if (Nc.pred === Nb) {
+  //Check if pred of pred is equal to succ
+  if (Nd === Nb) {
     skelEdges.push(new GraphEdge(Pa, I[1]));
     skelEdges.push(new GraphEdge(Pb, I[1]));
     skelEdges.push(new GraphEdge(Pc, I[1]));
@@ -856,7 +871,7 @@ edgeTwoC = function(mySLAV, I, processed, skelEdges, skelVtxs) {
   return false;
 };
 
-//if simple edge event add the two edges from the intersection point to the initial vertices to the skeleton
+//output two skeleton arcs VaI and VbI
 edgeTwoD = function(I, skelEdges) {
   var Na, Nb, Pa, Pb;
   Na = I[2];
