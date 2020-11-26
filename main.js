@@ -1318,21 +1318,80 @@ splitTwoE = function(mySLAV, I, processed, skelVtxs) {
   if (!(Nc != null)) {
     throw error;
   }
+  //mark the node as processed
   processed.push(N);
   fancyVertex = [I[1], V.inEdge, V.outEdge, dirSeg];
   skelVtxs.push(fancyVertex);
+  //two new vertices
   V1 = new Vertex(I[1], V.inEdge, dirSeg);
   V2 = new Vertex(I[1], dirSeg, V.outEdge);
+  //Case where the vertex splitting is a terminal vertex
+  if (isNodeTerminal(N)) {
+    if (N.content.inEdge === null) {
+      //initial : you don't have  Na, i.e. N pred
+      //create the LAV (part 2) that you can create
+      LAV1 = mySLAV.LAVContaining(N);
+      //Nc is the starting node of opposite edge
+      Nd = Nc.succ;
+      Nb = N.succ;
+      //link new  nodes and adapt their pred/succ to point on them
+      N2 = new Node(Nc, V2, Nb);
+      Nc.succ = N2;
+      Nb.pred = N2;
+      //new list created starting from N1 succ
+      lavb = new CircularDoublyLinkedList();
+      lavb.nodesList.push(N2);
+      newElem = N2.succ;
+      while (newElem !== N2) {
+        lavb.nodesList.push(newElem);
+        newElem = newElem.succ;
+      }
+      lavb.head = N1;
+      //close the new lav
+      lavb.tail = lavb.head.pred;
+
+      //Now you need to take care of the other half part...
+    } else {
+       //terminal : you don't have  Nb, i.e. N succ
+      //create the LAV (part 2) that you can create
+      LAV1 = mySLAV.LAVContaining(N);
+      //Nc is the starting node of opposite edge
+      Nd = Nc.succ;
+      Na = N.pred;
+      //link new  nodes and adapt their pred/succ to point on them
+      N1 = new Node(Na, V1, Nd);
+      Nd.pred = N1;
+      Na.succ = N1;
+      //new list created starting from N1 succ
+      lava = new CircularDoublyLinkedList();
+      lava.nodesList.push(N1);
+      newElem = N1.succ;
+      while (newElem !== N1) {
+        lava.nodesList.push(newElem);
+        newElem = newElem.succ;
+      }
+      lava.head = N1;
+      //close the new lav
+      lava.tail = lava.head.pred;
+
+      //Now you need to take care of the other half part...
+    }
+  }
+
+  //pos of my node
   LAV1 = mySLAV.LAVContaining(N);
+  //Nc is the starting node of opposite edge
   Nd = Nc.succ;
   Na = N.pred;
   Nb = N.succ;
+  //link new  nodes and adapt their pred/succ to point on them
   N1 = new Node(Na, V1, Nd);
   N2 = new Node(Nc, V2, Nb);
   Nd.pred = N1;
   Nc.succ = N2;
   Na.succ = N1;
   Nb.pred = N2;
+  //new list created starting from N1 succ
   lava = new CircularDoublyLinkedList();
   lava.nodesList.push(N1);
   newElem = N1.succ;
@@ -1341,13 +1400,18 @@ splitTwoE = function(mySLAV, I, processed, skelVtxs) {
     newElem = newElem.succ;
   }
   lava.head = N1;
+  //close the new lav
   lava.tail = lava.head.pred;
+
+
   if (indexOf.call(lava.nodesList, N2) >= 0) {
+    //if it is a merge
     LAV2 = mySLAV.LAVContaining(Nd);
     mySLAV.removeLAV(LAV1);
     mySLAV.removeLAV(LAV2);
     mySLAV.pushLAV(lava);
   } else {
+    //create the second list
     lavb = new CircularDoublyLinkedList();
     lavb.nodesList.push(N2);
     newElem = N2.succ;
