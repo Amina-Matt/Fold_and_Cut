@@ -1376,6 +1376,7 @@ splitTwoE = function(mySLAV, I, processed, skelVtxs) {
 
       //Now you need to take care of the other half part...
     }
+    return [N1, N2];
   }
 
   //pos of my node
@@ -1735,6 +1736,7 @@ testOpposite = function (node, testNode) {
     }
 
   };
+}
 //use setIntersect
 //use intersect
 //angleBisector
@@ -3243,10 +3245,12 @@ exportToFOLD = function(CP, CPFaces, facesRelations) {
   s = s + ']}';
   return s;
 };
+
+//Start jquery
 var FOLD, a, b, c, rect;
 
 FOLD = require('fold');
-
+//canvas comes from : var canvas = document.getElementById("myCanvas");
 rect = canvas.getBoundingClientRect();
 
 a = rect.left;
@@ -3267,21 +3271,25 @@ $(document).ready(function() {
   CP = new CreasePattern();
   gEdges = [];
   text = "";
+  //Buttons initialization
+  //this goes with the button <button id="toggle">Show/hide unused creases</button>
   if (show) {
-    document.getElementById("toggle").innerHTML = "Unused creases ON";
+    //jquery select ID toggle and initialize (or update) its content
+    $("#toggle").html("Unused creases ON");
   } else {
-    document.getElementById("toggle").innerHTML = "Unused creases OFF";
+    $("#toggle").html("Unused creases OFF");
   }
   if (live) {
-    document.getElementById("live").innerHTML = "Live computation ON";
+    $("#live").html("Live computation ON ");
   } else {
-    document.getElementById("live").innerHTML = "Live computation OFF";
+    $("#live").html("Live computation OFF ");
   }
   if (skeletonOnly) {
-    document.getElementById("skeleton").innerHTML = "Skeleton only ON";
+    $("#skeleton").html("Skeleton Only ON ");
   } else {
-    document.getElementById("skeleton").innerHTML = "Skeleton only OFF";
+    $("#skeleton").html("Skeleton only OFF ")
   }
+
   $("#myCanvas").mouseup(function(e) {
     var P, closed, x, y;
     $("#myCanvas").unbind("mousemove");
@@ -3392,6 +3400,7 @@ $(document).ready(function() {
       }
     }
   });
+  //Modify with click
   $("#skeleton").click(function(e) {
     if (skeletonOnly) {
       skeletonOnly = false;
@@ -3404,26 +3413,33 @@ $(document).ready(function() {
       return testOutputFunction(clickSeq, show, skeletonOnly);
     }
   });
+  //Modify with click
   $("#live").click(function(e) {
     if (live) {
       live = false;
-      document.getElementById("live").innerHTML = "Live computation OFF";
+      $("#live").html("Live computation OFF");
     } else {
       live = true;
-      document.getElementById("live").innerHTML = "Live computation ON";
+      $("#live").html("Live computation ON");
     }
     if (live) {
       return testOutputFunction(clickSeq, show, skeletonOnly);
     }
   });
+  //Modify with click
   $("#toggle").click(function(e) {
     if (show) {
       show = false;
+      $("#toggle").html("Unused creases OFF");
     } else {
       show = true;
+      $("#toggle").html("Unused creases ON");
     }
     return testOutputFunction(clickSeq, show, skeletonOnly);
   });
+  
+
+
   $("#myCanvas").mousemove(function(e) {
     var x, y;
     x = e.pageX - a;
