@@ -1,9 +1,9 @@
 //This is the updated (November 2020) version of huh.js from Danielle Wang (2017)
 
 var CircularDoublyLinkedList, Node, PriorityQueue, SLAV,
-  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+  indexOf = [].indexOf || function (item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-Node = (function() {
+Node = (function () {
   function Node(pre, cont, suc) {
     this.pred = pre;
     this.content = cont;
@@ -14,7 +14,7 @@ Node = (function() {
 
 })();
 
-CircularDoublyLinkedList = (function() {
+CircularDoublyLinkedList = (function () {
   function CircularDoublyLinkedList(valuesList) {
     var j, len, val;
     this.nodesList = [];
@@ -26,7 +26,7 @@ CircularDoublyLinkedList = (function() {
     }
   }
 
-  CircularDoublyLinkedList.prototype.push = function(val) {
+  CircularDoublyLinkedList.prototype.push = function (val) {
     if (this.head != null) {
       return this.insert(val, this.tail);
     } else {
@@ -38,7 +38,7 @@ CircularDoublyLinkedList = (function() {
     }
   };
 
-  CircularDoublyLinkedList.prototype.insert = function(val, prevnode) {
+  CircularDoublyLinkedList.prototype.insert = function (val, prevnode) {
     var nood, postnode;
     nood = new Node(prevnode, val, prevnode.succ);
     postnode = prevnode.succ;
@@ -49,7 +49,7 @@ CircularDoublyLinkedList = (function() {
     return nood;
   };
 
-  CircularDoublyLinkedList.prototype.allContents = function() {
+  CircularDoublyLinkedList.prototype.allContents = function () {
     var C, j, len, nood, ref;
     C = [];
     ref = this.nodesList;
@@ -60,11 +60,11 @@ CircularDoublyLinkedList = (function() {
     return C;
   };
 
-  CircularDoublyLinkedList.prototype.length = function() {
+  CircularDoublyLinkedList.prototype.length = function () {
     return this.nodesList.length;
   };
 
-  CircularDoublyLinkedList.prototype.remove = function(nood) {
+  CircularDoublyLinkedList.prototype.remove = function (nood) {
     var postnode, prevnode;
     if (this.length() === 0) {
       return;
@@ -86,7 +86,7 @@ CircularDoublyLinkedList = (function() {
     }
   };
 
-  CircularDoublyLinkedList.prototype.reverse = function() {
+  CircularDoublyLinkedList.prototype.reverse = function () {
     var j, len, nood, ref, tmp;
     ref = this.nodesList;
     for (j = 0, len = ref.length; j < len; j++) {
@@ -103,7 +103,7 @@ CircularDoublyLinkedList = (function() {
     return this;
   };
 
-  CircularDoublyLinkedList.prototype.copy = function() {
+  CircularDoublyLinkedList.prototype.copy = function () {
     var copyCDLL, elem;
     copyCDLL = new CircularDoublyLinkedList();
     copyCDLL.push(this.head.content.copy());
@@ -115,14 +115,14 @@ CircularDoublyLinkedList = (function() {
     return copyCDLL;
   };
 
-  CircularDoublyLinkedList.prototype.isInside = function(otherLAV) {
+  CircularDoublyLinkedList.prototype.isInside = function (otherLAV) {
     if (inside(this.head.content.point, otherLAV)) {
       return true;
     }
     return false;
   };
 
-  CircularDoublyLinkedList.prototype.orientation = function() {
+  CircularDoublyLinkedList.prototype.orientation = function () {
     var A, j, len, node, ref, v, w, x1, x2, y1, y2;
     A = 0;
     ref = this.nodesList;
@@ -142,14 +142,14 @@ CircularDoublyLinkedList = (function() {
     return 1;
   };
 
-  CircularDoublyLinkedList.prototype.positiveOrient = function() {
+  CircularDoublyLinkedList.prototype.positiveOrient = function () {
     if (this.orientation() === -1) {
       this.reverse();
     }
     return this;
   };
 
-  CircularDoublyLinkedList.prototype.print = function() {
+  CircularDoublyLinkedList.prototype.print = function () {
     var j, len, nood, ref, s;
     s = " ";
     ref = this.nodesList;
@@ -164,12 +164,12 @@ CircularDoublyLinkedList = (function() {
 
 })();
 
-PriorityQueue = (function() {
+PriorityQueue = (function () {
   function PriorityQueue() {
     this.list = [];
   }
 
-  PriorityQueue.prototype.add = function(content, number) {
+  PriorityQueue.prototype.add = function (content, number) {
     var i, j, ref, resolved;
     if (this.list.length === 0) {
       return this.list.push([content, number]);
@@ -187,17 +187,17 @@ PriorityQueue = (function() {
     }
   };
 
-  PriorityQueue.prototype.pop = function() {
+  PriorityQueue.prototype.pop = function () {
     var I;
     I = this.list.splice(0, 1);
     return I[0][0];
   };
 
-  PriorityQueue.prototype.length = function() {
+  PriorityQueue.prototype.length = function () {
     return this.list.length;
   };
 
-  PriorityQueue.prototype.values = function() {
+  PriorityQueue.prototype.values = function () {
     var contents, i, j, ref, thing;
     contents = [];
     for (i = j = 0, ref = this.list.length - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
@@ -213,13 +213,13 @@ PriorityQueue = (function() {
 
 
 /*	print : ->
-		s = " " 
-		for element in @list 
-			s = s + s[0] + " ; "
-			printing is weird the contents are gonna be weird
+    s = " " 
+    for element in @list 
+      s = s + s[0] + " ; "
+      printing is weird the contents are gonna be weird
  */
 
-SLAV = (function() {
+SLAV = (function () {
   function SLAV(setOfLAVs) {
     this.allLAVs = [];
     if (setOfLAVs != null) {
@@ -227,35 +227,35 @@ SLAV = (function() {
     }
   }
 
-  SLAV.prototype.pushLAV = function(newLAV) {
+  SLAV.prototype.pushLAV = function (newLAV) {
     return this.allLAVs.push(newLAV);
   };
 
-  SLAV.prototype.removeLAV = function(oldLAV) {
+  SLAV.prototype.removeLAV = function (oldLAV) {
     var n;
     n = this.allLAVs.indexOf(oldLAV);
     return this.allLAVs.splice(n, 1);
   };
 
-  SLAV.prototype.allEdges = function() {
+  SLAV.prototype.allEdges = function () {
     var E, element, j, k, lav, len, len1, ref, ref1;
     E = [];
     ref = this.allLAVs;
     for (j = 0, len = ref.length; j < len; j++) {
       lav = ref[j];
-     ref1 = lav.allContents();
-     for (k = 0, len1 = ref1.length; k < len1; k++) {
+      ref1 = lav.allContents();
+      for (k = 0, len1 = ref1.length; k < len1; k++) {
         element = ref1[k];
         //add condition for planargraph
-        if ((element.outEdge) != null){
-        E.push(element.outEdge.undirect());
+        if ((element.outEdge) != null) {
+          E.push(element.outEdge.undirect());
         }
       }
     }
     return E;
   };
 
-  SLAV.prototype.allNodes = function() {
+  SLAV.prototype.allNodes = function () {
     var N, j, k, lav, len, len1, nood, ref, ref1;
     N = [];
     ref = this.allLAVs;
@@ -270,7 +270,7 @@ SLAV = (function() {
     return N;
   };
 
-  SLAV.prototype.printLAVs = function() {
+  SLAV.prototype.printLAVs = function () {
     var j, lav, len, ref, s;
     s = "";
     ref = this.allLAVs;
@@ -281,7 +281,7 @@ SLAV = (function() {
     return s;
   };
 
-  SLAV.prototype.printEdges = function() {
+  SLAV.prototype.printEdges = function () {
     var j, len, ref, s, seg;
     s = "";
     ref = this.allEdges();
@@ -292,7 +292,7 @@ SLAV = (function() {
     return s;
   };
 
-  SLAV.prototype.printContents = function() {
+  SLAV.prototype.printContents = function () {
     var j, len, nood, ref, s;
     s = " ";
     ref = this.allNodes();
@@ -303,7 +303,7 @@ SLAV = (function() {
     return s;
   };
 
-  SLAV.prototype.LAVContaining = function(nood) {
+  SLAV.prototype.LAVContaining = function (nood) {
     var j, lav, len, ref;
     ref = this.allLAVs;
     for (j = 0, len = ref.length; j < len; j++) {
@@ -315,7 +315,7 @@ SLAV = (function() {
     return null;
   };
 
-  SLAV.prototype.reverse = function() {
+  SLAV.prototype.reverse = function () {
     var j, lav, len, ref;
     ref = this.allLAVs;
     for (j = 0, len = ref.length; j < len; j++) {
@@ -325,7 +325,7 @@ SLAV = (function() {
     return this;
   };
 
-  SLAV.prototype.copy = function() {
+  SLAV.prototype.copy = function () {
     var copySLAV, j, lav, len, ref;
     copySLAV = new SLAV();
     ref = this.allLAVs;
@@ -336,7 +336,7 @@ SLAV = (function() {
     return copySLAV;
   };
 
-  SLAV.prototype.join = function(otherSLAV) {
+  SLAV.prototype.join = function (otherSLAV) {
     var j, lav, len, ref;
     ref = otherSLAV.allLAVs;
     for (j = 0, len = ref.length; j < len; j++) {
@@ -346,7 +346,7 @@ SLAV = (function() {
     return this;
   };
 
-  SLAV.prototype.orient = function() {
+  SLAV.prototype.orient = function () {
     var count, i, j, k, l, lav, len, len1, m, n, otherLav, parityArray, ref, ref1, ref2, ref3;
     ref = this.allLAVs;
     for (j = 0, len = ref.length; j < len; j++) {
@@ -379,7 +379,7 @@ SLAV = (function() {
     return this;
   };
 
-  SLAV.prototype.antiOrient = function() {
+  SLAV.prototype.antiOrient = function () {
     this.orient();
     this.reverse();
     return this;
@@ -389,9 +389,9 @@ SLAV = (function() {
 
 })();
 var computePerps, dropPerp, leaveFaceTest,
-  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+  indexOf = [].indexOf || function (item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-computePerps = function(skelEdges, skelVtxs, infEdges, gVtxs, gEdges) {
+computePerps = function (skelEdges, skelVtxs, infEdges, gVtxs, gEdges) {
   var count, e, index, infPerps, j, k, l, len, len1, len2, m, oldInfs, oldSkels, perps, quasiGraphVtxs, quasiSkelVtxs, ray, skelV, skele, skeli, tmpSkeleton, tooManyPerps, type, v;
   perps = [];
   infPerps = [];
@@ -448,7 +448,7 @@ computePerps = function(skelEdges, skelVtxs, infEdges, gVtxs, gEdges) {
   return [skelEdges, tmpSkeleton, infEdges, gVtxs, gEdges, perps, infPerps, quasiSkelVtxs, quasiGraphVtxs, tooManyPerps];
 };
 
-dropPerp = function(ray, v, skelEdges, infEdges, gEdges, perps, infPerps) {
+dropPerp = function (ray, v, skelEdges, infEdges, gEdges, perps, infPerps) {
   var d, dis, edge, edge1, edge2, edgeSet, endpt1, endpt2, ft, gE, iE, j, k, l, len, len1, len2, n, orig, p, pt, ref, ref1, ref2, ref3, reflection, sE, type;
   ref = [null, "none", null, null], pt = ref[0], type = ref[1], dis = ref[2], edge = ref[3];
   for (j = 0, len = gEdges.length; j < len; j++) {
@@ -533,7 +533,7 @@ dropPerp = function(ray, v, skelEdges, infEdges, gEdges, perps, infPerps) {
   return type;
 };
 
-leaveFaceTest = function(v, e, skelVtxs, oldSkels, oldInfs) {
+leaveFaceTest = function (v, e, skelVtxs, oldSkels, oldInfs) {
   var face_edges, face_vertices, fancyV, i, j, k, l, leaving, len, len1, len2, len3, m, o, ray, ref, ref1, ref2, segOrRay, skele, skeli, vert;
   face_vertices = [e.endpt1, e.endpt2];
   for (j = 0, len = skelVtxs.length; j < len; j++) {
@@ -581,7 +581,7 @@ leaveFaceTest = function(v, e, skelVtxs, oldSkels, oldInfs) {
 };
 var convert, replaceVertex;
 
-convert = function(skelEdges, skelVtxs, infEdges, gVtxs, gEdges, perps, infPerps, quasiSkelVtxs, quasiGraphVtxs) {
+convert = function (skelEdges, skelVtxs, infEdges, gVtxs, gEdges, perps, infPerps, quasiSkelVtxs, quasiGraphVtxs) {
   var BL, BR, TL, TR, aa, ab, ac, allVtxs, bVertex, bottom, boundaryEdges, boundaryPerps, boundarySkels, boundaryVtxs, cen, closestEdge, d, distance, e, edge, edges, edgesWithoutComp, i, j, k, l, left, len, len1, len10, len11, len12, len13, len14, len15, len16, len17, len18, len2, len3, len4, len5, len6, len7, len8, len9, m, maxCoordX, maxCoordY, minCoordX, minCoordY, n, o, p, q, quasiGraphVtxsOnly, quasiSkelVtxsOnly, r, ray, right, s, t, tmpCPV, tmpE, top, u, v, vWithComp, vert, vertices, verticesWithComp, w, x, y, z;
   maxCoordX = canvas.width;
   maxCoordY = canvas.height;
@@ -754,7 +754,7 @@ convert = function(skelEdges, skelVtxs, infEdges, gVtxs, gEdges, perps, infPerps
   return new CreasePattern(vertices, edges, cen);
 };
 
-replaceVertex = function(vert, tmpCPV, edgesWithoutComp, perps, vertices) {
+replaceVertex = function (vert, tmpCPV, edgesWithoutComp, perps, vertices) {
   var e, edge, i, j, len, len1;
   for (i = 0, len = edgesWithoutComp.length; i < len; i++) {
     e = edgesWithoutComp[i];
@@ -778,9 +778,9 @@ replaceVertex = function(vert, tmpCPV, edgesWithoutComp, perps, vertices) {
   return vertices.push(tmpCPV);
 };
 var edgeHandle, edgeTwoC, edgeTwoD, edgeTwoE, edgeTwoF,
-  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+  indexOf = [].indexOf || function (item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-edgeHandle = function(mySLAV, pq, I, processed, skelEdges, skelVtxs, infEdges) {
+edgeHandle = function (mySLAV, pq, I, processed, skelEdges, skelVtxs, infEdges) {
   var N, e, endpt1, endpt2, error1, i, j, len, len1, ref, ref1, v, x, y;
   //Takes Va and Vb of I and check if processed return
   if ((ref = I[2], indexOf.call(processed, ref) >= 0) || (ref1 = I[3], indexOf.call(processed, ref1) >= 0)) {
@@ -825,23 +825,23 @@ edgeHandle = function(mySLAV, pq, I, processed, skelEdges, skelVtxs, infEdges) {
 //use edgeTwoF
 var isNodeTerminal;
 
-isNodeTerminal = function(node){
-  if (node.content.inEdge === null || node.content.outEdge === null){
+isNodeTerminal = function (node) {
+  if (node.content.inEdge === null || node.content.outEdge === null) {
     return true;
-  }else{
+  } else {
     return false;
   }
 };
 
-edgeTwoC = function(mySLAV, I, processed, skelEdges, skelVtxs) {
+edgeTwoC = function (mySLAV, I, processed, skelEdges, skelVtxs) {
   var Na, Nb, Nc, Nd, Pa, Pb, Pc, aOut, bOut, cOut;
   Na = I[2];
   Nc = Na.pred; //pred Va
   Nd = Nc.pred; //pred of pred Va
   Nb = I[3];
   //Don't try to find a roof if one of the nodes is a terminal nodes
-  if ( isNodeTerminal(Nc) || isNodeTerminal(Nd) || isNodeTerminal(Nb)){
-    return; 
+  if (isNodeTerminal(Nc) || isNodeTerminal(Nd) || isNodeTerminal(Nb)) {
+    return;
   }
   Pa = Na.content.point;
   aOut = Na.content.outEdge;
@@ -864,7 +864,7 @@ edgeTwoC = function(mySLAV, I, processed, skelEdges, skelVtxs) {
 };
 
 //output two skeleton arcs VaI and VbI
-edgeTwoD = function(I, skelEdges) {
+edgeTwoD = function (I, skelEdges) {
   var Na, Nb, Pa, Pb;
   Na = I[2];
   Nb = I[3];
@@ -875,7 +875,7 @@ edgeTwoD = function(I, skelEdges) {
 };
 
 
-edgeTwoE = function(mySLAV, I, processed, skelVtxs) {
+edgeTwoE = function (mySLAV, I, processed, skelVtxs) {
   var N, Na, Nb, Va, Vb, currLAV, fancyVertex, newV;
   Na = I[2];
   Nb = I[3];
@@ -907,17 +907,17 @@ edgeTwoE = function(mySLAV, I, processed, skelVtxs) {
   return N;
 };
 
-edgeTwoF = function(mySLAV, N, pq, infEdges) {
+edgeTwoF = function (mySLAV, N, pq, infEdges) {
   return computeEvents(mySLAV, N, pq, infEdges);
 };
 var fold, foldCorridor, outputCreasePatternFOLD, outputFoldedStateFOLD,
-  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+  indexOf = [].indexOf || function (item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-outputCreasePatternFOLD = function(CP, CPfaces) {
+outputCreasePatternFOLD = function (CP, CPfaces) {
   return FOLD;
 };
 
-fold = function(CP, shady, root) {
+fold = function (CP, shady, root) {
   var corr, corridors, k, len;
   corridors = computeCorridors(CP);
   for (k = 0, len = corridors.length; k < len; k++) {
@@ -928,7 +928,7 @@ fold = function(CP, shady, root) {
   return CP;
 };
 
-foldCorridor = function(CP, shady, root, corr) {
+foldCorridor = function (CP, shady, root, corr) {
   var P, Q, a, alreadyReflected, b, base, baseOther, basePerp, c, d, doubleFace, face, face1, face2, faceGraphVs, graphV, i, j, k, l, len, len1, len2, len3, m, n, newt, newu, o, p, q, ref, ref1, ref2, ref3, ref4, ref5, ref6, reflectThisFace, results, sharedEdge, sk, t, theta, transformed, u, v, x, xx;
   if (corr.numOfWalls === 1) {
     if (corr.C1 != null) {
@@ -1000,7 +1000,7 @@ foldCorridor = function(CP, shady, root, corr) {
   results = [];
   for (q = 0, len3 = ref6.length; q < len3; q++) {
     face = ref6[q];
-    results.push((function() {
+    results.push((function () {
       var len4, r, ref7, results1;
       ref7 = face[0];
       results1 = [];
@@ -1028,12 +1028,12 @@ foldCorridor = function(CP, shady, root, corr) {
   return results;
 };
 
-outputFoldedStateFOLD = function(CP, CPfaces, facesRelations) {
+outputFoldedStateFOLD = function (CP, CPfaces, facesRelations) {
   return FOLD;
 };
 var foldAndCut;
 
-foldAndCut = function(clickSeq) {
+foldAndCut = function (clickSeq) {
   var CP, CPfaces, e, facesRelations, gE, gV, i, iPerps, perps, qGV, qSV, ref, ref1, ref2, root, shady, tooManyPerps, v;
   ref = straightSkeleton(clickSeq), e = ref[0], v = ref[1], i = ref[2], gV = ref[3], gE = ref[4];
   console.log(clickSeq);
@@ -1048,9 +1048,9 @@ foldAndCut = function(clickSeq) {
   return [CP, CPfaces, facesRelations, gE, tooManyPerps];
 };
 var computeCorridors, computeShadowTree, corridorsContaining, foldedState,
-  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+  indexOf = [].indexOf || function (item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-computeCorridors = function(CP) {
+computeCorridors = function (CP) {
   var BAll, corr, corridors, done, e, i, j, k, l, len, len1, len2, m, n, newCorr, ref, v, w;
   corridors = [];
   BAll = CP.boundaryAllCircle();
@@ -1106,7 +1106,7 @@ computeCorridors = function(CP) {
   return corridors;
 };
 
-computeShadowTree = function(CP, corridors) {
+computeShadowTree = function (CP, corridors) {
   var k, len, ref, skels, v;
   skels = [];
   ref = CP.cPVs;
@@ -1119,7 +1119,7 @@ computeShadowTree = function(CP, corridors) {
   return new OrientedMetricTree(skels, corridors);
 };
 
-corridorsContaining = function(perpEdge, corridors) {
+corridorsContaining = function (perpEdge, corridors) {
   var container, corr, k, len;
   container = [];
   for (k = 0, len = corridors.length; k < len; k++) {
@@ -1131,7 +1131,7 @@ corridorsContaining = function(perpEdge, corridors) {
   return container;
 };
 
-foldedState = function(CP) {
+foldedState = function (CP) {
   var CPfaces, checkCorr, checkIndex, container, corr, corr1, corr2, corridors, downs, e, edge, f, fac, face1, face2, facesRelations, gluedInd, i, j, k, l, lastFace, len, len1, len2, len3, len4, len5, len6, m, n, needSwitch, neighborCircleSK, numOfGluedFaces, o, p, q, r, ref, ref1, ref2, ref3, ref4, ref5, root, shady, sk, skPrime, tmp, tmpInd;
   corridors = computeCorridors(CP);
   shady = computeShadowTree(CP, corridors);
@@ -1260,9 +1260,9 @@ foldedState = function(CP) {
   return [CPfaces, facesRelations, shady, root];
 };
 var splitHandle, splitTwoD, splitTwoE, splitTwoF,
-  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+  indexOf = [].indexOf || function (item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-splitHandle = function(mySLAV, pq, I, processed, skelEdges, skelVtxs, infEdges) {
+splitHandle = function (mySLAV, pq, I, processed, skelEdges, skelVtxs, infEdges) {
   var N, N1, N2, Nc, dirSeg, error1, i, len, node, ref, ref1, ref2;
   if (ref = I[2], indexOf.call(processed, ref) >= 0) {
     return;
@@ -1294,7 +1294,7 @@ splitHandle = function(mySLAV, pq, I, processed, skelEdges, skelVtxs, infEdges) 
 //use splitTwoE
 //use splitTwoF
 
-splitTwoD = function(I, skelEdges) {
+splitTwoD = function (I, skelEdges) {
   //new graph edge between intersection I[1] and the vertex itself [2]
   var N, P;
   N = I[2];
@@ -1302,7 +1302,7 @@ splitTwoD = function(I, skelEdges) {
   return skelEdges.push(new GraphEdge(P, I[1]));
 };
 
-splitTwoE = function(mySLAV, I, processed, skelVtxs) {
+splitTwoE = function (mySLAV, I, processed, skelVtxs) {
   var LAV1, LAV2, N, N1, N2, Na, Nb, Nc, Nd, V, V1, V2, dirSeg, fancyVertex, i, lava, lavb, len, newElem, node, ref;
   N = I[2];
   V = N.content;
@@ -1352,7 +1352,7 @@ splitTwoE = function(mySLAV, I, processed, skelVtxs) {
 
       //Now you need to take care of the other half part...
     } else {
-       //terminal : you don't have  Nb, i.e. N succ
+      //terminal : you don't have  Nb, i.e. N succ
       //create the LAV (part 2) that you can create
       LAV1 = mySLAV.LAVContaining(N);
       //Nc is the starting node of opposite edge
@@ -1429,7 +1429,7 @@ splitTwoE = function(mySLAV, I, processed, skelVtxs) {
   return [N1, N2];
 };
 
-splitTwoF = function(mySLAV, N1, N2, pq, infEdges) {
+splitTwoF = function (mySLAV, N1, N2, pq, infEdges) {
   computeEvents(mySLAV, N1, pq, infEdges);
   return computeEvents(mySLAV, N2, pq, infEdges);
 };
@@ -1445,7 +1445,7 @@ stepOneAB = function (clickSeq) {
 
   if (clickSeq[0].x == clickSeq[clickSeq.length - 1].x && clickSeq[0].y == clickSeq[clickSeq.length - 1].y) {
     LAV = new CircularDoublyLinkedList();
-        // Polygon case
+    // Polygon case
     for (i = 0, len = clickSeq.length; i < len; i++) {
       vtx = clickSeq[i];
       test = 'In polygon case';
@@ -1486,7 +1486,7 @@ stepOneAB = function (clickSeq) {
   } else {
     //Planar graph case
     //If it isn't a polygon but a straight planar graph the first and last vertices are different
-    
+
     LAV = new CircularDoublyLinkedList();
     for (i = 0, len = clickSeq.length; i < len; i++) {
       vtx = clickSeq[i];
@@ -1507,7 +1507,7 @@ stepOneAB = function (clickSeq) {
         LAV.push(newVertex);
         mySLAV.pushLAV(LAV);
         //treat the last terminal point
-        if(n == len-1){
+        if (n == len - 1) {
           inEdgeVtx = new DirectedSegment(u, vtx);
           outEdgeVtx = null;
           vertexFinal = new Vertex(vtx, inEdgeVtx, outEdgeVtx);
@@ -1519,18 +1519,18 @@ stepOneAB = function (clickSeq) {
       gVtxs.push(vtx);
     }
   }
-mySLAV.orient();
-gEdges = mySLAV.allEdges();
-copySLAV = mySLAV.copy();
-copySLAV.reverse();
-mySLAV.join(copySLAV);
-return [mySLAV, gVtxs, gEdges];
+  mySLAV.orient();
+  gEdges = mySLAV.allEdges();
+  copySLAV = mySLAV.copy();
+  copySLAV.reverse();
+  mySLAV.join(copySLAV);
+  return [mySLAV, gVtxs, gEdges];
 };
 
 // ---
 var computeB, computeEvents, computeI, stepOneC, testOpposite, weakTestOpposite;
 
-stepOneC = function(mySLAV, infEdges) {
+stepOneC = function (mySLAV, infEdges) {
   var i, len, node, pq, ref;
   pq = new PriorityQueue;
   ref = mySLAV.allNodes();
@@ -1545,21 +1545,21 @@ stepOneC = function(mySLAV, infEdges) {
 //computeEvents 
 //PriorityQueue
 
-computeEvents = function(mySLAV, node, pq, infEdges) {
+computeEvents = function (mySLAV, node, pq, infEdges) {
   var I, allCandidates, allEdgeEvents, dE, dS, i, j, len, len1, ref, ref1, splitPoint, v;
   v = node.content;
   allEdgeEvents = computeI(mySLAV, node);
   for (i = 0, len = allEdgeEvents.length; i < len; i++) {
-     ref = allEdgeEvents[i], I = ref[0], dE = ref[1];
-     pq.add(I, dE);
-     console.log(I,dE);
+    ref = allEdgeEvents[i], I = ref[0], dE = ref[1];
+    pq.add(I, dE);
+    console.log(I, dE);
   }
   if (isReflex(v)) {
     allCandidates = computeB(mySLAV, node);
     for (j = 0, len1 = allCandidates.length; j < len1; j++) {
       ref1 = allCandidates[j], splitPoint = ref1[0], dS = ref1[1];
       pq.add(splitPoint, dS);
-      console.log(splitPoint,dS);
+      console.log(splitPoint, dS);
     }
   }
 };
@@ -1567,15 +1567,15 @@ computeEvents = function(mySLAV, node, pq, infEdges) {
 //use computeB
 //use isReflex
 
-computeI = function(mySLAV, node) {
+computeI = function (mySLAV, node) {
   var I1, I2, allEdgeEvents, d1, d2, e, u, v, w;
   allEdgeEvents = [];
   v = node.content;
   u = node.pred.content;
   w = node.succ.content;
-  
+
   //add initial vertex case
-  if (v.inEdge == null){
+  if (v.inEdge == null) {
     e = line(v.outEdge);
     I1 = intersect(v.bbbisector()[0], w.bbbisector());
     I2 = intersect(v.bbbisector()[1], w.bbbisector());
@@ -1589,7 +1589,7 @@ computeI = function(mySLAV, node) {
     }
   }
   //add initial vertex case
-  if (v.outEdge == null){
+  if (v.outEdge == null) {
     e = line(v.inEdge);
     I1 = intersect(v.bbbisector()[0], u.bbbisector());
     I2 = intersect(v.bbbisector()[1], u.bbbisector());
@@ -1600,45 +1600,45 @@ computeI = function(mySLAV, node) {
     if (I2 != null) {
       d2 = dist(I2, e);
       allEdgeEvents.push([["e", I2, node.pred, node], d2]);
-    } 
+    }
   }
   //general case
-  if (v.inEdge != null && v.outEdge != null){
+  if (v.inEdge != null && v.outEdge != null) {
     e = line(v.inEdge);
     //Case where the vertex from inEdge is terminal
-    if (u.bbbisector().length >=2) {
-        bis = u.bbbisector();
-        I1array= bis.map(bis => intersect(bis,v.bbbisector()));
-        //Push all the intersections
-        for  (i = 0, len = I1array.length; i < len; i++) {
-          I1=I1array[i];
-          if (I1 != null) {
-            d1 = dist(I1, e);
-            allEdgeEvents.push([["e", I1, node.pred, node], d1]);
-          }
+    if (u.bbbisector().length >= 2) {
+      bis = u.bbbisector();
+      I1array = bis.map(bis => intersect(bis, v.bbbisector()));
+      //Push all the intersections
+      for (i = 0, len = I1array.length; i < len; i++) {
+        I1 = I1array[i];
+        if (I1 != null) {
+          d1 = dist(I1, e);
+          allEdgeEvents.push([["e", I1, node.pred, node], d1]);
         }
-    }else{
+      }
+    } else {
       I1 = intersect(u.bbbisector(), v.bbbisector());
       if (I1 != null) {
         d1 = dist(I1, e);
         allEdgeEvents.push([["e", I1, node.pred, node], d1]);
       }
     }
-    
-     //Case where the vertex of outEdge is terminal
-    if (w.bbbisector().length >=2) {
-      bis=w.bbbisector();
-      I2array= bis.map(bis => intersect(v.bbbisector(),bis));
+
+    //Case where the vertex of outEdge is terminal
+    if (w.bbbisector().length >= 2) {
+      bis = w.bbbisector();
+      I2array = bis.map(bis => intersect(v.bbbisector(), bis));
       //Push all the intersections
-      for  (i = 0, len = I2array.length; i < len; i++) {
-        I2=I2array[i];
+      for (i = 0, len = I2array.length; i < len; i++) {
+        I2 = I2array[i];
         if (I2 != null) {
           d2 = dist(I2, e);
           allEdgeEvents.push([["e", I2, node, node.succ], d2]);
         }
       }
-    }else{
-    I2 = intersect(v.bbbisector(), w.bbbisector());
+    } else {
+      I2 = intersect(v.bbbisector(), w.bbbisector());
       if (I2 != null) {
         d2 = dist(I2, e);
         allEdgeEvents.push([["e", I2, node, node.succ], d2]);
@@ -1650,7 +1650,7 @@ computeI = function(mySLAV, node) {
 
 
 
-computeB = function(mySLAV, node) {
+computeB = function (mySLAV, node) {
   var B, candidates, d, i, len, outU, ref, ref1, testNode;
   candidates = [];
   ref = mySLAV.allNodes();
@@ -1672,11 +1672,11 @@ testOpposite = function (node, testNode) {
   u = testNode.content;
   w = testNode.succ.content;
   //with terminal vertices
-  if(isNodeTerminal(u)){
+  if (isNodeTerminal(u)) {
     //no edge associated with this vertex
     return null;
   }
-  
+
   outV = v.outEdge;
   inV = v.inEdge;
   p = u.point;
@@ -1743,7 +1743,7 @@ testOpposite = function (node, testNode) {
 //side
 //dist
 
-weakTestOpposite = function(node, testNode) {
+weakTestOpposite = function (node, testNode) {
   var B, X, d, inV, l, lineInV, lineOutU, lineOutV, outU, outV, p, q, r, rayInV, rayOutU, reverseRayOutV, u, v, w, list;
   v = node.content;
   q = v.point;
@@ -1752,19 +1752,19 @@ weakTestOpposite = function(node, testNode) {
   //edge of interest (e is between u and w)
   u = testNode.content;
   //If u is a terminal vertex there isn't any edge to test
-  if (u.outEdge === null){
+  if (u.outEdge === null) {
     return null;
   }
   w = testNode.succ.content;
   p = u.point;
   outU = u.outEdge;
   rayOutU = new LineOrRay(p, p.plus(outU.dir()), true);
-  
+
   lineOutU = line(outU);//
   //setIntersect tests if there are points in both the opposite and the set 
   list = [q];
-  if(node.succ != null){list.push(node.succ.content.point)};
-  if(node.pred != null){list.push(node.pred.content.point)};
+  if (node.succ != null) { list.push(node.succ.content.point) };
+  if (node.pred != null) { list.push(node.pred.content.point) };
   if (setIntersect([p, w.point], list) != null) {
     return null;
   }
@@ -1775,25 +1775,25 @@ weakTestOpposite = function(node, testNode) {
   }
   // 
   l = line(outU);
-  if (outV != null){
+  if (outV != null) {
     reverseRayOutV = new LineOrRay(q, q.minus(outV.dir()), true);
     if (!(intersect(l, reverseRayOutV) != null)) {
       return null;
     }
   }
-  if (inV != null){
-      rayInV = new LineOrRay(q, q.plus(inV.dir()), true);
+  if (inV != null) {
+    rayInV = new LineOrRay(q, q.plus(inV.dir()), true);
     if (!(intersect(l, rayInV) != null)) {
       return null;
     }
   }
 
   //For a terminal vertex v, the property bbbisector is an array of two bisector
-  if (v.bbbisector().length>0){
-    for (var vBis of v.bbbisector()){
+  if (v.bbbisector().length > 0) {
+    for (var vBis of v.bbbisector()) {
       //a terminal edge has by definition an null edge. Thus we will make the calculations with the other edge.
-    ( inV === null ) ? (edgeV = v.outEdge ) : (edgeV = v.inEdge);
-    lineV = line(edgeV);
+      (inV === null) ? (edgeV = v.outEdge) : (edgeV = v.inEdge);
+      lineV = line(edgeV);
       if ((intersect(vBis, lineOutU) != null) && (intersect(lineV, lineOutU) != null)) {
         X = intersect(lineV, lineOutU);
         r = angleBisector(X, edgeV, outU);
@@ -1801,10 +1801,10 @@ weakTestOpposite = function(node, testNode) {
       }
       if (B != null) {
         d = dist(B, edgeV);
-        return [B, outU, d];  
+        return [B, outU, d];
       }
     }
-  }else{
+  } else {
     lineInV = line(inV);
     lineOutV = line(outV);
     if ((intersect(v.bbbisector(), lineOutU) != null) && (intersect(lineInV, lineOutU) != null) && (intersect(lineOutV, lineOutU) != null)) {
@@ -1814,7 +1814,7 @@ weakTestOpposite = function(node, testNode) {
     }
     if (B != null) {
       d = dist(B, outV);
-      return  [B, outU, d];
+      return [B, outU, d];
     }
   }
   return null;
@@ -1824,7 +1824,7 @@ weakTestOpposite = function(node, testNode) {
 
 var stepTwo;
 
-stepTwo = function(mySLAV, pq, processed, skelEdges, skelVtxs, infEdges) {
+stepTwo = function (mySLAV, pq, processed, skelEdges, skelVtxs, infEdges) {
   var I;
   //last point of pq
   I = pq.pop();
@@ -1840,9 +1840,9 @@ stepTwo = function(mySLAV, pq, processed, skelEdges, skelVtxs, infEdges) {
 
 
 var straightSkeleton,
-  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+  indexOf = [].indexOf || function (item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-straightSkeleton = function(clickSequence) {
+straightSkeleton = function (clickSequence) {
   var gEdges, gVtxs, i, infEdges, leftOver, len, mySLAV, pq, processed, ref, ref1, skelEdges, skelVtxs;
   console.clear();
   skelEdges = [];
@@ -1873,46 +1873,46 @@ straightSkeleton = function(clickSequence) {
 };
 var DirectedSegment, GraphEdge, LineOrRay, Point, Vertex, angle, angleBisector, dist, foot, intersect, isReflex, line, perp, reflect;
 
-Point = (function() {
+Point = (function () {
   function Point(x, y) {
     this.x = x;
     this.y = y;
     this.isPoint = true;
   }
 
-  Point.prototype.ang = function() {
+  Point.prototype.ang = function () {
     return Math.atan2(this.y, this.x);
   };
 
-  Point.prototype.plus = function(otherPoint) {
+  Point.prototype.plus = function (otherPoint) {
     var x, y;
     x = this.x + otherPoint.x;
     y = this.y + otherPoint.y;
     return new Point(x, y);
   };
 
-  Point.prototype.minus = function(otherPoint) {
+  Point.prototype.minus = function (otherPoint) {
     var x, y;
     x = this.x - otherPoint.x;
     y = this.y - otherPoint.y;
     return new Point(x, y);
   };
 
-  Point.prototype.times = function(num) {
+  Point.prototype.times = function (num) {
     var x, y;
     x = this.x * num;
     y = this.y * num;
     return new Point(x, y);
   };
 
-  Point.prototype.isEqualTo = function(otherPoint) {
+  Point.prototype.isEqualTo = function (otherPoint) {
     if (this.x === otherPoint.x && this.y === otherPoint.y) {
       return true;
     }
     return false;
   };
 
-  Point.prototype.print = function() {
+  Point.prototype.print = function () {
     return "(" + this.x + ", " + this.y + ")";
   };
 
@@ -1920,7 +1920,7 @@ Point = (function() {
 
 })();
 
-LineOrRay = (function() {
+LineOrRay = (function () {
   function LineOrRay(a, b, rayness) {
     this.origin = a;
     this.dir = b.minus(a);
@@ -1931,7 +1931,7 @@ LineOrRay = (function() {
     }
   }
 
-  LineOrRay.prototype.print = function() {
+  LineOrRay.prototype.print = function () {
     if (this.isRay) {
       return "[ ray: origin = " + this.origin.print() + ", dir = " + this.dir.print() + " ]";
     } else {
@@ -1943,26 +1943,26 @@ LineOrRay = (function() {
 
 })();
 
-DirectedSegment = (function() {
+DirectedSegment = (function () {
   function DirectedSegment(p, q) {
     this.endpt1 = p;
     this.endpt2 = q;
     this.isSegment = true;
   }
 
-  DirectedSegment.prototype.dir = function() {
+  DirectedSegment.prototype.dir = function () {
     return this.endpt2.minus(this.endpt1);
   };
 
-  DirectedSegment.prototype.undirect = function() {
+  DirectedSegment.prototype.undirect = function () {
     return new GraphEdge(this.endpt1, this.endpt2);
   };
 
-  DirectedSegment.prototype.isEqualTo = function(otherDirectedSegment) {
+  DirectedSegment.prototype.isEqualTo = function (otherDirectedSegment) {
     return otherDirectedSegment.endpt1 === this.endpt1 && otherDirectedSegment.endpt2 === this.endpt2;
   };
 
-  DirectedSegment.prototype.print = function() {
+  DirectedSegment.prototype.print = function () {
     return this.endpt1.print() + " --> " + this.endpt2.print();
   };
 
@@ -1970,14 +1970,14 @@ DirectedSegment = (function() {
 
 })();
 
-GraphEdge = (function() {
+GraphEdge = (function () {
   function GraphEdge(a, b) {
     this.endpt1 = a;
     this.endpt2 = b;
     this.isSegment = true;
   }
 
-  GraphEdge.prototype.isEqualTo = function(otherGraphEdge) {
+  GraphEdge.prototype.isEqualTo = function (otherGraphEdge) {
     if (this.endpt1 === otherGraphEdge.endpt1 && this.endpt2 === otherGraphEdge.endpt2) {
       return true;
     }
@@ -1987,7 +1987,7 @@ GraphEdge = (function() {
     return false;
   };
 
-  GraphEdge.prototype.print = function() {
+  GraphEdge.prototype.print = function () {
     return this.endpt1.print() + " -- " + this.endpt2.print();
   };
 
@@ -1995,7 +1995,7 @@ GraphEdge = (function() {
 
 })();
 
-Vertex = (function() {
+Vertex = (function () {
   function Vertex(point, inEdge, outEdge) {
     this.point = point;
     this.inEdge = inEdge;
@@ -2006,15 +2006,15 @@ Vertex = (function() {
     //}
   }
 
-  Vertex.prototype.bbbisector = function() {
+  Vertex.prototype.bbbisector = function () {
     return angleBisector(this.point, this.inEdge, this.outEdge);
   };
 
-  Vertex.prototype.copy = function() {
+  Vertex.prototype.copy = function () {
     return new Vertex(this.point, this.inEdge, this.outEdge);
   };
 
-  Vertex.prototype.print = function() {
+  Vertex.prototype.print = function () {
     return "[ " + this.point.print() + ", " + this.inEdge.print() + ", " + this.outEdge.print() + " ]";
   };
 
@@ -2022,14 +2022,14 @@ Vertex = (function() {
 
 })();
 //What to do when we don't have a segment, i.e. inEdge = null
-line = function(segment) {
+line = function (segment) {
   if (segment.isRay != null) {
     return new LineOrRay(segment.origin, segment.origin.plus(segment.dir), false);
   }
   return new LineOrRay(segment.endpt1, segment.endpt2, false);
 };
 
-intersect = function(lrs1, lrs2) {
+intersect = function (lrs1, lrs2) {
   var a1, a2, b1, b2, i, l1, l2, len, ref, s, sgmnt, t, u1, u2, v1, v2, x, y;
   l1 = line(lrs1);
   l2 = line(lrs2);
@@ -2069,7 +2069,7 @@ intersect = function(lrs1, lrs2) {
   return new Point(x, y);
 };
 
-angle = function(inDirSeg, outDirSeg) {
+angle = function (inDirSeg, outDirSeg) {
   var a1, a2, b1, b2, theta;
   a1 = inDirSeg.dir().x;
   b1 = inDirSeg.dir().y;
@@ -2079,53 +2079,53 @@ angle = function(inDirSeg, outDirSeg) {
   return theta = theta - 2 * Math.PI * Math.floor(theta / (2 * Math.PI));
 };
 
-isReflex = function(v) {
-  if (v.inEdge == null || v.outEdge == null){
+isReflex = function (v) {
+  if (v.inEdge == null || v.outEdge == null) {
     return true;
-  }else{
+  } else {
     if (angle(v.inEdge, v.outEdge) > Math.PI) {
       return true;
     } else {
       return false;
+    }
   }
-}
 };
 
 
 //Modified angle bisector function
-angleBisector = function(vert, inDirSeg, outDirSeg) {
+angleBisector = function (vert, inDirSeg, outDirSeg) {
   var bisector, bisectorDir, theta, x, y;
-  if (inDirSeg != null && outDirSeg != null){
-  theta = angle(inDirSeg, outDirSeg);
-  x = outDirSeg.dir().x;
-  y = outDirSeg.dir().y;
-  bisectorDir = new Point(Math.cos(theta / 2) * x - Math.sin(theta / 2) * y, Math.sin(theta / 2) * x + Math.cos(theta / 2) * y);
-  return bisector = new LineOrRay(vert, vert.plus(bisectorDir), true);
-}else{
-  //initial vertex 
-  if (inDirSeg != null && outDirSeg == null){
-  theta = 135 * Math.PI / 180; 
-  x = inDirSeg.dir().x;
-  y = inDirSeg.dir().y;
-  bisectorDir1 = new Point(Math.cos(theta) * x - Math.sin(theta) * y, Math.sin(theta) * x + Math.cos(theta) * y);
-  theta = -135 * Math.PI / 180; 
-  bisectorDir2 = new Point(Math.cos(theta) * x - Math.sin(theta) * y, Math.sin(theta) * x + Math.cos(theta) * y);
-  return bisector = [new LineOrRay(vert, vert.plus(bisectorDir1),true),new LineOrRay(vert, vert.plus(bisectorDir2),true)]
-  }else{
-  //final vertex
-  theta = 135 * Math.PI / 180; 
-  x = outDirSeg.dir().x;
-  y = outDirSeg.dir().y;
-  bisectorDir1 = new Point(Math.cos(theta) * x - Math.sin(theta) * y, Math.sin(theta) * x + Math.cos(theta) * y);
-  theta = -135 * Math.PI / 180; 
-  bisectorDir2 = new Point(Math.cos(theta) * x - Math.sin(theta) * y, Math.sin(theta) * x + Math.cos(theta) * y);
-  return bisector = [new LineOrRay(vert, vert.plus(bisectorDir1),true), new LineOrRay(vert, vert.plus(bisectorDir2),true)]
+  if (inDirSeg != null && outDirSeg != null) {
+    theta = angle(inDirSeg, outDirSeg);
+    x = outDirSeg.dir().x;
+    y = outDirSeg.dir().y;
+    bisectorDir = new Point(Math.cos(theta / 2) * x - Math.sin(theta / 2) * y, Math.sin(theta / 2) * x + Math.cos(theta / 2) * y);
+    return bisector = new LineOrRay(vert, vert.plus(bisectorDir), true);
+  } else {
+    //initial vertex 
+    if (inDirSeg != null && outDirSeg == null) {
+      theta = 135 * Math.PI / 180;
+      x = inDirSeg.dir().x;
+      y = inDirSeg.dir().y;
+      bisectorDir1 = new Point(Math.cos(theta) * x - Math.sin(theta) * y, Math.sin(theta) * x + Math.cos(theta) * y);
+      theta = -135 * Math.PI / 180;
+      bisectorDir2 = new Point(Math.cos(theta) * x - Math.sin(theta) * y, Math.sin(theta) * x + Math.cos(theta) * y);
+      return bisector = [new LineOrRay(vert, vert.plus(bisectorDir1), true), new LineOrRay(vert, vert.plus(bisectorDir2), true)]
+    } else {
+      //final vertex
+      theta = 135 * Math.PI / 180;
+      x = outDirSeg.dir().x;
+      y = outDirSeg.dir().y;
+      bisectorDir1 = new Point(Math.cos(theta) * x - Math.sin(theta) * y, Math.sin(theta) * x + Math.cos(theta) * y);
+      theta = -135 * Math.PI / 180;
+      bisectorDir2 = new Point(Math.cos(theta) * x - Math.sin(theta) * y, Math.sin(theta) * x + Math.cos(theta) * y);
+      return bisector = [new LineOrRay(vert, vert.plus(bisectorDir1), true), new LineOrRay(vert, vert.plus(bisectorDir2), true)]
+    }
   }
-}
 
 };
 
-dist = function(pt, lrs) {
+dist = function (pt, lrs) {
   var a, b, l, originDir, ptOrigin, theta, x, y;
   if (lrs.isPoint != null) {
     x = pt.x;
@@ -2145,7 +2145,7 @@ dist = function(pt, lrs) {
   return Math.abs(Math.sin(theta) * Math.sqrt(Math.pow(x - a, 2) + Math.pow(y - b, 2)));
 };
 
-foot = function(pt, lrs) {
+foot = function (pt, lrs) {
   var a, b, c, d, l, r, ref, ref1, ref2, ref3, s, x, y;
   l = line(lrs);
   ref = [pt.x, pt.y], x = ref[0], y = ref[1];
@@ -2163,14 +2163,14 @@ foot = function(pt, lrs) {
   return new Point(x, y);
 };
 
-perp = function(pt, lrs) {
+perp = function (pt, lrs) {
   var ft, l;
   l = line(lrs);
   ft = foot(pt, l);
   return new LineOrRay(pt, ft, true);
 };
 
-reflect = function(pt, lrs) {
+reflect = function (pt, lrs) {
   var ft, l;
   l = line(lrs);
   ft = foot(pt, l);
@@ -2179,11 +2179,11 @@ reflect = function(pt, lrs) {
   return pt;
 };
 var Corridor, CreasePattern, CreasePatternEdge, CreasePatternVertex, OrientedMetricTree, incident, otherVertex, setIntersect,
-  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  extend = function (child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty,
-  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+  indexOf = [].indexOf || function (item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-CreasePatternVertex = (function(superClass) {
+CreasePatternVertex = (function (superClass) {
   extend(CreasePatternVertex, superClass);
 
   function CreasePatternVertex(x, y, type, skelVtx, foldedPosition) {
@@ -2203,12 +2203,12 @@ CreasePatternVertex = (function(superClass) {
     }
   }
 
-  CreasePatternVertex.prototype.clearFolds = function() {
+  CreasePatternVertex.prototype.clearFolds = function () {
     this.foldedPos.x = this.x;
     return this.foldedPos.y = this.y;
   };
 
-  CreasePatternVertex.prototype.toggleFold = function() {
+  CreasePatternVertex.prototype.toggleFold = function () {
     var tmpX, tmpY;
     tmpX = this.x;
     tmpY = this.y;
@@ -2218,7 +2218,7 @@ CreasePatternVertex = (function(superClass) {
     return this.foldedPos.y = tmpY;
   };
 
-  CreasePatternVertex.prototype.printFull = function() {
+  CreasePatternVertex.prototype.printFull = function () {
     if (this.component != null) {
       return "[ (" + this.x + "," + this.y + "), " + this.type + ", (" + this.component.x + "," + this.component.y + ") ]";
     }
@@ -2229,7 +2229,7 @@ CreasePatternVertex = (function(superClass) {
 
 })(Point);
 
-CreasePatternEdge = (function() {
+CreasePatternEdge = (function () {
   function CreasePatternEdge(endpt1, endpt2, type, skelVtx, assignment) {
     this.endpt1 = endpt1;
     this.endpt2 = endpt2;
@@ -2245,26 +2245,26 @@ CreasePatternEdge = (function() {
     this.foldedPos = new GraphEdge(this.endpt1.foldedPos, this.endpt2.foldedPos);
   }
 
-  CreasePatternEdge.prototype.isEqualTo = function(otherCPE) {
+  CreasePatternEdge.prototype.isEqualTo = function (otherCPE) {
     if ((this.endpt1 === otherCPE.endpt1 && this.endpt2 === otherCPE.endpt2) || (this.endpt1 === otherCPE.endpt2 && this.endpt2 === otherCPE.endpt1)) {
       return true;
     }
     return false;
   };
 
-  CreasePatternEdge.prototype.length = function() {
+  CreasePatternEdge.prototype.length = function () {
     return dist(this.endpt1, this.endpt2);
   };
 
-  CreasePatternEdge.prototype.assign = function(mvbfu) {
+  CreasePatternEdge.prototype.assign = function (mvbfu) {
     return this.assignment = mvbfu;
   };
 
-  CreasePatternEdge.prototype.print = function() {
+  CreasePatternEdge.prototype.print = function () {
     return this.endpt1.print() + " -- " + this.endpt2.print() + " " + this.assignment;
   };
 
-  CreasePatternEdge.prototype.printFull = function() {
+  CreasePatternEdge.prototype.printFull = function () {
     if (this.type === "perp") {
       return this.type + " " + this.endpt1.print() + " -- " + this.endpt2.print() + " " + this.assignment + " " + this.component.print();
     }
@@ -2275,18 +2275,18 @@ CreasePatternEdge = (function() {
 
 })();
 
-CreasePattern = (function() {
+CreasePattern = (function () {
   function CreasePattern(cPVs, cPEs, center) {
     this.cPVs = cPVs;
     this.cPEs = cPEs;
     this.center = center;
   }
 
-  CreasePattern.prototype.addVtx = function(cPV) {
+  CreasePattern.prototype.addVtx = function (cPV) {
     return this.cPVs.push(cPV);
   };
 
-  CreasePattern.prototype.removeVtx = function(cPV) {
+  CreasePattern.prototype.removeVtx = function (cPV) {
     var i, k, n, ref, results;
     n = this.cPVs.indexOf(cPV);
     this.cPVs.splice(n, 1);
@@ -2301,17 +2301,17 @@ CreasePattern = (function() {
     return results;
   };
 
-  CreasePattern.prototype.addEdge = function(cPE) {
+  CreasePattern.prototype.addEdge = function (cPE) {
     return this.cPEs.push(cPE);
   };
 
-  CreasePattern.prototype.removeEdge = function(cPE) {
+  CreasePattern.prototype.removeEdge = function (cPE) {
     var n;
     n = this.cPEs.indexOf(cPE);
     return this.cPEs.splice(n, 1);
   };
 
-  CreasePattern.prototype.neighborEdges = function(cPV) {
+  CreasePattern.prototype.neighborEdges = function (cPV) {
     var N, e, k, len, ref;
     N = [];
     ref = this.cPEs;
@@ -2324,7 +2324,7 @@ CreasePattern = (function() {
     return N;
   };
 
-  CreasePattern.prototype.neighborVtxs = function(cPV) {
+  CreasePattern.prototype.neighborVtxs = function (cPV) {
     var V, e, k, len, ref;
     V = [];
     ref = this.neighborEdges(cPV);
@@ -2339,11 +2339,11 @@ CreasePattern = (function() {
     return V;
   };
 
-  CreasePattern.prototype.degree = function(cPV) {
+  CreasePattern.prototype.degree = function (cPV) {
     return this.neighborEdges(cPV).length;
   };
 
-  CreasePattern.prototype.isEdge = function(vertex1, vertex2) {
+  CreasePattern.prototype.isEdge = function (vertex1, vertex2) {
     var e, k, len, ref;
     ref = this.cPEs;
     for (k = 0, len = ref.length; k < len; k++) {
@@ -2355,7 +2355,7 @@ CreasePattern = (function() {
     return false;
   };
 
-  CreasePattern.prototype.boundaryPerpCircle = function() {
+  CreasePattern.prototype.boundaryPerpCircle = function () {
     var b, k, len, ref, theta, v;
     b = new PriorityQueue;
     ref = this.cPVs;
@@ -2369,7 +2369,7 @@ CreasePattern = (function() {
     return b.values();
   };
 
-  CreasePattern.prototype.boundaryAllCircle = function() {
+  CreasePattern.prototype.boundaryAllCircle = function () {
     var b, k, len, ref, theta, v;
     b = new PriorityQueue;
     ref = this.cPVs;
@@ -2383,7 +2383,7 @@ CreasePattern = (function() {
     return b.values();
   };
 
-  CreasePattern.prototype.boundaryEdgeCircle = function() {
+  CreasePattern.prototype.boundaryEdgeCircle = function () {
     var b, e, k, len, m, ref, theta, v, w;
     b = new ProirityQueue;
     ref = this.cPEs;
@@ -2400,7 +2400,7 @@ CreasePattern = (function() {
     return b.values();
   };
 
-  CreasePattern.prototype.rotateCCW = function(edge, vertex) {
+  CreasePattern.prototype.rotateCCW = function (edge, vertex) {
     var candidateEdge, k, len, otherVtx, phi, ref, rotatedEdge, theta, vertexPrime;
     if (edge.endpt1 === vertex) {
       vertexPrime = edge.endpt2;
@@ -2429,7 +2429,7 @@ CreasePattern = (function() {
     return rotatedEdge;
   };
 
-  CreasePattern.prototype.rotateCW = function(edge, vertex) {
+  CreasePattern.prototype.rotateCW = function (edge, vertex) {
     var e, k, len, ref;
     ref = this.neighborEdges(vertex);
     for (k = 0, len = ref.length; k < len; k++) {
@@ -2440,7 +2440,7 @@ CreasePattern = (function() {
     }
   };
 
-  CreasePattern.prototype.rotateCW2 = function(edge, vertex) {
+  CreasePattern.prototype.rotateCW2 = function (edge, vertex) {
     var rotEdge, rotVertex;
     rotEdge = this.rotateCW(edge, vertex);
     if (rotEdge.endpt1 === vertex) {
@@ -2451,7 +2451,7 @@ CreasePattern = (function() {
     return [rotEdge, rotVertex];
   };
 
-  CreasePattern.prototype.rotateCCW2 = function(edge, vertex) {
+  CreasePattern.prototype.rotateCCW2 = function (edge, vertex) {
     var rotEdge, rotVertex;
     rotEdge = this.rotateCCW(edge, vertex);
     if (rotEdge.endpt1 === vertex) {
@@ -2462,7 +2462,7 @@ CreasePattern = (function() {
     return [rotEdge, rotVertex];
   };
 
-  CreasePattern.prototype.toggleFold = function() {
+  CreasePattern.prototype.toggleFold = function () {
     var k, len, ref, results, v;
     ref = this.cPVs;
     results = [];
@@ -2477,7 +2477,7 @@ CreasePattern = (function() {
 
 })();
 
-Corridor = (function(superClass) {
+Corridor = (function (superClass) {
   extend(Corridor, superClass);
 
   function Corridor(CP, boundaryEdge, vtx1, vtx2) {
@@ -2559,7 +2559,7 @@ Corridor = (function(superClass) {
     }
   }
 
-  Corridor.prototype.assign = function(edge) {
+  Corridor.prototype.assign = function (edge) {
     var container, face, face1, face2, i, j, k, len, ref;
     if (edge.type === "graph") {
       edge.assign("f");
@@ -2586,7 +2586,7 @@ Corridor = (function(superClass) {
     }
   };
 
-  Corridor.prototype.gluedIndex = function(face) {
+  Corridor.prototype.gluedIndex = function (face) {
     var e, i, ind, k, ref, subtractThisMuch;
     ind = this.faces.indexOf(face);
     if (ind === 0) {
@@ -2602,7 +2602,7 @@ Corridor = (function(superClass) {
     return ind - subtractThisMuch;
   };
 
-  Corridor.prototype.assignAll = function() {
+  Corridor.prototype.assignAll = function () {
     var edge, k, l, len, len1, len2, o, ref, ref1, ref2, results;
     ref = this.wall1_Edges;
     for (k = 0, len = ref.length; k < len; k++) {
@@ -2623,7 +2623,7 @@ Corridor = (function(superClass) {
     return results;
   };
 
-  Corridor.prototype.faceRelations = function() {
+  Corridor.prototype.faceRelations = function () {
     var f, faceRel, g, i, k, ref;
     faceRel = [];
     for (i = k = 0, ref = this.faces.length - 2; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
@@ -2640,13 +2640,13 @@ Corridor = (function(superClass) {
     return faceRel;
   };
 
-  Corridor.prototype.clearFolds = function() {
+  Corridor.prototype.clearFolds = function () {
     var face, k, len, ref, results, v;
     ref = this.faces;
     results = [];
     for (k = 0, len = ref.length; k < len; k++) {
       face = ref[k];
-      results.push((function() {
+      results.push((function () {
         var l, len1, ref1, results1;
         ref1 = face[0];
         results1 = [];
@@ -2660,7 +2660,7 @@ Corridor = (function(superClass) {
     return results;
   };
 
-  Corridor.prototype.print = function() {
+  Corridor.prototype.print = function () {
     if ((this.C1 != null) && (this.C2 != null)) {
       return "2-wall-corridor between " + this.C1.print() + " and " + this.C2.print();
     } else {
@@ -2676,21 +2676,21 @@ Corridor = (function(superClass) {
 
 })(CreasePattern);
 
-OrientedMetricTree = (function() {
+OrientedMetricTree = (function () {
   function OrientedMetricTree(vertices, edges) {
     this.vertices = vertices;
     this.edges = edges;
   }
 
-  OrientedMetricTree.prototype.addVtx = function(vertex) {
+  OrientedMetricTree.prototype.addVtx = function (vertex) {
     return this.vertices.push(vertex);
   };
 
-  OrientedMetricTree.prototype.addEdge = function(edge) {
+  OrientedMetricTree.prototype.addEdge = function (edge) {
     return this.edges.push(edge);
   };
 
-  OrientedMetricTree.prototype.degree = function(vertex) {
+  OrientedMetricTree.prototype.degree = function (vertex) {
     var d, e, k, len, ref;
     d = 0;
     ref = this.edges;
@@ -2703,7 +2703,7 @@ OrientedMetricTree = (function() {
     return d;
   };
 
-  OrientedMetricTree.prototype.isEdge = function(vertex1, vertex2) {
+  OrientedMetricTree.prototype.isEdge = function (vertex1, vertex2) {
     var e, k, len, ref;
     ref = this.edges;
     for (k = 0, len = ref.length; k < len; k++) {
@@ -2715,7 +2715,7 @@ OrientedMetricTree = (function() {
     return false;
   };
 
-  OrientedMetricTree.prototype.findLeaf = function() {
+  OrientedMetricTree.prototype.findLeaf = function () {
     var k, len, ref, v;
     ref = this.vertices;
     for (k = 0, len = ref.length; k < len; k++) {
@@ -2726,7 +2726,7 @@ OrientedMetricTree = (function() {
     }
   };
 
-  OrientedMetricTree.prototype.findPath = function(start, end) {
+  OrientedMetricTree.prototype.findPath = function (start, end) {
     var C, N, V, boundaryVtx, e, k, l, len, len1, len2, len3, len4, len5, len6, len7, m, middle, neighborhoodE, neighborhoodS, newC, o, p1, p2, q, r, ref, ref1, ref2, ref3, s, t, u, v, vert, z;
     s = 0;
     neighborhoodS = [[[start, [start]]], [[start, [start]]], [start]];
@@ -2807,11 +2807,11 @@ OrientedMetricTree = (function() {
     return p1.concat(p2);
   };
 
-  OrientedMetricTree.prototype.treeDistance = function(vertex1, vertex2) {
+  OrientedMetricTree.prototype.treeDistance = function (vertex1, vertex2) {
     return this.findPath(vertex1, vertex2).length - 1;
   };
 
-  OrientedMetricTree.prototype.distance = function(vertex1, vertex2) {
+  OrientedMetricTree.prototype.distance = function (vertex1, vertex2) {
     var d, i, k, p, ref;
     p = this.findPath(vertex1, vertex2);
     d = 0;
@@ -2824,7 +2824,7 @@ OrientedMetricTree = (function() {
     return d;
   };
 
-  OrientedMetricTree.prototype.orientation = function(vertex) {
+  OrientedMetricTree.prototype.orientation = function (vertex) {
     var e, edgeCircle, k, len, ref, repr, wall;
     edgeCircle = new PriorityQueue;
     ref = this.edges;
@@ -2856,7 +2856,7 @@ OrientedMetricTree = (function() {
 
 })();
 
-incident = function(cPV, cPE) {
+incident = function (cPV, cPE) {
   if (cPE.endpt1 === cPV || cPE.endpt2 === cPV) {
     return true;
   }
@@ -2864,7 +2864,7 @@ incident = function(cPV, cPE) {
 };
 
 //if a is into b
-setIntersect = function(A, B) {
+setIntersect = function (A, B) {
   var a, k, len;
   for (k = 0, len = A.length; k < len; k++) {
     a = A[k];
@@ -2875,7 +2875,7 @@ setIntersect = function(A, B) {
   return null;
 };
 
-otherVertex = function(cPV, cPE) {
+otherVertex = function (cPV, cPE) {
   if (cPV === cPE.endpt1) {
     return cPE.endpt2;
   } else {
@@ -2885,7 +2885,7 @@ otherVertex = function(cPV, cPE) {
 var inside, side;
 
 //Side indicate if a point is inside the polygon (right) or outside in the open half-plane (left)
-side = function(point, dirSeg) {
+side = function (point, dirSeg) {
   var d, endpt1, endpt2, ref;
   if ((dirSeg.isRay != null) && dirSeg.isRay) {
     endpt1 = dirSeg.origin;
@@ -2902,7 +2902,7 @@ side = function(point, dirSeg) {
   return "right";
 };
 
-inside = function(pt, LAV) {
+inside = function (pt, LAV) {
   var a, count, e, i, insideness, l, len, nood, r, ref;
   r = Math.random();
   a = new Point(1, r);
@@ -2926,9 +2926,9 @@ inside = function(pt, LAV) {
   }
   return false;
 };
-var draw, drawCPEdge, drawCreasePattern, drawPoint, drawSkeleton, exportToFOLD, printClickSequence, removeMarkers, stringToClickSeq, testOutputFunction;
+var draw, drawCPEdge, drawCreasePattern, drawPoint, drawPointGreen, drawLine, drawSkeleton, exportToFOLD, printClickSequence, removeMarkers, stringToClickSeq, testOutputFunction;
 
-printClickSequence = function(clickSeq) {
+printClickSequence = function (clickSeq) {
   var click, i, k, ref, s;
   s = "";
   if (clickSeq.length === 1) {
@@ -2950,7 +2950,7 @@ printClickSequence = function(clickSeq) {
   return document.getElementById("clicks").innerHTML = s;
 };
 
-removeMarkers = function(clickSequence) {
+removeMarkers = function (clickSequence) {
   var i, k, modifiedClickSeq, perturbedPoint, point, ref, start;
   modifiedClickSeq = [];
   start = null;
@@ -2972,7 +2972,7 @@ removeMarkers = function(clickSequence) {
   return modifiedClickSeq;
 };
 
-draw = function(clickSequence) {
+draw = function (clickSequence) {
   var i, k, point, previous, ref;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   for (i = k = 0, ref = clickSequence.length - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
@@ -2993,7 +2993,7 @@ draw = function(clickSequence) {
   }
 };
 
-drawPoint = function(x, y) {
+drawPoint = function (x, y) {
   ctx.beginPath();
   ctx.arc(x, c - y - b, 3, 0, 2 * Math.PI);
   ctx.fillStyle = "orange";
@@ -3002,7 +3002,28 @@ drawPoint = function(x, y) {
   return ctx.stroke();
 };
 
-drawCPEdge = function(edge, show) {
+drawPointGreen = function (x, y) {
+  ctx.beginPath();
+  ctx.arc(x, c - y - b, 3, 0, 2 * Math.PI);
+  ctx.fillStyle = "green";
+  ctx.fill();
+  ctx.strokeStyle = "black";
+  return ctx.stroke();
+};
+
+drawLine = function (endpt1,endpt2) {
+  ctx.beginPath();
+  ctx.beginPath();
+  ctx.moveTo(endpt1.x, c - endpt1.y - b);
+  ctx.lineTo(endpt2.x, c - endpt2.y - b);
+  ctx.fill();
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 1;
+  return ctx.stroke();
+};
+
+
+drawCPEdge = function (edge, show) {
   var endpt1, endpt2;
   endpt1 = edge.endpt1;
   endpt2 = edge.endpt2;
@@ -3040,7 +3061,7 @@ drawCPEdge = function(edge, show) {
   }
 };
 
-testOutputFunction = function(clickSeq, show, skeletonOnly) {
+testOutputFunction = function (clickSeq, show, skeletonOnly) {
   var CP, CPFaces, facesRelations, gEdges, gVtxs, infEdges, k, len, ref, ref1, skelEdges, skelVtxs, skelv, text, tmpSkeleton, tooManyPerps;
   if (skeletonOnly) {
     ref = straightSkeleton(removeMarkers(clickSeq)), skelEdges = ref[0], skelVtxs = ref[1], infEdges = ref[2], gVtxs = ref[3], gEdges = ref[4];
@@ -3059,7 +3080,7 @@ testOutputFunction = function(clickSeq, show, skeletonOnly) {
     } else {
       text = "";
     }
-    return $("a#programatically").click(function() {
+    return $("a#programatically").click(function () {
       var now;
       now = text;
       return this.href = "data:text/plain;charset=UTF-8," + encodeURIComponent(now);
@@ -3067,7 +3088,7 @@ testOutputFunction = function(clickSeq, show, skeletonOnly) {
   }
 };
 
-drawCreasePattern = function(CP, gEdges, show) {
+drawCreasePattern = function (CP, gEdges, show) {
   var cpEdge, cpVertex, cute, k, l, len, len1, len2, m, ref, ref1, results, x, y;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "white";
@@ -3101,7 +3122,7 @@ drawCreasePattern = function(CP, gEdges, show) {
   return results;
 };
 
-drawSkeleton = function(CP, gEdges, show) {
+drawSkeleton = function (CP, gEdges, show) {
   var cpEdge, cpVertex, cute, endpt1, endpt2, k, l, len, len1, len2, m, ref, ref1, results, x, y;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "white";
@@ -3144,7 +3165,7 @@ drawSkeleton = function(CP, gEdges, show) {
   return results;
 };
 
-stringToClickSeq = function(str) {
+stringToClickSeq = function (str) {
   var P, char, clickSeq, i, num1, num2, ref, ref1, ref2, start, x, y;
   clickSeq = [];
   start = null;
@@ -3197,7 +3218,7 @@ stringToClickSeq = function(str) {
   return clickSeq;
 };
 
-exportToFOLD = function(CP, CPFaces, facesRelations) {
+exportToFOLD = function (CP, CPFaces, facesRelations) {
   var e, fac, i, j, k, l, m, n, o, p1, p2, ref, ref1, ref2, ref3, ref4, s, v, vertices;
   s = '{ "file_spec": 1, \n "file_classes": ["singleModel"],\n "frame_title": "Fold-and-Cut crease pattern",\n "frame_classes": ["creasePattern"],\n "frame_attributes": ["2D"],\n "vertices_coords": [';
   for (i = k = 0, ref = CP.cPVs.length - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
@@ -3259,9 +3280,9 @@ b = rect.top;
 
 c = rect.bottom;
 //Wait for your document to be loaded
-$(document).ready(function() {
+$(document).ready(function () {
   var CP, clickSeq, gEdges, live, previous, repeat, show, skeletonOnly, start, text;
-  clickSeq = ["marker"];
+  clickSeq = [];
   start = null;
   previous = null;
   repeat = null;
@@ -3290,90 +3311,142 @@ $(document).ready(function() {
     $("#skeleton").html("Skeleton only OFF ")
   }
 
-  $("#myCanvas").mouseup(function(e) {
-    var P, closed, x, y;
-    $("#myCanvas").unbind("mousemove");
-    if (repeat != null) {
-      repeat = null;
-    } else {
-      x = e.pageX - a;
-      y = c - e.pageY;
-      P = new Point(x, y);
-      if (start === null) {
-        start = P;
-        previous = P;
-      } else {
-        if (dist(P, start) < 6) {
-          closed = true;
-          ctx.moveTo(previous.x, c - b - previous.y);
-          ctx.lineTo(start.x, c - b - start.y);
-          ctx.stroke();
-          previous = null;
-          clickSeq.push(start);
-          clickSeq.push("marker");
-          start = null;
-        }
-      }
-      if (!closed) {
-        if (previous !== P) {
-          ctx.beginPath();
-          ctx.moveTo(previous.x, c - b - previous.y);
-          ctx.lineTo(P.x, c - b - P.y);
-          ctx.lineWidth = 1;
-          ctx.strokeStyle = "black";
-          ctx.stroke();
-          previous = P;
-        }
-        clickSeq.push(P);
-        ctx.beginPath();
-        ctx.arc(x, c - y - b, 3, 0, 2 * Math.PI);
-        ctx.fillStyle = "green";
-        ctx.fill();
-      }
-    }
-    if (start === null) {
-      printClickSequence(clickSeq);
-      if (live) {
-        testOutputFunction(clickSeq, show, skeletonOnly);
-      }
-    }
-    return $("#myCanvas").mousemove(function(e) {
-      x = e.pageX - a;
-      y = c - e.pageY;
-      return document.getElementById("coords").innerHTML = "(" + x + ", " + y + ")";
-    });
-  });
-  $("#myCanvas").mousedown(function(e) {
-    var P, i, len, point, x, y;
-    $("#myCanvas").unbind("mousemove");
+  //-------//
+  $('#myCanvas').click(function (e) {
+    console.log('In the click');
+    var P, closed, x, y, initial;
     x = e.pageX - a;
     y = c - e.pageY;
     P = new Point(x, y);
+
     if (start === null) {
-      for (i = 0, len = clickSeq.length; i < len; i++) {
-        point = clickSeq[i];
-        if (point === "marker") {
-          continue;
-        }
-        if (dist(P, point) < 4) {
-          repeat = point;
-          break;
-        }
-      }
+      drawPointGreen(x,y);
+      //mark the start of a new planar graph or polygon
+      clickSeq.push('marker');
+      //not the start anymore
+      start = P;
+      console.log('Start is ' + start);
+      //point in list
+      clickSeq.push(P);
+      //previous initializes
+      previous = P;
+    
+    }else{
+      if (dist(P, start) < 4){
+        console.log('jsuis dans la boucle')
+        closed = true;
+        drawLine(previous,start);
+        start = null;
+      }else{
+      drawPointGreen(x,y);
+      //draw line with previous point
+      drawLine(P,previous)
+      //point in list
+      clickSeq.push(P);
+      //update previous
+      previous = P;
     }
-    return $("#myCanvas").mousemove(function(e) {
-      if (!(repeat != null)) {
-        return;
-      }
-      x = e.pageX - a;
-      y = c - e.pageY;
-      document.getElementById("coords").innerHTML = "(" + x + ", " + y + ")";
-      repeat.x = x;
-      repeat.y = y;
-      return draw(clickSeq);
-    });
+  }
+    
+    console.log(clickSeq)
   });
-  $(document).keydown(function(e) {
+
+  // $("#myCanvas").mouseup(function(e) {
+  //   var P, closed, x, y;
+  //   $("#myCanvas").unbind("mousemove");
+  //   if (repeat != null) {
+  //     repeat = null;
+  //   } else {
+  //     x = e.pageX - a;
+  //     y = c - e.pageY;
+  //     P = new Point(x, y);
+  //     if (start === null) {
+  //       start = P;
+  //       previous = P;
+  //     } else {
+  //       if (dist(P, start) < 6) {
+  //         closed = true;
+  //         ctx.moveTo(previous.x, c - b - previous.y);
+  //         ctx.lineTo(start.x, c - b - start.y);
+  //         ctx.stroke();
+  //         previous = null;
+  //         clickSeq.push(start);
+  //         clickSeq.push("marker");
+  //         start = null;
+  //       }
+  //     }
+  //     if (!closed) {
+  //       if (previous !== P) {
+  //         ctx.beginPath();
+  //         ctx.moveTo(previous.x, c - b - previous.y);
+  //         ctx.lineTo(P.x, c - b - P.y);
+  //         ctx.lineWidth = 1;
+  //         ctx.strokeStyle = "black";
+  //         ctx.stroke();
+  //         previous = P;
+  //       }
+  //       clickSeq.push(P);
+  //       ctx.beginPath();
+  //       ctx.arc(x, c - y - b, 3, 0, 2 * Math.PI);
+  //       ctx.fillStyle = "green";
+  //       ctx.fill();
+  //     }
+  //   }
+  //   if (start === null) {
+  //     printClickSequence(clickSeq);
+  //     if (live) {
+  //       testOutputFunction(clickSeq, show, skeletonOnly);
+  //     }
+  //   }
+  //   return $("#myCanvas").mousemove(function(e) {
+  //     x = e.pageX - a;
+  //     y = c - e.pageY;
+  //     //initialize (or update the coords element)
+  //     return document.getElementById("coords").innerHTML = "(" + x + ", " + y + ")";
+  //   });
+  // });
+
+
+  // $("#myCanvas").mousedown(function(e) {
+  //   var P, i, len, point, x, y;
+  //   $("#myCanvas").unbind("mousemove");
+  //   x = e.pageX - a;
+  //   y = c - e.pageY;
+  //   P = new Point(x, y);
+  //   if (start === null) {
+  //     for (i = 0, len = clickSeq.length; i < len; i++) {
+  //       point = clickSeq[i];
+  //       if (point === "marker") {
+  //         continue;
+  //       }
+  //       if (dist(P, point) < 4) {
+  //         repeat = point;
+  //         break;
+  //       }
+  //     }
+  //   }
+  //   return $("#myCanvas").mousemove(function(e) {
+  //     if (!(repeat != null)) {
+  //       return;
+  //     }
+  //     x = e.pageX - a;
+  //     y = c - e.pageY;
+  //     document.getElementById("coords").innerHTML = "(" + x + ", " + y + ")";
+  //     repeat.x = x;
+  //     repeat.y = y;
+  //     return draw(clickSeq);
+  //   });
+  // });
+  // $("#myCanvas").mousemove(function(e) {
+  //   var x, y;
+  //   x = e.pageX - a;
+  //   y = c - e.pageY;
+  //   return document.getElementById("coords").innerHTML = "(" + x + ", " + y + ")";
+  // });
+  // //-------//
+
+
+  $(document).keydown(function (e) {
     if (e.which === 27) {
       while (clickSeq[clickSeq.length - 1] !== "marker") {
         clickSeq.splice(clickSeq.length - 1, 1);
@@ -3386,7 +3459,7 @@ $(document).ready(function() {
       }
     }
   });
-  $(document).keydown(function(e) {
+  $(document).keydown(function (e) {
     if (start === null && e.which === 88) {
       if (clickSeq.length > 1) {
         clickSeq.splice(clickSeq.length - 1);
@@ -3400,8 +3473,8 @@ $(document).ready(function() {
       }
     }
   });
-  //Modify with click
-  $("#skeleton").click(function(e) {
+  //Modify button with click
+  $("#skeleton").click(function (e) {
     if (skeletonOnly) {
       skeletonOnly = false;
       document.getElementById("skeleton").innerHTML = "Skeleton only OFF";
@@ -3413,8 +3486,8 @@ $(document).ready(function() {
       return testOutputFunction(clickSeq, show, skeletonOnly);
     }
   });
-  //Modify with click
-  $("#live").click(function(e) {
+  //Modify button with click
+  $("#live").click(function (e) {
     if (live) {
       live = false;
       $("#live").html("Live computation OFF");
@@ -3426,8 +3499,8 @@ $(document).ready(function() {
       return testOutputFunction(clickSeq, show, skeletonOnly);
     }
   });
-  //Modify with click
-  $("#toggle").click(function(e) {
+  //Modify button with click
+  $("#toggle").click(function (e) {
     if (show) {
       show = false;
       $("#toggle").html("Unused creases OFF");
@@ -3437,23 +3510,19 @@ $(document).ready(function() {
     }
     return testOutputFunction(clickSeq, show, skeletonOnly);
   });
-  
 
 
-  $("#myCanvas").mousemove(function(e) {
-    var x, y;
-    x = e.pageX - a;
-    y = c - e.pageY;
-    return document.getElementById("coords").innerHTML = "(" + x + ", " + y + ")";
-  });
-  $("#manual").click(function() {
+
+
+
+  $("#manual").click(function () {
     clickSeq = stringToClickSeq($("input:text").val());
     printClickSequence(clickSeq);
     if (live) {
       return testOutputFunction(clickSeq, show, skeletonOnly);
     }
   });
-  return $("a#programatically").click(function() {
+  return $("a#programatically").click(function () {
     var now;
     now = text;
     return this.href = "data:text/plain;charset=UTF-8," + encodeURIComponent(now);
