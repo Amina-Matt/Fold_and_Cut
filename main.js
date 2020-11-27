@@ -3485,6 +3485,7 @@ $(document).ready(function () {
   //Modify the value of closed with a click 
   $("#terminate").click(function(e){
     start = null;
+    clickSeq.push('marker');
   })
   //Modify button with click
   $("#skeleton").click(function (e) {
