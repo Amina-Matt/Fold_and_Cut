@@ -1438,84 +1438,83 @@ var stepOneAB;
 stepOneAB = function (clickSeq) {
   var LAV, copySLAV, gEdges, gVtxs, i, inEdgeU, inEdgeVtx, leaf, len, mySLAV, n, newVertex, outEdgeU, outEdgeVtx, u, vertexOne, vertexTwo, vertices, vtx;
   leaf = null;
+  LAV = new CircularDoublyLinkedList();
   vertices = [];
   gVtxs = [];
   mySLAV = new SLAV();
-  console.log(clickSeq);
-  if (clickSeq[0].x == clickSeq[clickSeq.length - 1].x && clickSeq[0].y == clickSeq[clickSeq.length - 1].y) {
-    LAV = new CircularDoublyLinkedList();
-    console.log('In polygon case');
-        // Polygon case
-    for (i = 0, len = clickSeq.length; i < len; i++) {
-      vtx = clickSeq[i];
-      if (leaf === null) {
-        leaf = vtx;
-        vertices.push(vtx);
-        gVtxs.push(vtx);
-      } else {
-        if (vtx.x === leaf.x && vtx.y === leaf.y) {
-          n = vertices.length;
-          u = vertices[n - 1];
-          inEdgeU = new DirectedSegment(vertices[n - 2], u);
-          outEdgeU = new DirectedSegment(u, vtx);
-          inEdgeVtx = new DirectedSegment(u, vtx);
-          outEdgeVtx = new DirectedSegment(vtx, vertices[1]);
-          vertexOne = new Vertex(u, inEdgeU, outEdgeU);
-          vertexTwo = new Vertex(vtx, inEdgeVtx, outEdgeVtx);
-          LAV.push(vertexOne);
-          LAV.push(vertexTwo);
-          mySLAV.pushLAV(LAV);
-          LAV = new CircularDoublyLinkedList();
-          vertices = [];
-          leaf = null;
-        } else {
-          n = vertices.length;
-          if (n >= 2) {
-            u = vertices[n - 1];
-            inEdgeU = new DirectedSegment(vertices[n - 2], u);
-            outEdgeU = new DirectedSegment(u, vtx);
-            newVertex = new Vertex(u, inEdgeU, outEdgeU);
-            LAV.push(newVertex);
-          }
-          vertices.push(vtx);
-          gVtxs.push(vtx);
-        }
-      }
-    }
-  } else {
-    //Planar graph case
-    console.log('In polygon case');
-    //If it isn't a polygon but a straight planar graph the first and last vertices are different
-    LAV = new CircularDoublyLinkedList();
-    for (i = 0, len = clickSeq.length; i < len; i++) {
-      vtx = clickSeq[i];
-      n = vertices.length;
-      //treat the first terminal point
-      if (n == 0) {
-        inEdgeU = null;
-        outEdgeU = new DirectedSegment(vtx, clickSeq[1]);
-        newVertex = new Vertex(vtx, inEdgeU, outEdgeU);
-        LAV.push(newVertex);
-      }
-      if (n >= 2) {
+  // if (clickSeq[0].x == clickSeq[clickSeq.length - 1].x && clickSeq[0].y == clickSeq[clickSeq.length - 1].y) {
+  //LAV = new CircularDoublyLinkedList();
+  // Polygon case
+  for (i = 0, len = clickSeq.length; i < len; i++) {
+    vtx = clickSeq[i];
+    if (leaf === null) {
+      leaf = vtx;
+      vertices.push(vtx);
+      gVtxs.push(vtx);
+    } else {
+      if (vtx.x === leaf.x && vtx.y === leaf.y) {
+        n = vertices.length;
         u = vertices[n - 1];
         inEdgeU = new DirectedSegment(vertices[n - 2], u);
         outEdgeU = new DirectedSegment(u, vtx);
-        newVertex = new Vertex(u, inEdgeU, outEdgeU);
-        LAV.push(newVertex);
-        //treat the last terminal point
-        if (n == len - 1) {
-          inEdgeVtx = new DirectedSegment(u, vtx);
-          outEdgeVtx = null;
-          vertexFinal = new Vertex(vtx, inEdgeVtx, outEdgeVtx);
-          LAV.push(vertexFinal);
+        inEdgeVtx = new DirectedSegment(u, vtx);
+        outEdgeVtx = new DirectedSegment(vtx, vertices[1]);
+        vertexOne = new Vertex(u, inEdgeU, outEdgeU);
+        vertexTwo = new Vertex(vtx, inEdgeVtx, outEdgeVtx);
+        LAV.push(vertexOne);
+        LAV.push(vertexTwo);
+        mySLAV.pushLAV(LAV);
+        LAV = new CircularDoublyLinkedList();
+        vertices = [];
+        leaf = null;
+      } else {
+        n = vertices.length;
+        if (n >= 2) {
+          u = vertices[n - 1];
+          inEdgeU = new DirectedSegment(vertices[n - 2], u);
+          outEdgeU = new DirectedSegment(u, vtx);
+          newVertex = new Vertex(u, inEdgeU, outEdgeU);
+          LAV.push(newVertex);
         }
+        vertices.push(vtx);
+        gVtxs.push(vtx);
       }
-      vertices.push(vtx);
-      gVtxs.push(vtx);
     }
-    mySLAV.pushLAV(LAV);
   }
+  // } else {
+  //   //Planar graph case
+  //   console.log('In planar case');
+  //   //If it isn't a polygon but a straight planar graph the first and last vertices are different
+  //   LAV = new CircularDoublyLinkedList();
+  //   for (i = 0, len = clickSeq.length; i < len; i++) {
+  //     vtx = clickSeq[i];
+  //     n = vertices.length;
+  //     //treat the first terminal point
+  //     if (n == 0) {
+  //       inEdgeU = null;
+  //       outEdgeU = new DirectedSegment(vtx, clickSeq[1]);
+  //       newVertex = new Vertex(vtx, inEdgeU, outEdgeU);
+  //       LAV.push(newVertex);
+  //     }
+  //     if (n >= 2) {
+  //       u = vertices[n - 1];
+  //       inEdgeU = new DirectedSegment(vertices[n - 2], u);
+  //       outEdgeU = new DirectedSegment(u, vtx);
+  //       newVertex = new Vertex(u, inEdgeU, outEdgeU);
+  //       LAV.push(newVertex);
+  //       //treat the last terminal point
+  //       if (n == len - 1) {
+  //         inEdgeVtx = new DirectedSegment(u, vtx);
+  //         outEdgeVtx = null;
+  //         vertexFinal = new Vertex(vtx, inEdgeVtx, outEdgeVtx);
+  //         LAV.push(vertexFinal);
+  //       }
+  //     }
+  //     vertices.push(vtx);
+  //     gVtxs.push(vtx);
+  //   }
+  //   mySLAV.pushLAV(LAV);
+  // }
   mySLAV.orient();
   gEdges = mySLAV.allEdges();
   copySLAV = mySLAV.copy();
@@ -1839,7 +1838,7 @@ var straightSkeleton,
 
 straightSkeleton = function (clickSequence) {
   var gEdges, gVtxs, i, infEdges, leftOver, len, mySLAV, pq, processed, ref, ref1, skelEdges, skelVtxs;
-  console.clear();
+  // console.clear();
   skelEdges = [];
   skelVtxs = [];
   infEdges = [];
@@ -1849,7 +1848,7 @@ straightSkeleton = function (clickSequence) {
   console.log(clickSequence);
   console.log('The slav is');
   console.log(mySLAV);
- 
+  console.log('The ref is');
   pq = stepOneC(mySLAV, infEdges);
   // console.log('Done stepOneC in straight skeleton function');
   // console.log('StepOneC returns:');
@@ -1867,7 +1866,6 @@ straightSkeleton = function (clickSequence) {
       infEdges.push(leftOver.content.bbbisector());
     }
   }
-  console.log('Here here')
   return [skelEdges, skelVtxs, infEdges, gVtxs, gEdges];
 };
 var DirectedSegment, GraphEdge, LineOrRay, Point, Vertex, angle, angleBisector, dist, foot, intersect, isReflex, line, perp, reflect;
@@ -3064,12 +3062,16 @@ drawCPEdge = function (edge, show) {
 testOutputFunction = function (clickSeq, show, skeletonOnly) {
   var CP, CPFaces, facesRelations, gEdges, gVtxs, infEdges, k, len, ref, ref1, skelEdges, skelVtxs, skelv, text, tmpSkeleton, tooManyPerps;
   if (skeletonOnly) {
+    console.log('Here is the sequence untouched');
+    console.log(clickSeq);
     ref = straightSkeleton(removeMarkers(clickSeq)), skelEdges = ref[0], skelVtxs = ref[1], infEdges = ref[2], gVtxs = ref[3], gEdges = ref[4];
     tmpSkeleton = [];
     for (k = 0, len = skelVtxs.length; k < len; k++) {
       skelv = skelVtxs[k];
       tmpSkeleton.push(skelv[0]);
     }
+    console.log('this is ref');
+    console.log(ref);
     CP = convert(skelEdges, tmpSkeleton, infEdges, gVtxs, gEdges, [], [], [], []);
     console.log('just before the drawSkeleton');
     return drawSkeleton(CP, gEdges, show);
@@ -3155,12 +3157,10 @@ drawSkeleton = function (CP, gEdges, show) {
   results = [];
   
   for (m = 0, len2 = ref1.length; m < len2; m++) {
-    console.log(cpVertex);
     cpVertex = ref1[m];
     if (cpVertex.type === "graph") {
       x = cpVertex.x;
       y = cpVertex.y;
-      console.log('in draw skeleton ')
       results.push(drawPoint(x, y));
     } else {
       results.push(void 0);
@@ -3286,7 +3286,7 @@ c = rect.bottom;
 //Wait for your document to be loaded
 $(document).ready(function () {
   var CP, clickSeq, gEdges, live, previous, repeat, show, skeletonOnly, start, text;
-  clickSeq = [];
+  clickSeq = ["marker"];
   start = null;
   previous = null;
   repeat = null;
@@ -3325,20 +3325,21 @@ $(document).ready(function () {
     if (start === null) {
       drawPointGreen(x,y);
       //mark the start of a new planar graph or polygon
-      clickSeq.push('marker');
+      
       //not the start anymore
       start = P;
       //point in list
       clickSeq.push(P);
       //previous initializes
       previous = P;
-    
     }else{
+      
       if (dist(P, start) < 6){
         closed = true;
         clickSeq.push(start);
         drawLine(previous,start);
         start = null;
+        clickSeq.push('marker');
       }else{
       drawPointGreen(x,y);
       //draw line with previous point
