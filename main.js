@@ -3486,6 +3486,9 @@ $(document).ready(function () {
   $("#terminate").click(function(e){
     start = null;
     clickSeq.push('marker');
+    if (live){
+      return testOutputFunction(clickSeq, show, skeletonOnly);
+    }
   })
   //Modify button with click
   $("#skeleton").click(function (e) {
