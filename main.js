@@ -30,9 +30,13 @@ CircularDoublyLinkedList = (function () {
     if (this.head != null) {
       return this.insert(val, this.tail);
     } else {
+      console.log('Im in the else')
+      console.log(this.head)
       this.head = new Node(null, val, null);
       this.head.pred = this.head;
       this.head.succ = this.head;
+      console.log(val)
+      console.log(this.head)
       this.nodesList.push(this.head);
       return this.tail = this.head.pred;
     }
@@ -1441,9 +1445,7 @@ stepOneAB = function (clickSeq) {
   vertices = [];
   gVtxs = [];
   mySLAV = new SLAV();
-  console.log(clickSeq[0]);
-  console.log(clickSeq[clickSeq.length - 1].x);
-
+ 
   if (clickSeq[0].x == clickSeq[clickSeq.length - 1].x && clickSeq[0].y == clickSeq[clickSeq.length - 1].y) {
   LAV = new CircularDoublyLinkedList();
   console.log('In polygon case');
@@ -1494,12 +1496,16 @@ stepOneAB = function (clickSeq) {
       n = vertices.length;
       //treat the first terminal point
       if (n == 0) {
+        console.log('je suis dans n==0')
         inEdgeU = null;
         outEdgeU = new DirectedSegment(vtx, clickSeq[1]);
         newVertex = new Vertex(vtx, inEdgeU, outEdgeU);
+        console.log('what is really newVertex')
+        console.log(newVertex)
         LAV.push(newVertex);
       }
       if (n >= 2) {
+
         u = vertices[n - 1];
         inEdgeU = new DirectedSegment(vertices[n - 2], u);
         outEdgeU = new DirectedSegment(u, vtx);
@@ -1507,16 +1513,18 @@ stepOneAB = function (clickSeq) {
         LAV.push(newVertex);
         //treat the last terminal point
         if (n == len - 1) {
+
           inEdgeVtx = new DirectedSegment(u, vtx);
           outEdgeVtx = null;
           vertexFinal = new Vertex(vtx, inEdgeVtx, outEdgeVtx);
           LAV.push(vertexFinal);
         }
       }
+      
       vertices.push(vtx);
       gVtxs.push(vtx);
     }
-    mySLAV.pushLAV(LAV);s
+    mySLAV.pushLAV(LAV);
   }
   mySLAV.orient();
   gEdges = mySLAV.allEdges();
@@ -3075,8 +3083,6 @@ testOutputFunction = function (clickSeq, show, skeletonOnly) {
       skelv = skelVtxs[k];
       tmpSkeleton.push(skelv[0]);
     }
-    console.log('this is ref');
-    console.log(ref);
     CP = convert(skelEdges, tmpSkeleton, infEdges, gVtxs, gEdges, [], [], [], []);
     console.log('just before the drawSkeleton');
     return drawSkeleton(CP, gEdges, show);
