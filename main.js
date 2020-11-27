@@ -1438,12 +1438,15 @@ var stepOneAB;
 stepOneAB = function (clickSeq) {
   var LAV, copySLAV, gEdges, gVtxs, i, inEdgeU, inEdgeVtx, leaf, len, mySLAV, n, newVertex, outEdgeU, outEdgeVtx, u, vertexOne, vertexTwo, vertices, vtx;
   leaf = null;
-  LAV = new CircularDoublyLinkedList();
   vertices = [];
   gVtxs = [];
   mySLAV = new SLAV();
-  // if (clickSeq[0].x == clickSeq[clickSeq.length - 1].x && clickSeq[0].y == clickSeq[clickSeq.length - 1].y) {
-  //LAV = new CircularDoublyLinkedList();
+  console.log(clickSeq[0]);
+  console.log(clickSeq[clickSeq.length - 1].x);
+
+  if (clickSeq[0].x == clickSeq[clickSeq.length - 1].x && clickSeq[0].y == clickSeq[clickSeq.length - 1].y) {
+  LAV = new CircularDoublyLinkedList();
+  console.log('In polygon case');
   // Polygon case
   for (i = 0, len = clickSeq.length; i < len; i++) {
     vtx = clickSeq[i];
@@ -1481,40 +1484,40 @@ stepOneAB = function (clickSeq) {
       }
     }
   }
-  // } else {
-  //   //Planar graph case
-  //   console.log('In planar case');
-  //   //If it isn't a polygon but a straight planar graph the first and last vertices are different
-  //   LAV = new CircularDoublyLinkedList();
-  //   for (i = 0, len = clickSeq.length; i < len; i++) {
-  //     vtx = clickSeq[i];
-  //     n = vertices.length;
-  //     //treat the first terminal point
-  //     if (n == 0) {
-  //       inEdgeU = null;
-  //       outEdgeU = new DirectedSegment(vtx, clickSeq[1]);
-  //       newVertex = new Vertex(vtx, inEdgeU, outEdgeU);
-  //       LAV.push(newVertex);
-  //     }
-  //     if (n >= 2) {
-  //       u = vertices[n - 1];
-  //       inEdgeU = new DirectedSegment(vertices[n - 2], u);
-  //       outEdgeU = new DirectedSegment(u, vtx);
-  //       newVertex = new Vertex(u, inEdgeU, outEdgeU);
-  //       LAV.push(newVertex);
-  //       //treat the last terminal point
-  //       if (n == len - 1) {
-  //         inEdgeVtx = new DirectedSegment(u, vtx);
-  //         outEdgeVtx = null;
-  //         vertexFinal = new Vertex(vtx, inEdgeVtx, outEdgeVtx);
-  //         LAV.push(vertexFinal);
-  //       }
-  //     }
-  //     vertices.push(vtx);
-  //     gVtxs.push(vtx);
-  //   }
-  //   mySLAV.pushLAV(LAV);
-  // }
+  } else {
+    //Planar graph case
+    console.log('In planar case');
+    //If it isn't a polygon but a straight planar graph the first and last vertices are different
+    LAV = new CircularDoublyLinkedList();
+    for (i = 0, len = clickSeq.length; i < len; i++) {
+      vtx = clickSeq[i];
+      n = vertices.length;
+      //treat the first terminal point
+      if (n == 0) {
+        inEdgeU = null;
+        outEdgeU = new DirectedSegment(vtx, clickSeq[1]);
+        newVertex = new Vertex(vtx, inEdgeU, outEdgeU);
+        LAV.push(newVertex);
+      }
+      if (n >= 2) {
+        u = vertices[n - 1];
+        inEdgeU = new DirectedSegment(vertices[n - 2], u);
+        outEdgeU = new DirectedSegment(u, vtx);
+        newVertex = new Vertex(u, inEdgeU, outEdgeU);
+        LAV.push(newVertex);
+        //treat the last terminal point
+        if (n == len - 1) {
+          inEdgeVtx = new DirectedSegment(u, vtx);
+          outEdgeVtx = null;
+          vertexFinal = new Vertex(vtx, inEdgeVtx, outEdgeVtx);
+          LAV.push(vertexFinal);
+        }
+      }
+      vertices.push(vtx);
+      gVtxs.push(vtx);
+    }
+    mySLAV.pushLAV(LAV);s
+  }
   mySLAV.orient();
   gEdges = mySLAV.allEdges();
   copySLAV = mySLAV.copy();
@@ -2952,21 +2955,22 @@ removeMarkers = function (clickSequence) {
   var i, k, modifiedClickSeq, perturbedPoint, point, ref, start;
   modifiedClickSeq = [];
   start = null;
-  for (i = k = 0, ref = clickSequence.length - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
-    point = clickSequence[i];
-    if (point !== "marker") {
-      perturbedPoint = new Point(point.x + Math.random() * 0.01 - 0.005, point.y + Math.random() * 0.01 - 0.005);
-      if (start === null) {
-        start = perturbedPoint;
-      }
-      if (clickSequence[i + 1] === "marker") {
-        modifiedClickSeq.push(start);
-        start = null;
-      } else {
-        modifiedClickSeq.push(perturbedPoint);
-      }
-    }
-  }
+  modifiedClickSeq= clickSequence.filter(element => element  != "marker");
+  // for (i = k = 0, ref = clickSequence.length - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
+  //   point = clickSequence[i];
+  //   if (point !== "marker") {
+  //     perturbedPoint = new Point(point.x + Math.random() * 0.01 - 0.005, point.y + Math.random() * 0.01 - 0.005);
+  //     if (start === null) {
+  //       start = perturbedPoint;
+  //     }
+  //     if (clickSequence[i + 1] === "marker") {
+  //       modifiedClickSeq.push(start);
+  //       start = null;
+  //     } else {
+  //       modifiedClickSeq.push(perturbedPoint);
+  //     }
+  //   }
+  // }
   return modifiedClickSeq;
 };
 
@@ -3064,6 +3068,7 @@ testOutputFunction = function (clickSeq, show, skeletonOnly) {
   if (skeletonOnly) {
     console.log('Here is the sequence untouched');
     console.log(clickSeq);
+    console.log(removeMarkers(clickSeq));
     ref = straightSkeleton(removeMarkers(clickSeq)), skelEdges = ref[0], skelVtxs = ref[1], infEdges = ref[2], gVtxs = ref[3], gEdges = ref[4];
     tmpSkeleton = [];
     for (k = 0, len = skelVtxs.length; k < len; k++) {
