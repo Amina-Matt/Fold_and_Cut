@@ -3332,9 +3332,9 @@ $(document).ready(function () {
       previous = P;
     
     }else{
-      if (dist(P, start) < 4){
-        console.log('jsuis dans la boucle')
+      if (dist(P, start) < 6){
         closed = true;
+        clickSeq.push(start);
         drawLine(previous,start);
         start = null;
       }else{
@@ -3473,6 +3473,10 @@ $(document).ready(function () {
       }
     }
   });
+  //Modify the value of closed with a click 
+  $("#terminate").click(function(e){
+    start = null;
+  })
   //Modify button with click
   $("#skeleton").click(function (e) {
     if (skeletonOnly) {
