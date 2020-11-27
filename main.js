@@ -1036,7 +1036,6 @@ var foldAndCut;
 foldAndCut = function (clickSeq) {
   var CP, CPfaces, e, facesRelations, gE, gV, i, iPerps, perps, qGV, qSV, ref, ref1, ref2, root, shady, tooManyPerps, v;
   ref = straightSkeleton(clickSeq), e = ref[0], v = ref[1], i = ref[2], gV = ref[3], gE = ref[4];
-  console.log(clickSeq);
   console.log("straight skeleton finished");
   ref1 = computePerps(e, v, i, gV, gE), e = ref1[0], v = ref1[1], i = ref1[2], gV = ref1[3], gE = ref1[4], perps = ref1[5], iPerps = ref1[6], qSV = ref1[7], qGV = ref1[8], tooManyPerps = ref1[9];
   console.log("computePerps finished");
@@ -1442,13 +1441,13 @@ stepOneAB = function (clickSeq) {
   vertices = [];
   gVtxs = [];
   mySLAV = new SLAV();
-
+  console.log(clickSeq);
   if (clickSeq[0].x == clickSeq[clickSeq.length - 1].x && clickSeq[0].y == clickSeq[clickSeq.length - 1].y) {
     LAV = new CircularDoublyLinkedList();
-    // Polygon case
+    console.log('In polygon case');
+        // Polygon case
     for (i = 0, len = clickSeq.length; i < len; i++) {
       vtx = clickSeq[i];
-      test = 'In polygon case';
       if (leaf === null) {
         leaf = vtx;
         vertices.push(vtx);
@@ -1485,8 +1484,8 @@ stepOneAB = function (clickSeq) {
     }
   } else {
     //Planar graph case
+    console.log('In polygon case');
     //If it isn't a polygon but a straight planar graph the first and last vertices are different
-
     LAV = new CircularDoublyLinkedList();
     for (i = 0, len = clickSeq.length; i < len; i++) {
       vtx = clickSeq[i];
@@ -1497,7 +1496,6 @@ stepOneAB = function (clickSeq) {
         outEdgeU = new DirectedSegment(vtx, clickSeq[1]);
         newVertex = new Vertex(vtx, inEdgeU, outEdgeU);
         LAV.push(newVertex);
-        mySLAV.pushLAV(LAV);
       }
       if (n >= 2) {
         u = vertices[n - 1];
@@ -1505,19 +1503,18 @@ stepOneAB = function (clickSeq) {
         outEdgeU = new DirectedSegment(u, vtx);
         newVertex = new Vertex(u, inEdgeU, outEdgeU);
         LAV.push(newVertex);
-        mySLAV.pushLAV(LAV);
         //treat the last terminal point
         if (n == len - 1) {
           inEdgeVtx = new DirectedSegment(u, vtx);
           outEdgeVtx = null;
           vertexFinal = new Vertex(vtx, inEdgeVtx, outEdgeVtx);
           LAV.push(vertexFinal);
-          mySLAV.pushLAV(LAV);
         }
       }
       vertices.push(vtx);
       gVtxs.push(vtx);
     }
+    mySLAV.pushLAV(LAV);
   }
   mySLAV.orient();
   gEdges = mySLAV.allEdges();
@@ -1552,14 +1549,12 @@ computeEvents = function (mySLAV, node, pq, infEdges) {
   for (i = 0, len = allEdgeEvents.length; i < len; i++) {
     ref = allEdgeEvents[i], I = ref[0], dE = ref[1];
     pq.add(I, dE);
-    console.log(I, dE);
   }
   if (isReflex(v)) {
     allCandidates = computeB(mySLAV, node);
     for (j = 0, len1 = allCandidates.length; j < len1; j++) {
       ref1 = allCandidates[j], splitPoint = ref1[0], dS = ref1[1];
       pq.add(splitPoint, dS);
-      console.log(splitPoint, dS);
     }
   }
 };
@@ -1850,12 +1845,16 @@ straightSkeleton = function (clickSequence) {
   infEdges = [];
   processed = [];
   ref = stepOneAB(clickSequence), mySLAV = ref[0], gVtxs = ref[1], gEdges = ref[2];
-  //console.log('Done stepOneAB in straight skeleton function');
-  //console.log('StepOneAB returns:');
-  //console.log(ref);
+  console.log('The click sequence is');
+  console.log(clickSequence);
+  console.log('The slav is');
+  console.log(mySLAV);
+ 
   pq = stepOneC(mySLAV, infEdges);
   // console.log('Done stepOneC in straight skeleton function');
   // console.log('StepOneC returns:');
+  console.log('The priority queue is');
+ 
   console.log(pq);
   while (pq.length() !== 0) {
     stepTwo(mySLAV, pq, processed, skelEdges, skelVtxs, infEdges);
@@ -2950,6 +2949,7 @@ printClickSequence = function (clickSeq) {
   return document.getElementById("clicks").innerHTML = s;
 };
 
+//this function remover the markers in between the different click sequences and perturbs every point
 removeMarkers = function (clickSequence) {
   var i, k, modifiedClickSeq, perturbedPoint, point, ref, start;
   modifiedClickSeq = [];
@@ -3071,6 +3071,7 @@ testOutputFunction = function (clickSeq, show, skeletonOnly) {
       tmpSkeleton.push(skelv[0]);
     }
     CP = convert(skelEdges, tmpSkeleton, infEdges, gVtxs, gEdges, [], [], [], []);
+    console.log('just before the drawSkeleton');
     return drawSkeleton(CP, gEdges, show);
   } else {
     ref1 = foldAndCut(removeMarkers(clickSeq)), CP = ref1[0], CPFaces = ref1[1], facesRelations = ref1[2], gEdges = ref1[3], tooManyPerps = ref1[4];
@@ -3152,11 +3153,14 @@ drawSkeleton = function (CP, gEdges, show) {
   }
   ref1 = CP.cPVs;
   results = [];
+  
   for (m = 0, len2 = ref1.length; m < len2; m++) {
+    console.log(cpVertex);
     cpVertex = ref1[m];
     if (cpVertex.type === "graph") {
       x = cpVertex.x;
       y = cpVertex.y;
+      console.log('in draw skeleton ')
       results.push(drawPoint(x, y));
     } else {
       results.push(void 0);
@@ -3288,7 +3292,7 @@ $(document).ready(function () {
   repeat = null;
   show = false;
   live = true;
-  skeletonOnly = false;
+  skeletonOnly = true;
   CP = new CreasePattern();
   gEdges = [];
   text = "";
@@ -3313,7 +3317,6 @@ $(document).ready(function () {
 
   //-------//
   $('#myCanvas').click(function (e) {
-    console.log('In the click');
     var P, closed, x, y, initial;
     x = e.pageX - a;
     y = c - e.pageY;
@@ -3325,7 +3328,6 @@ $(document).ready(function () {
       clickSeq.push('marker');
       //not the start anymore
       start = P;
-      console.log('Start is ' + start);
       //point in list
       clickSeq.push(P);
       //previous initializes
@@ -3347,8 +3349,12 @@ $(document).ready(function () {
       previous = P;
     }
   }
-    
-    console.log(clickSeq)
+  if (start === null) {
+        printClickSequence(clickSeq);
+        if (live) {
+          testOutputFunction(clickSeq, show, skeletonOnly);
+        }
+  }
   });
 
   // $("#myCanvas").mouseup(function(e) {
@@ -3437,15 +3443,15 @@ $(document).ready(function () {
   //     return draw(clickSeq);
   //   });
   // });
-  // $("#myCanvas").mousemove(function(e) {
-  //   var x, y;
-  //   x = e.pageX - a;
-  //   y = c - e.pageY;
-  //   return document.getElementById("coords").innerHTML = "(" + x + ", " + y + ")";
-  // });
-  // //-------//
+  $("#myCanvas").mousemove(function(e) {
+    var x, y;
+    x = e.pageX - a;
+    y = c - e.pageY;
+    return document.getElementById("coords").innerHTML = "(" + x + ", " + y + ")";
+  });
+  //-------//
 
-
+//escape keyboard event
   $(document).keydown(function (e) {
     if (e.which === 27) {
       while (clickSeq[clickSeq.length - 1] !== "marker") {
@@ -3459,6 +3465,8 @@ $(document).ready(function () {
       }
     }
   });
+
+  //x keyboard
   $(document).keydown(function (e) {
     if (start === null && e.which === 88) {
       if (clickSeq.length > 1) {
