@@ -17,13 +17,88 @@ Node = (function () {
 ////-----------------------////
 
 
-class DoublyLinkedList{
-  constructor(){
+class DoublyLinkedList {
+  constructor() {
+    this.nodesList = [];
     this.length = 0;
     this.head = null;
     this.tail = null;
+  
   }
-}
+  //method push
+  push() {
+    var nood = new this.Node(vertex);
+    if (this.head != null) {
+      return this.insert(val, this.tail);
+    } else {
+      //If the list is empty
+      if (this.head === null) {
+        this.head = nood;
+        this.tail = nood;
+        this.length++;
+        return this.head;
+      }
+    }
+  }
+  //method insert
+  insert(vertex, pos = this.length) {
+    var nood = new this.Node(vertex);
+    //Insertion at head
+    if (pos == 0) {
+      nood.pred = null;
+      nood.next = this.head;
+      this.head.prev = nood;
+      this.head = nood;
+      return this.head;
+    }
+    var iter = 1;
+    var currNode = this.head;
+    while (currNode.next != null && iter < pos) {
+      currNode = currNode.next;
+      iter++;
+    }
+    nood.next = currNode.next;
+    //This handle the case where the curr.node is the last one
+    if (currNode.next != null) {
+      currNode.next.prev = node;
+    }
+    node.prev = currNode;
+    currNode.next = node;
+
+    // check if inserted element was at the tail, if yes then make tail point to it
+    if (this.tail.next != null) {
+      this.tail = this.tail.next;
+    }
+    this.length++;
+    return node;
+  }
+  remove(vertex, pos = 0) {
+    if (this.length === 0) {
+      console.log("List is already empty");
+      return;
+    }
+    this.length--;
+    let currNode = this.head;
+    if (pos <= 0) {
+      this.head = this.head.next;
+      this.head.prev = null;
+    } else if (pos >= this.length - 1) {
+      this.tail = this.tail.prev;
+      this.tail.next = null;
+    } else {
+      let iter = 0;
+      while (iter < pos) {
+        currNode = currNode.next;
+        iter++;
+      }
+      currNode.next = currNode.next.next;
+      currNode.next.prev = currNode;
+    }
+    return currNode;
+  }
+
+
+};
 
 
 
@@ -55,16 +130,8 @@ CircularDoublyLinkedList = (function () {
     }
   };
 
-  CircularDoublyLinkedList.prototype.insert = function (val, prevnode) {
-    //val is a vertex 
+  CircularDoublyLinkedList.prototype.insert = function(val, prevnode) {
     var nood, postnode;
-    if(val.inEdge == null){
-      nood = new Node(null, val, prevnode.succ);
-      postnode = prevnode.succ;
-      postnode.pred = nood;
-      this.nodesList.push(nood);
-    return nood;
-    }else{
     nood = new Node(prevnode, val, prevnode.succ);
     postnode = prevnode.succ;
     prevnode.succ = nood;
@@ -72,7 +139,6 @@ CircularDoublyLinkedList = (function () {
     this.nodesList.push(nood);
     this.tail = this.head.pred;
     return nood;
-  }
   };
 
   CircularDoublyLinkedList.prototype.allContents = function () {
@@ -1470,8 +1536,8 @@ stepOneAB = function (clickSeq) {
   mySLAV = new SLAV();
  
   if (clickSeq[0].x == clickSeq[clickSeq.length - 1].x && clickSeq[0].y == clickSeq[clickSeq.length - 1].y) {
-  LAV = new CircularDoublyLinkedList();
   console.log('In polygon case');
+  LAV = new CircularDoublyLinkedList();
   // Polygon case
   for (i = 0, len = clickSeq.length; i < len; i++) {
     vtx = clickSeq[i];
@@ -1513,7 +1579,7 @@ stepOneAB = function (clickSeq) {
     //Planar graph case
     console.log('In planar case');
     //If it isn't a polygon but a straight planar graph the first and last vertices are different
-    LAV = new CircularDoublyLinkedList();
+    LAV = new DoublyLinkedList();
     for (i = 0, len = clickSeq.length; i < len; i++) {
       vtx = clickSeq[i];
       // console.log('VTX')
