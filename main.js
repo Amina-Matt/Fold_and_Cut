@@ -1,6 +1,6 @@
 //This is the updated (November 2020) version of huh.js from Danielle Wang (2017)
 
-var CircularDoublyLinkedList, Node, PriorityQueue, SLAV,
+var CircularDoublyLinkedList, DoublyLinkedList, Node, PriorityQueue, SLAV,
   indexOf = [].indexOf || function (item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 Node = (function () {
@@ -14,96 +14,160 @@ Node = (function () {
 
 })();
 
-////-----------------------////
-
-
-class DoublyLinkedList {
-  constructor() {
-    this.nodesList = [];
-    this.length = 0;
-    this.head = null;
-    this.tail = null;
-  
-  }
-  //method push
-  push() {
-    var nood = new this.Node(vertex);
-    if (this.head != null) {
-      return this.insert(val, this.tail);
-    } else {
-      //If the list is empty
-      if (this.head === null) {
-        this.head = nood;
-        this.tail = nood;
-        this.length++;
-        return this.head;
+DoublyLinkedList = (function () {
+  function DoublyLinkedList(valuesList) {
+      var j, len, val;
+      //property
+      this.nodesList = [];
+      //fill the nodes list
+      if (valuesList != null) {
+          for (j = 0, len = valuesList.length; j < len; j++) {
+              val = valuesList[j];
+              this.push(val);
+          }
       }
-    }
-  }
-  //method insert
-  insert(vertex, pos = this.length) {
-    var nood = new this.Node(vertex);
-    //Insertion at head
-    if (pos == 0) {
-      nood.pred = null;
-      nood.next = this.head;
-      this.head.prev = nood;
-      this.head = nood;
-      return this.head;
-    }
-    var iter = 1;
-    var currNode = this.head;
-    while (currNode.next != null && iter < pos) {
-      currNode = currNode.next;
-      iter++;
-    }
-    nood.next = currNode.next;
-    //This handle the case where the curr.node is the last one
-    if (currNode.next != null) {
-      currNode.next.prev = node;
-    }
-    node.prev = currNode;
-    currNode.next = node;
-
-    // check if inserted element was at the tail, if yes then make tail point to it
-    if (this.tail.next != null) {
-      this.tail = this.tail.next;
-    }
-    this.length++;
-    return node;
-  }
-  remove(vertex, pos = 0) {
-    if (this.length === 0) {
-      console.log("List is already empty");
-      return;
-    }
-    this.length--;
-    let currNode = this.head;
-    if (pos <= 0) {
-      this.head = this.head.next;
-      this.head.prev = null;
-    } else if (pos >= this.length - 1) {
-      this.tail = this.tail.prev;
-      this.tail.next = null;
-    } else {
-      let iter = 0;
-      while (iter < pos) {
-        currNode = currNode.next;
-        iter++;
+  // how to add a vertex the middle of a list
+  DoublyLinkedList.prototype.push = function (val) {
+      if (this.head != null) {
+          //if the list already exist you just insert it
+          return this.insert(val, this.tail);
+      } else {
+          //if there isn't any list yet 
+          nood = new Node(null, val,null);
+          this.head = nood;
+          this.tail = nood;
+          this.nodesList.push(this.head);
+          return ;
       }
-      currNode.next = currNode.next.next;
-      currNode.next.prev = currNode;
-    }
-    return currNode;
-  }
+  };
 
-
+  DoublyLinkedList.prototype.insert = function (val, prevnode) {
+      var nood, postnode;
+      nood = new Node(prevnode, val, null);
+      //the new node points on the end, ie null
+      //its pred is the end of the existing list, this.tail == prevnode
+      //the nood before is now pointing to it
+      prevnode.succ = nood;
+      this.nodesList.push(nood);
+      this.tail = nood;
+      return nood;
+  };
 };
 
+DoublyLinkedList.prototype.allContents = function () {
+  var C, j, len, nood, ref;
+  C = [];
+  ref = this.nodesList;
+  for (j = 0, len = ref.length; j < len; j++) {
+      nood = ref[j];
+      C.push(nood.content);
+  }
+  return C;
+};
 
+DoublyLinkedList.prototype.length = function () {
+  return this.nodesList.length;
+};
 
-////-----------------------////
+DoublyLinkedList.prototype.remove = function (nood) {
+  var postnode, prevnode;
+  if (this.length() === 0) {
+      return;
+  }
+  if (this.length() === 1 && nood === this.head) {
+      this.nodesList = [];
+      this.head = null;
+      return this.tail = null;
+  } else {
+      prevnode = nood.pred;
+      postnode = nood.succ;
+      prevnode.succ = postnode;
+      postnode.pred = prevnode;
+      this.nodesList.splice(this.nodesList.indexOf(nood), 1);
+      if (nood === this.head) {
+          this.head = this.head.succ;
+      }
+      return;
+  }
+};
 
+DoublyLinkedList.prototype.reverse = function () {
+  var j, len, nood, ref, tmp;
+  ref = this.nodesList;
+  for (j = 0, len = ref.length; j < len; j++) {
+      nood = ref[j];
+      tmp = nood.succ;
+      nood.succ = nood.pred;
+      nood.pred = tmp;
+      nood.content.inEdge = new DirectedSegment(nood.pred.content.point, nood.content.point);
+      nood.content.outEdge = new DirectedSegment(nood.content.point, nood.succ.content.point);
+      nood.content.bisector = angleBisector(nood.content.point, nood.content.inEdge, nood.content.outEdge);
+  }
+  this.head = this.tail;
+  this.tail = this.head.pred;
+  return this;
+};
+
+DoublyLinkedList.prototype.copy = function () {
+  var copyCDLL, elem;
+  copyCDLL = new CircularDoublyLinkedList();
+  copyCDLL.push(this.head.content.copy());
+  elem = this.head.succ;
+  while (elem !== this.head) {
+      copyCDLL.push(elem.content.copy());
+      elem = elem.succ;
+  }
+  return copyCDLL;
+};
+
+DoublyLinkedList.prototype.isInside = function (otherLAV) {
+  if (inside(this.head.content.point, otherLAV)) {
+      return true;
+  }
+  return false;
+};
+
+DoublyLinkedList.prototype.orientation = function () {
+  var A, j, len, node, ref, v, w, x1, x2, y1, y2;
+  A = 0;
+  ref = this.nodesList;
+  for (j = 0, len = ref.length; j < len; j++) {
+      node = ref[j];
+      v = node.content.point;
+      w = node.succ.content.point;
+      x1 = v.x;
+      x2 = w.x;
+      y1 = v.y;
+      y2 = w.y;
+      A = A + (x2 - x1) * (y2 + y1);
+  }
+  if (A > 0) {
+      return -1;
+  }
+  return 1;
+};
+
+DoublyLinkedList.prototype.positiveOrient = function () {
+  if (this.orientation() === -1) {
+      this.reverse();
+  }
+  return this;
+};
+
+DoublyLinkedList.prototype.print = function () {
+  var j, len, nood, ref, s;
+  s = " ";
+  ref = this.nodesList;
+  for (j = 0, len = ref.length; j < len; j++) {
+      nood = ref[j];
+      s = s + nood.content.print() + "\n ";
+  }
+  return s;
+};
+
+return DoublyLinkedList;
+
+}) ();
 
 CircularDoublyLinkedList = (function () {
   function CircularDoublyLinkedList(valuesList) {
@@ -116,6 +180,7 @@ CircularDoublyLinkedList = (function () {
       }
     }
   }
+
 
   CircularDoublyLinkedList.prototype.push = function (val) {
     if (this.head != null) {
@@ -132,6 +197,7 @@ CircularDoublyLinkedList = (function () {
 
   CircularDoublyLinkedList.prototype.insert = function(val, prevnode) {
     var nood, postnode;
+    //only vertex links after
     nood = new Node(prevnode, val, prevnode.succ);
     postnode = prevnode.succ;
     prevnode.succ = nood;
