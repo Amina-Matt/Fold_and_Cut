@@ -129,15 +129,15 @@ DoublyLinkedList.prototype.remove = function (nood) {
   };
 
 DoublyLinkedList.prototype.copy = function () {
-  var copyCDLL, elem;
-  copyCDLL = new CircularDoublyLinkedList();
-  copyCDLL.push(this.head.content.copy());
+  var copyDLL, elem;
+  copyDLL = new DoublyLinkedList();
+  copyDLL.push(this.head.content.copy());
   elem = this.head.succ;
-  while (elem !== this.head) {
-      copyCDLL.push(elem.content.copy());
+  while (elem !== this.head && elem !== null) {
+      copyDLL.push(elem.content.copy());
       elem = elem.succ;
   }
-  return copyCDLL;
+  return copyDLL;
 };
 
 DoublyLinkedList.prototype.isInside = function (otherLAV) {
@@ -1716,7 +1716,11 @@ stepOneAB = function (clickSeq) {
   }
   mySLAV.orient();
   gEdges = mySLAV.allEdges();
+  console.log('Copy');
+  console.log(mySLAV);
   copySLAV = mySLAV.copy();
+  console.log('Copy');
+  console.log(copySLAV);
   copySLAV.reverse();
   mySLAV.join(copySLAV);
   return [LAV,mySLAV, gVtxs, gEdges];
