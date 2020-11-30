@@ -91,22 +91,42 @@ DoublyLinkedList.prototype.remove = function (nood) {
   }
 };
 
-DoublyLinkedList.prototype.reverse = function () {
-  var j, len, nood, ref, tmp;
-  ref = this.nodesList;
-  for (j = 0, len = ref.length; j < len; j++) {
-      nood = ref[j];
-      tmp = nood.succ;
-      nood.succ = nood.pred;
-      nood.pred = tmp;
-      nood.content.inEdge = new DirectedSegment(nood.pred.content.point, nood.content.point);
-      nood.content.outEdge = new DirectedSegment(nood.content.point, nood.succ.content.point);
-      nood.content.bisector = angleBisector(nood.content.point, nood.content.inEdge, nood.content.outEdge);
-  }
-  this.head = this.tail;
-  this.tail = this.head.pred;
-  return this;
-};
+  DoublyLinkedList.prototype.reverse = function () {
+    var j, len, nood, ref, tmp;
+    ref = this.nodesList;
+    for (j = 0, len = ref.length; j < len; j++) {
+      if (j == 0) {
+        nood = ref[j];
+        tmp = nood.succ;
+        nood.succ = null;
+        nood.pred = tmp;
+        nood.content.inEdge = new DirectedSegment(nood.pred.content.point, nood.content.point);
+        nood.content.outEdge = null;
+        nood.content.bisector = angleBisector(nood.content.point, nood.content.inEdge, nood.content.outEdge);
+      } else {
+        if (j == len - 1) {
+          nood = ref[j];
+          nood.succ = nood.pred;
+          nood.pred = null;
+          nood.content.inEdge = null;
+          nood.content.outEdge = new DirectedSegment(nood.content.point, nood.succ.content.point);
+          nood.content.bisector = angleBisector(nood.content.point, nood.content.inEdge, nood.content.outEdge);
+        } else {
+          nood = ref[j];
+          tmp = nood.succ;
+          nood.succ = nood.pred;
+          nood.pred = tmp;
+          nood.content.inEdge = new DirectedSegment(nood.pred.content.point, nood.content.point);
+          nood.content.outEdge = new DirectedSegment(nood.content.point, nood.succ.content.point);
+          nood.content.bisector = angleBisector(nood.content.point, nood.content.inEdge, nood.content.outEdge);
+        }
+      }
+    }
+    tmp = this.head;
+    this.head = this.tail;
+    this.tail = tmp;
+    return this;
+  };
 
 DoublyLinkedList.prototype.copy = function () {
   var copyCDLL, elem;
