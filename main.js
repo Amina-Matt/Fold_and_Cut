@@ -131,7 +131,7 @@ DoublyLinkedList.prototype.orientation = function () {
   var A, j, len, node, ref, v, w, x1, x2, y1, y2;
   A = 0;
   ref = this.nodesList;
-  for (j = 0, len = ref.length; j < len; j++) {
+  for (j = 0, len = ref.length; j < len-1; j++) {
       node = ref[j];
       v = node.content.point;
       w = node.succ.content.point;
