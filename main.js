@@ -28,9 +28,10 @@ CircularDoublyLinkedList = (function () {
 
   CircularDoublyLinkedList.prototype.push = function (val) {
     if (this.head != null) {
+      //console.log('11111111111je suis dans le cas 1')
       return this.insert(val, this.tail);
     } else {
-      console.log('Im in the else')
+      //console.log('2222222222je suis dans le cas 2')
       console.log(this.head)
       this.head = new Node(null, val, null);
       this.head.pred = this.head;
@@ -1499,8 +1500,15 @@ stepOneAB = function (clickSeq) {
         console.log('je suis dans n==0')
         inEdgeU = null;
         outEdgeU = new DirectedSegment(vtx, clickSeq[1]);
-        newVertex = new Vertex(vtx, inEdgeU, outEdgeU);
+        console.log('what is newVertex  for now')
+        console.log(newVertex)
+        //newVertex = new Vertex(vtx, inEdgeU, outEdgeU);
+        newVertex = new Vertex(vtx, null, outEdgeU);
         console.log('what is really newVertex')
+        console.log(newVertex)
+        console.log('#######')
+        console.log(inEdgeU)
+        newVertex.inEdge = null;
         console.log(newVertex)
         LAV.push(newVertex);
       }
@@ -3007,6 +3015,7 @@ drawPoint = function (x, y) {
   ctx.beginPath();
   ctx.arc(x, c - y - b, 3, 0, 2 * Math.PI);
   ctx.fillStyle = "orange";
+  console.log('I m in the drawPoint function');
   ctx.fill();
   ctx.strokeStyle = "black";
   return ctx.stroke();
@@ -3128,6 +3137,7 @@ drawCreasePattern = function (CP, gEdges, show) {
     if (cpVertex.type === "graph") {
       x = cpVertex.x;
       y = cpVertex.y;
+      console.log('Jsuis dans le drawCreasePattern');
       results.push(drawPoint(x, y));
     } else {
       results.push(void 0);
@@ -3173,6 +3183,7 @@ drawSkeleton = function (CP, gEdges, show) {
       x = cpVertex.x;
       y = cpVertex.y;
       results.push(drawPoint(x, y));
+      console.log('Jsuis dans le drawSkeleton');
     } else {
       results.push(void 0);
     }
@@ -3497,6 +3508,8 @@ $(document).ready(function () {
   $("#terminate").click(function(e){
     start = null;
     clickSeq.push('marker');
+    //console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+    //console.log(clickSeq)
     if (live){
       return testOutputFunction(clickSeq, show, skeletonOnly);
     }
