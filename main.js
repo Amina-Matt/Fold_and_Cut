@@ -14,6 +14,22 @@ Node = (function () {
 
 })();
 
+////-----------------------////
+
+
+class DoublyLinkedList{
+  constructor(){
+    this.length = 0;
+    this.head = null;
+    this.tail = null;
+  }
+}
+
+
+
+////-----------------------////
+
+
 CircularDoublyLinkedList = (function () {
   function CircularDoublyLinkedList(valuesList) {
     var j, len, val;
@@ -28,23 +44,27 @@ CircularDoublyLinkedList = (function () {
 
   CircularDoublyLinkedList.prototype.push = function (val) {
     if (this.head != null) {
-      //console.log('11111111111je suis dans le cas 1')
       return this.insert(val, this.tail);
     } else {
-      //console.log('2222222222je suis dans le cas 2')
-     // console.log(this.head)
-      this.head = new Node(null, val, null);
-      this.head.pred = this.head;
-      this.head.succ = this.head;
-      // console.log(val)
-      // console.log(this.head)
-      this.nodesList.push(this.head);
-      return this.tail = this.head.pred;
+      //no items in the list yet
+        this.head = new Node(null, val, null);
+        this.head.pred = this.head;
+        this.head.succ = this.head;
+        this.nodesList.push(this.head);
+        return this.tail = this.head.pred;
     }
   };
 
   CircularDoublyLinkedList.prototype.insert = function (val, prevnode) {
+    //val is a vertex 
     var nood, postnode;
+    if(val.inEdge == null){
+      nood = new Node(null, val, prevnode.succ);
+      postnode = prevnode.succ;
+      postnode.pred = nood;
+      this.nodesList.push(nood);
+    return nood;
+    }else{
     nood = new Node(prevnode, val, prevnode.succ);
     postnode = prevnode.succ;
     prevnode.succ = nood;
@@ -52,6 +72,7 @@ CircularDoublyLinkedList = (function () {
     this.nodesList.push(nood);
     this.tail = this.head.pred;
     return nood;
+  }
   };
 
   CircularDoublyLinkedList.prototype.allContents = function () {
@@ -1495,20 +1516,20 @@ stepOneAB = function (clickSeq) {
     LAV = new CircularDoublyLinkedList();
     for (i = 0, len = clickSeq.length; i < len; i++) {
       vtx = clickSeq[i];
-      console.log('VTX')
-      console.log(vtx)
+      // console.log('VTX')
+      // console.log(vtx)
       n = vertices.length;
       //treat the first terminal point
       if (n == 0) {
-        console.log('je suis dans n==0')
+        // console.log('je suis dans n==0')
         inEdgeU = null;
         outEdgeU = new DirectedSegment(vtx, clickSeq[1]);
-        console.log('outEdgeU')
-        console.log(outEdgeU)
+        // console.log('outEdgeU')
+        // console.log(outEdgeU)
         //newVertex = new Vertex(vtx, inEdgeU, outEdgeU);
         newVertex = new Vertex(vtx, null, outEdgeU);
-        console.log('what is really newVertex')
-        console.log(newVertex)
+        // console.log('what is really newVertex')
+        // console.log(newVertex)
         // console.log('#######')
         // console.log(inEdgeU)
         newVertex.inEdge = null;
@@ -1533,14 +1554,20 @@ stepOneAB = function (clickSeq) {
       vertices.push(vtx);
       gVtxs.push(vtx);
     }
+    console.log('------THIS IS THE LAV------');
+    console.log(LAV);
+    console.log('------THIS IS THE MYSLAV before PUSH------');
+    console.log(mySLAV);
     mySLAV.pushLAV(LAV);
+    console.log('------THIS IS THE MYSLAV after PUSH------');
+    console.log(mySLAV);
   }
   mySLAV.orient();
   gEdges = mySLAV.allEdges();
   copySLAV = mySLAV.copy();
   copySLAV.reverse();
   mySLAV.join(copySLAV);
-  return [mySLAV, gVtxs, gEdges];
+  return [LAV,mySLAV, gVtxs, gEdges];
 };
 
 // ---
@@ -1587,9 +1614,11 @@ computeI = function (mySLAV, node) {
   v = node.content;
   u = node.pred.content;
   w = node.succ.content;
-
+  console.log('MySLAV');
+  console.log(mySLAV);
   //add initial vertex case
   if (v.inEdge == null) {
+    console.log('IN INITIAL CASE');
     e = line(v.outEdge);
     I1 = intersect(v.bbbisector()[0], w.bbbisector());
     I2 = intersect(v.bbbisector()[1], w.bbbisector());
@@ -1602,11 +1631,20 @@ computeI = function (mySLAV, node) {
       allEdgeEvents.push([["e", I2, node, node.succ], d2]);
     }
   }
-  //add initial vertex case
+  //add final vertex case
   if (v.outEdge == null) {
+    console.log('IN FINAL CASE');
+    console.log('v.inEdge');
+    console.log(v.inEdge);
     e = line(v.inEdge);
+    console.log('e');
+    console.log(e);
     I1 = intersect(v.bbbisector()[0], u.bbbisector());
+    console.log('I1');
+    console.log(I1);
     I2 = intersect(v.bbbisector()[1], u.bbbisector());
+    console.log('I2');
+    console.log(I2);
     if (I1 != null) {
       d1 = dist(I1, e);
       allEdgeEvents.push([["e", I1, node.pred, node], d1]);
@@ -1618,6 +1656,8 @@ computeI = function (mySLAV, node) {
   }
   //general case
   if (v.inEdge != null && v.outEdge != null) {
+    console.log('IN GENERAL CASE');
+   // console.log('flag before error : in general case');
     e = line(v.inEdge);
     //Case where the vertex from inEdge is terminal
     if (u.bbbisector().length >= 2) {
