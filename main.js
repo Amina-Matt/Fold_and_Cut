@@ -686,6 +686,7 @@ convert = function (skelEdges, skelVtxs, infEdges, gVtxs, gEdges, perps, infPerp
     }
     bVertex = intersect(closestEdge, r);
     boundarySkels.push(bVertex);
+    console.log('Im here in the CONVERT function playing stupidely with the vertex')
     boundaryEdges.push(new GraphEdge(bVertex, closestEdge.endpt1));
     boundaryEdges.push(new GraphEdge(bVertex, closestEdge.endpt2));
     boundaryEdges.splice(boundaryEdges.indexOf(closestEdge), 1);
@@ -1494,18 +1495,20 @@ stepOneAB = function (clickSeq) {
     LAV = new CircularDoublyLinkedList();
     for (i = 0, len = clickSeq.length; i < len; i++) {
       vtx = clickSeq[i];
+      console.log('VTX')
+      console.log(vtx)
       n = vertices.length;
       //treat the first terminal point
       if (n == 0) {
-        // console.log('je suis dans n==0')
+        console.log('je suis dans n==0')
         inEdgeU = null;
         outEdgeU = new DirectedSegment(vtx, clickSeq[1]);
-        // console.log('what is newVertex  for now')
-        // console.log(newVertex)
+        console.log('outEdgeU')
+        console.log(outEdgeU)
         //newVertex = new Vertex(vtx, inEdgeU, outEdgeU);
         newVertex = new Vertex(vtx, null, outEdgeU);
-        // console.log('what is really newVertex')
-        // console.log(newVertex)
+        console.log('what is really newVertex')
+        console.log(newVertex)
         // console.log('#######')
         // console.log(inEdgeU)
         newVertex.inEdge = null;
@@ -1513,7 +1516,6 @@ stepOneAB = function (clickSeq) {
         LAV.push(newVertex);
       }
       if (n >= 2) {
-
         u = vertices[n - 1];
         inEdgeU = new DirectedSegment(vertices[n - 2], u);
         outEdgeU = new DirectedSegment(u, vtx);
@@ -1521,7 +1523,6 @@ stepOneAB = function (clickSeq) {
         LAV.push(newVertex);
         //treat the last terminal point
         if (n == len - 1) {
-
           inEdgeVtx = new DirectedSegment(u, vtx);
           outEdgeVtx = null;
           vertexFinal = new Vertex(vtx, inEdgeVtx, outEdgeVtx);
@@ -1863,14 +1864,20 @@ straightSkeleton = function (clickSequence) {
   infEdges = [];
   processed = [];
   ref = stepOneAB(clickSequence), mySLAV = ref[0], gVtxs = ref[1], gEdges = ref[2];
-  console.log('&&&&&&&&&&& THESE ARE THE GEDGES FROM STEP ONE AB');
+  console.log('---------------------------------')
+  console.log('stepOneAB completed without error.')
+  console.log('---------------------------------')
+  console.log('my gedges');
   console.log(gEdges);
-  // console.log('The click sequence is');
   // console.log(clickSequence);
   // console.log('The slav is');
   // console.log(mySLAV);
   // console.log('The ref is');
+
   pq = stepOneC(mySLAV, infEdges);
+  console.log('---------------------------------')
+  console.log('stepOneC completed without error.')
+  console.log('---------------------------------')
   // console.log('Done stepOneC in straight skeleton function');
   // console.log('StepOneC returns:');
   //console.log('The priority queue is');
@@ -1878,6 +1885,9 @@ straightSkeleton = function (clickSequence) {
   while (pq.length() !== 0) {
     stepTwo(mySLAV, pq, processed, skelEdges, skelVtxs, infEdges);
   }
+  console.log('---------------------------------')
+  console.log('stepTwo completed without error.')
+  console.log('---------------------------------')
   ref1 = mySLAV.allNodes();
   //for each nodes, test if the leftover is in the processed, if not (not processed) go and add the bisector to the list of infEdges
   for (i = 0, len = ref1.length; i < len; i++) {
@@ -3295,7 +3305,7 @@ exportToFOLD = function (CP, CPFaces, facesRelations) {
 //Start jquery
 var FOLD, a, b, c, rect;
 
-FOLD = require('fold');
+// FOLD = require('fold');
 //canvas comes from : var canvas = document.getElementById("myCanvas");
 rect = canvas.getBoundingClientRect();
 
