@@ -32,12 +32,12 @@ CircularDoublyLinkedList = (function () {
       return this.insert(val, this.tail);
     } else {
       //console.log('2222222222je suis dans le cas 2')
-      console.log(this.head)
+     // console.log(this.head)
       this.head = new Node(null, val, null);
       this.head.pred = this.head;
       this.head.succ = this.head;
-      console.log(val)
-      console.log(this.head)
+      // console.log(val)
+      // console.log(this.head)
       this.nodesList.push(this.head);
       return this.tail = this.head.pred;
     }
@@ -1497,19 +1497,19 @@ stepOneAB = function (clickSeq) {
       n = vertices.length;
       //treat the first terminal point
       if (n == 0) {
-        console.log('je suis dans n==0')
+        // console.log('je suis dans n==0')
         inEdgeU = null;
         outEdgeU = new DirectedSegment(vtx, clickSeq[1]);
-        console.log('what is newVertex  for now')
-        console.log(newVertex)
+        // console.log('what is newVertex  for now')
+        // console.log(newVertex)
         //newVertex = new Vertex(vtx, inEdgeU, outEdgeU);
         newVertex = new Vertex(vtx, null, outEdgeU);
-        console.log('what is really newVertex')
-        console.log(newVertex)
-        console.log('#######')
-        console.log(inEdgeU)
+        // console.log('what is really newVertex')
+        // console.log(newVertex)
+        // console.log('#######')
+        // console.log(inEdgeU)
         newVertex.inEdge = null;
-        console.log(newVertex)
+        //console.log(newVertex)
         LAV.push(newVertex);
       }
       if (n >= 2) {
@@ -1863,17 +1863,18 @@ straightSkeleton = function (clickSequence) {
   infEdges = [];
   processed = [];
   ref = stepOneAB(clickSequence), mySLAV = ref[0], gVtxs = ref[1], gEdges = ref[2];
-  console.log('The click sequence is');
-  console.log(clickSequence);
-  console.log('The slav is');
-  console.log(mySLAV);
-  console.log('The ref is');
+  console.log('&&&&&&&&&&& THESE ARE THE GEDGES FROM STEP ONE AB');
+  console.log(gEdges);
+  // console.log('The click sequence is');
+  // console.log(clickSequence);
+  // console.log('The slav is');
+  // console.log(mySLAV);
+  // console.log('The ref is');
   pq = stepOneC(mySLAV, infEdges);
   // console.log('Done stepOneC in straight skeleton function');
   // console.log('StepOneC returns:');
-  console.log('The priority queue is');
- 
-  console.log(pq);
+  //console.log('The priority queue is');
+  //console.log(pq);
   while (pq.length() !== 0) {
     stepTwo(mySLAV, pq, processed, skelEdges, skelVtxs, infEdges);
   }
@@ -3015,7 +3016,6 @@ drawPoint = function (x, y) {
   ctx.beginPath();
   ctx.arc(x, c - y - b, 3, 0, 2 * Math.PI);
   ctx.fillStyle = "orange";
-  console.log('I m in the drawPoint function');
   ctx.fill();
   ctx.strokeStyle = "black";
   return ctx.stroke();
@@ -3081,20 +3081,20 @@ drawCPEdge = function (edge, show) {
 };
 
 testOutputFunction = function (clickSeq, show, skeletonOnly) {
-  var CP, CPFaces, facesRelations, gEdges, gVtxs, infEdges, k, len, ref, ref1, skelEdges, skelVtxs, skelv, text, tmpSkeleton, tooManyPerps;
+  var out, CP, CPFaces, facesRelations, gEdges, gVtxs, infEdges, k, len, ref, ref1, skelEdges, skelVtxs, skelv, text, tmpSkeleton, tooManyPerps;
   if (skeletonOnly) {
-    console.log('Here is the sequence untouched');
-    console.log(clickSeq);
-    console.log(removeMarkers(clickSeq));
     ref = straightSkeleton(removeMarkers(clickSeq)), skelEdges = ref[0], skelVtxs = ref[1], infEdges = ref[2], gVtxs = ref[3], gEdges = ref[4];
     tmpSkeleton = [];
     for (k = 0, len = skelVtxs.length; k < len; k++) {
       skelv = skelVtxs[k];
       tmpSkeleton.push(skelv[0]);
     }
+
     CP = convert(skelEdges, tmpSkeleton, infEdges, gVtxs, gEdges, [], [], [], []);
-    console.log('just before the drawSkeleton');
-    return drawSkeleton(CP, gEdges, show);
+ 
+    out = drawSkeleton(CP, gEdges, show);
+    return out;
+
   } else {
     ref1 = foldAndCut(removeMarkers(clickSeq)), CP = ref1[0], CPFaces = ref1[1], facesRelations = ref1[2], gEdges = ref1[3], tooManyPerps = ref1[4];
     drawCreasePattern(CP, gEdges, show);
@@ -3137,7 +3137,6 @@ drawCreasePattern = function (CP, gEdges, show) {
     if (cpVertex.type === "graph") {
       x = cpVertex.x;
       y = cpVertex.y;
-      console.log('Jsuis dans le drawCreasePattern');
       results.push(drawPoint(x, y));
     } else {
       results.push(void 0);
@@ -3148,6 +3147,7 @@ drawCreasePattern = function (CP, gEdges, show) {
 
 drawSkeleton = function (CP, gEdges, show) {
   var cpEdge, cpVertex, cute, endpt1, endpt2, k, l, len, len1, len2, m, ref, ref1, results, x, y;
+  //redraw the canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -3183,7 +3183,6 @@ drawSkeleton = function (CP, gEdges, show) {
       x = cpVertex.x;
       y = cpVertex.y;
       results.push(drawPoint(x, y));
-      console.log('Jsuis dans le drawSkeleton');
     } else {
       results.push(void 0);
     }
