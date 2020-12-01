@@ -1,6 +1,6 @@
 //This is the updated (November 2020) version of huh.js from Danielle Wang (2017)
 
-var CircularDoublyLinkedList, nmNode, DoublyLinkedList, PriorityQueue, SLAV,
+var CircularDoublyLinkedList, nNode, DoublyLinkedList, PriorityQueue, SLAV,
   indexOf = [].indexOf || function (item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 nNode = (function() {
@@ -1723,7 +1723,7 @@ stepOneAB = function (clickSeq) {
   // console.log(copySLAV);
   copySLAV.reverse();
   mySLAV.join(copySLAV);
-  return [LAV,mySLAV, gVtxs, gEdges];
+  return [mySLAV, gVtxs, gEdges];
 };
 
 // ---
@@ -1733,7 +1733,7 @@ stepOneC = function (mySLAV, infEdges) {
   var i, len, node, pq, ref;
   pq = new PriorityQueue;
   console.log('mySlav avant beug ');
-  console.log(mySLAV)
+  console.log(mySLAV);
   ref = mySLAV.allNodes();
   console.log('apres beug?');
   for (i = 0, len = ref.length; i < len; i++) {
@@ -2064,9 +2064,9 @@ straightSkeleton = function (clickSequence) {
   infEdges = [];
   processed = [];
   ref = stepOneAB(clickSequence), mySLAV = ref[0], gVtxs = ref[1], gEdges = ref[2];
-  console.log('---------------------------------')
-  console.log('stepOneAB completed without error.')
-  console.log('---------------------------------')
+  console.log('---------------------------------');
+  console.log('stepOneAB completed without error.');
+  console.log('---------------------------------');
  
   // console.log(clickSequence);
   console.log('The slav is');
@@ -3504,7 +3504,7 @@ exportToFOLD = function (CP, CPFaces, facesRelations) {
 //Start jquery
 var FOLD, a, b, c, rect;
 
-// FOLD = require('fold');
+FOLD = require('fold');
 //canvas comes from : var canvas = document.getElementById("myCanvas");
 rect = canvas.getBoundingClientRect();
 
