@@ -131,15 +131,20 @@ DoublyLinkedList = (function () {
     var copyDLL, elem;
     copyDLL = new DoublyLinkedList();
     copyDLL.push(this.head.content.copy());
-    elem = this.head.succ;
-    console.log('elem')
-    console.log(elem)
-    while (elem !== this.head) {
-      if (elem != null){
+
+    if (this.head.succ != null) {
+      elem = this.head.succ;
+      while (elem !== null) {
         copyDLL.push(elem.content.copy());
         elem = elem.succ;
       }
-     
+    } else {
+      //this.head.succ == null
+      elem = this.head.pred;
+      while (elem !== null) {
+        copyDLL.push(elem.content.copy());
+        elem = elem.pred
+      }
     }
     return copyDLL;
   };
@@ -511,8 +516,6 @@ SLAV = (function () {
     var copySLAV, j, lav, len, ref;
     copySLAV = new SLAV();
     ref = this.allLAVs;
-    console.log('ref');
-    console.log(ref);
     for (j = 0, len = ref.length; j < len; j++) {
       lav = ref[j];
       copySLAV.pushLAV(lav.copy());
@@ -1708,24 +1711,14 @@ stepOneAB = function (clickSeq) {
       vertices.push(vtx);
       gVtxs.push(vtx);
     }
-    console.log('------THIS IS THE LAV------');
-    console.log(LAV);
-    console.log('------THIS IS THE MYSLAV before PUSH------');
-    console.log(mySLAV);
+  
     mySLAV.pushLAV(LAV);
-    console.log('------THIS IS THE MYSLAV after PUSH------');
-    console.log(mySLAV);
+   
   }
-  mySLAV.orient();
+  //mySLAV.orient();
   gEdges = mySLAV.allEdges();
-  // console.log('Copy');
-  // console.log(mySLAV);
   copySLAV = mySLAV.copy();
-  console.log('Copy');
-   console.log(copySLAV);
-  console.log('5');
-  //copySLAV.reverse();
-  console.log('6');
+  copySLAV.reverse();
   mySLAV.join(copySLAV);
   return [mySLAV, gVtxs, gEdges];
 };
@@ -1754,9 +1747,7 @@ computeEvents = function (mySLAV, node, pq, infEdges) {
   var I, allCandidates, allEdgeEvents, dE, dS, i, j, len, len1, ref, ref1, splitPoint, v;
   v = node.content;
   allEdgeEvents = computeI(mySLAV, node);
-  console.log('&&&&&&&&&&&&&&&&&&&&&&&     allEdgeEvents');
-  console.log(allEdgeEvents);
-
+  
   for (i = 0, len = allEdgeEvents.length; i < len; i++) {
     ref = allEdgeEvents[i], I = ref[0], dE = ref[1];
     pq.add(I, dE);
@@ -1784,12 +1775,12 @@ computeI = function (mySLAV, node) {
     console.log('IN INITIAL CASE');
     w = node.succ.content;
     e = line(v.outEdge);
-    //-----bisector tracking---------//
-    allBisectors.push(one=v.bbbisector()[0]);
-    allBisectors.push(two=v.bbbisector()[1]);
-    allBisectors.push(three=w.bbbisector());
-    console.log('Pushing bisectors from inital case');
-    //-----bisector tracking---------//
+    // //-----bisector tracking---------//
+    // allBisectors.push(one=v.bbbisector()[0]);
+    // allBisectors.push(two=v.bbbisector()[1]);
+    // allBisectors.push(three=w.bbbisector());
+    // console.log('Pushing bisectors from inital case');
+    // //-----bisector tracking---------//
 
     I1 = intersect(v.bbbisector()[0], w.bbbisector());
     I2 = intersect(v.bbbisector()[1], w.bbbisector());
@@ -1808,12 +1799,12 @@ computeI = function (mySLAV, node) {
     u = node.pred.content;
     e = line(v.inEdge);
 
-      //-----bisector tracking---------//
-      allBisectors.push(v.bbbisector()[0]);
-      allBisectors.push(v.bbbisector()[1]);
-      allBisectors.push(u.bbbisector());
-      console.log('Pushing bisectors from final case');
-      //-----bisector tracking---------//
+      // //-----bisector tracking---------//
+      // allBisectors.push(v.bbbisector()[0]);
+      // allBisectors.push(v.bbbisector()[1]);
+      // allBisectors.push(u.bbbisector());
+      // console.log('Pushing bisectors from final case');
+      // //-----bisector tracking---------//
 
     I1 = intersect(v.bbbisector()[0], u.bbbisector());
     I2 = intersect(v.bbbisector()[1], u.bbbisector());
@@ -1837,14 +1828,14 @@ computeI = function (mySLAV, node) {
     if (u.bbbisector().length >= 2) {
       bis = u.bbbisector();
 
-      //-----bisector tracking---------//
-      console.log('IN GENERAL CASE with inedgeterminal');
+      // //-----bisector tracking---------//
+      // console.log('IN GENERAL CASE with inedgeterminal');
 
-      allBisectors.push(u.bbbisector()[0]);
-      allBisectors.push(u.bbbisector()[1]);
-      allBisectors.push(v.bbbisector());
-      console.log('Pushing bisectors from general case');
-         //-----bisector tracking---------//
+      // allBisectors.push(u.bbbisector()[0]);
+      // allBisectors.push(u.bbbisector()[1]);
+      // allBisectors.push(v.bbbisector());
+      // console.log('Pushing bisectors from general case');
+      //    //-----bisector tracking---------//
 
       I1array = bis.map(bis => intersect(bis, v.bbbisector()));
       //Push all the intersections
@@ -1856,12 +1847,12 @@ computeI = function (mySLAV, node) {
         }
       }
     } else {
-      //-----bisector tracking---------//
-              console.log('IN GENERAL CASE with outEdge terminal');
-        allBisectors.push(u.bbbisector());
-        allBisectors.push(v.bbbisector());
-      console.log('Pushing bisectors from general case');
-   //-----bisector tracking---------//
+  //     //-----bisector tracking---------//
+  //             console.log('IN GENERAL CASE with outEdge terminal');
+  //       allBisectors.push(u.bbbisector());
+  //       allBisectors.push(v.bbbisector());
+  //     console.log('Pushing bisectors from general case');
+  //  //-----bisector tracking---------//
 
       I1 = intersect(u.bbbisector(), v.bbbisector());
       if (I1 != null) {
@@ -1873,13 +1864,13 @@ computeI = function (mySLAV, node) {
     //Case where the vertex of outEdge is terminal
     if (w.bbbisector().length >= 2) {
 
-      //-----bisector tracking---------//
-      console.log('IN GENERAL CASE with outEdge terminal');
-      allBisectors.push(w.bbbisector()[0]);
-      allBisectors.push(w.bbbisector()[1]);
-      allBisectors.push(v.bbbisector());
-      console.log('Pushing bisectors from general case');
-         //-----bisector tracking---------//
+      // //-----bisector tracking---------//
+      // console.log('IN GENERAL CASE with outEdge terminal');
+      // allBisectors.push(w.bbbisector()[0]);
+      // allBisectors.push(w.bbbisector()[1]);
+      // allBisectors.push(v.bbbisector());
+      // console.log('Pushing bisectors from general case');
+      //    //-----bisector tracking---------//
 
       bis = w.bbbisector();
       I2array = bis.map(bis => intersect(v.bbbisector(), bis));
@@ -1893,12 +1884,12 @@ computeI = function (mySLAV, node) {
       }
     } else {
 
-      //-----bisector tracking---------//
-      console.log('IN GENERAL CASE very general ');
-      allBisectors.push(w.bbbisector());
-      allBisectors.push(v.bbbisector());
-      console.log('Pushing bisectors from general case');
-         //-----bisector tracking---------//
+      // //-----bisector tracking---------//
+      // console.log('IN GENERAL CASE very general ');
+      // allBisectors.push(w.bbbisector());
+      // allBisectors.push(v.bbbisector());
+      // console.log('Pushing bisectors from general case');
+      //    //-----bisector tracking---------//
 
       I2 = intersect(v.bbbisector(), w.bbbisector());
       if (I2 != null) {
@@ -2118,15 +2109,32 @@ straightSkeleton = function (clickSequence) {
   console.log('---------------------------------');
   console.log('stepOneAB completed without error.');
   console.log('---------------------------------');
- 
+
   // console.log(clickSequence);
   // console.log('The slav is');
   // console.log(mySLAV);
   // console.log('The ref is');
   pq = stepOneC(mySLAV, infEdges);
+
   console.log('---------------------------------')
   console.log('stepOneC completed without error.')
   console.log('---------------------------------')
+  console.log('The priority queue is now')
+  console.log(pq)
+  
+
+// ------- visualization possible events ------//
+  for (j=0, len = pq.list.length; j<len;j++){
+  if(pq.list[j][0][0]=='e'){
+    drawPointGreen(pq.list[j][0][1].x,pq.list[j][0][1].y);
+  }else{
+    drawPoint(pq.list[j][0][1].x,pq.list[j][0][1].y);
+  }
+  }
+// ------- visualization possible events ------//
+
+
+  return;
   // console.log('Done stepOneC in straight skeleton function');
   // console.log('StepOneC returns:');
   //console.log('The priority queue is');
