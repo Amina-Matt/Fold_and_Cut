@@ -1,16 +1,16 @@
 //This is the updated (November 2020) version of huh.js from Danielle Wang (2017)
 
-var CircularDoublyLinkedList, DoublyLinkedList, Node, PriorityQueue, SLAV,
+var CircularDoublyLinkedList, nmNode, DoublyLinkedList, PriorityQueue, SLAV,
   indexOf = [].indexOf || function (item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-Node = (function () {
-  function Node(pre, cont, suc) {
+nNode = (function() {
+  function nNode(pre, cont, suc) {
     this.pred = pre;
     this.content = cont;
     this.succ = suc;
   }
 
-  return Node;
+  return nNode;
 
 })();
 
@@ -33,7 +33,7 @@ DoublyLinkedList = (function () {
           return this.insert(val, this.tail);
       } else {
           //if there isn't any list yet 
-          nood = new Node(null, val,null);
+          nood = new nNode(null, val,null);
           this.head = nood;
           this.tail = nood;
           this.nodesList.push(this.head);
@@ -43,7 +43,7 @@ DoublyLinkedList = (function () {
 
   DoublyLinkedList.prototype.insert = function (val, prevnode) {
       var nood, postnode;
-      nood = new Node(prevnode, val, null);
+      nood = new nNode(prevnode, val, null);
       //the new node points on the end, ie null
       //its pred is the end of the existing list, this.tail == prevnode
       //the nood before is now pointing to it
@@ -207,7 +207,7 @@ CircularDoublyLinkedList = (function () {
       return this.insert(val, this.tail);
     } else {
       //no items in the list yet
-        this.head = new Node(null, val, null);
+        this.head = new nNode(null, val, null);
         this.head.pred = this.head;
         this.head.succ = this.head;
         this.nodesList.push(this.head);
@@ -218,7 +218,7 @@ CircularDoublyLinkedList = (function () {
   CircularDoublyLinkedList.prototype.insert = function(val, prevnode) {
     var nood, postnode;
     //only vertex links after
-    nood = new Node(prevnode, val, prevnode.succ);
+    nood = new nNode(prevnode, val, prevnode.succ);
     postnode = prevnode.succ;
     prevnode.succ = nood;
     postnode.pred = nood;
@@ -566,6 +566,8 @@ SLAV = (function () {
   return SLAV;
 
 })();
+
+
 var computePerps, dropPerp, leaveFaceTest,
   indexOf = [].indexOf || function (item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
@@ -1513,7 +1515,7 @@ splitTwoE = function (mySLAV, I, processed, skelVtxs) {
       Nd = Nc.succ;
       Nb = N.succ;
       //link new  nodes and adapt their pred/succ to point on them
-      N2 = new Node(Nc, V2, Nb);
+      N2 = new nNode(Nc, V2, Nb);
       Nc.succ = N2;
       Nb.pred = N2;
       //new list created starting from N1 succ
@@ -1537,7 +1539,7 @@ splitTwoE = function (mySLAV, I, processed, skelVtxs) {
       Nd = Nc.succ;
       Na = N.pred;
       //link new  nodes and adapt their pred/succ to point on them
-      N1 = new Node(Na, V1, Nd);
+      N1 = new nNode(Na, V1, Nd);
       Nd.pred = N1;
       Na.succ = N1;
       //new list created starting from N1 succ
@@ -1564,8 +1566,8 @@ splitTwoE = function (mySLAV, I, processed, skelVtxs) {
   Na = N.pred;
   Nb = N.succ;
   //link new  nodes and adapt their pred/succ to point on them
-  N1 = new Node(Na, V1, Nd);
-  N2 = new Node(Nc, V2, Nb);
+  N1 = new nNode(Na, V1, Nd);
+  N2 = new nNode(Nc, V2, Nb);
   Nd.pred = N1;
   Nc.succ = N2;
   Na.succ = N1;
@@ -1706,21 +1708,21 @@ stepOneAB = function (clickSeq) {
       vertices.push(vtx);
       gVtxs.push(vtx);
     }
-    console.log('------THIS IS THE LAV------');
-    console.log(LAV);
-    console.log('------THIS IS THE MYSLAV before PUSH------');
-    console.log(mySLAV);
+    // console.log('------THIS IS THE LAV------');
+    // console.log(LAV);
+    // console.log('------THIS IS THE MYSLAV before PUSH------');
+    // console.log(mySLAV);
     mySLAV.pushLAV(LAV);
-    console.log('------THIS IS THE MYSLAV after PUSH------');
-    console.log(mySLAV);
+    // console.log('------THIS IS THE MYSLAV after PUSH------');
+    // console.log(mySLAV);
   }
   mySLAV.orient();
   gEdges = mySLAV.allEdges();
-  console.log('Copy');
-  console.log(mySLAV);
+  // console.log('Copy');
+  // console.log(mySLAV);
   copySLAV = mySLAV.copy();
-  console.log('Copy');
-  console.log(copySLAV);
+  // console.log('Copy');
+  // console.log(copySLAV);
   copySLAV.reverse();
   mySLAV.join(copySLAV);
   return [LAV,mySLAV, gVtxs, gEdges];
@@ -1732,11 +1734,15 @@ var computeB, computeEvents, computeI, stepOneC, testOpposite, weakTestOpposite;
 stepOneC = function (mySLAV, infEdges) {
   var i, len, node, pq, ref;
   pq = new PriorityQueue;
+  console.log('mySlav avant beug ');
+  console.log(mySLAV)
   ref = mySLAV.allNodes();
+  console.log('apres beug?');
   for (i = 0, len = ref.length; i < len; i++) {
     node = ref[i];
     computeEvents(mySLAV, node, pq, infEdges);
   }
+  
   return pq;
 };
 //create a PriorityQueue object, initialized with allNodes.
@@ -2063,11 +2069,10 @@ straightSkeleton = function (clickSequence) {
   console.log('---------------------------------')
   console.log('stepOneAB completed without error.')
   console.log('---------------------------------')
-  console.log('my gedges');
-  console.log(gEdges);
+ 
   // console.log(clickSequence);
-  // console.log('The slav is');
-  // console.log(mySLAV);
+  console.log('The slav is');
+  console.log(mySLAV);
   // console.log('The ref is');
 
   pq = stepOneC(mySLAV, infEdges);
