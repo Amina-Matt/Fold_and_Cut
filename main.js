@@ -1622,7 +1622,7 @@ stepOneAB = function (clickSeq) {
   mySLAV = new SLAV();
  
   if (clickSeq[0].x == clickSeq[clickSeq.length - 1].x && clickSeq[0].y == clickSeq[clickSeq.length - 1].y) {
-  console.log('In polygon case');
+    console.log('---------In polygon case ------------');
   LAV = new CircularDoublyLinkedList();
   // Polygon case
   for (i = 0, len = clickSeq.length; i < len; i++) {
@@ -1663,7 +1663,7 @@ stepOneAB = function (clickSeq) {
   }
   } else {
     //Planar graph case
-    console.log('In planar case');
+    console.log('---------In straight planar graph case ------------');
     //If it isn't a polygon but a straight planar graph the first and last vertices are different
     LAV = new DoublyLinkedList();
     for (i = 0, len = clickSeq.length; i < len; i++) {
@@ -1732,10 +1732,7 @@ var computeB, computeEvents, computeI, stepOneC, testOpposite, weakTestOpposite;
 stepOneC = function (mySLAV, infEdges) {
   var i, len, node, pq, ref;
   pq = new PriorityQueue;
-  console.log('mySlav avant beug ');
-  console.log(mySLAV);
   ref = mySLAV.allNodes();
-  console.log('apres beug?');
   for (i = 0, len = ref.length; i < len; i++) {
     node = ref[i];
     computeEvents(mySLAV, node, pq, infEdges);
@@ -1752,11 +1749,15 @@ computeEvents = function (mySLAV, node, pq, infEdges) {
   var I, allCandidates, allEdgeEvents, dE, dS, i, j, len, len1, ref, ref1, splitPoint, v;
   v = node.content;
   allEdgeEvents = computeI(mySLAV, node);
+  console.log('&&&&&&&&&&&&&&&&&&&&&&&     allEdgeEvents');
+  console.log(allEdgeEvents);
+
   for (i = 0, len = allEdgeEvents.length; i < len; i++) {
     ref = allEdgeEvents[i], I = ref[0], dE = ref[1];
     pq.add(I, dE);
   }
   if (isReflex(v)) {
+    console.log('in reflex');
     allCandidates = computeB(mySLAV, node);
     for (j = 0, len1 = allCandidates.length; j < len1; j++) {
       ref1 = allCandidates[j], splitPoint = ref1[0], dS = ref1[1];
@@ -1772,14 +1773,18 @@ computeI = function (mySLAV, node) {
   var I1, I2, allEdgeEvents, d1, d2, e, u, v, w;
   allEdgeEvents = [];
   v = node.content;
-  u = node.pred.content;
-  w = node.succ.content;
-  console.log('MySLAV');
-  console.log(mySLAV);
+  allBisectors = [];
   //add initial vertex case
-  if (v.inEdge == null) {
+  if (node.pred == null) {
     console.log('IN INITIAL CASE');
+    w = node.succ.content;
     e = line(v.outEdge);
+    //-----bisector tracking---------//
+    allBisectors.push(v.bbbisector()[0]);
+    allBisectors.push(v.bbbisector()[1]);
+    allBisectors.push(w.bbbisector());
+    //-----bisector tracking---------//
+
     I1 = intersect(v.bbbisector()[0], w.bbbisector());
     I2 = intersect(v.bbbisector()[1], w.bbbisector());
     if (I1 != null) {
@@ -1792,13 +1797,21 @@ computeI = function (mySLAV, node) {
     }
   }
   //add final vertex case
-  if (v.outEdge == null) {
+  if (node.succ == null) {
     console.log('IN FINAL CASE');
     console.log('v.inEdge');
     console.log(v.inEdge);
+    u = node.pred.content;
     e = line(v.inEdge);
     console.log('e');
     console.log(e);
+
+      //-----bisector tracking---------//
+      allBisectors.push(v.bbbisector()[0]);
+      allBisectors.push(v.bbbisector()[1]);
+      allBisectors.push(u.bbbisector());
+      //-----bisector tracking---------//
+
     I1 = intersect(v.bbbisector()[0], u.bbbisector());
     console.log('I1');
     console.log(I1);
@@ -1815,8 +1828,17 @@ computeI = function (mySLAV, node) {
     }
   }
   //general case
-  if (v.inEdge != null && v.outEdge != null) {
+  if (node.pred != null && node.succ != null) {
+    u = node.pred.content;
+    w = node.succ.content;
     console.log('IN GENERAL CASE');
+
+         //-----bisector tracking---------//
+         allBisectors.push(v.bbbisector());
+        allBisectors.push(u.bbbisector());
+         //-----bisector tracking---------//
+
+
    // console.log('flag before error : in general case');
     e = line(v.inEdge);
     //Case where the vertex from inEdge is terminal
@@ -1859,6 +1881,10 @@ computeI = function (mySLAV, node) {
       }
     }
   }
+  console.log('allBisectors');
+  console.log(allBisectors);
+  console.log(allBisectors[0]);
+  drawBisector(allBisectors[0]);
   return allEdgeEvents;
 };
 
@@ -2064,15 +2090,16 @@ straightSkeleton = function (clickSequence) {
   infEdges = [];
   processed = [];
   ref = stepOneAB(clickSequence), mySLAV = ref[0], gVtxs = ref[1], gEdges = ref[2];
+  console.log('--------- The SLAV is : ------------');
+  console.log(mySLAV);
   console.log('---------------------------------');
   console.log('stepOneAB completed without error.');
   console.log('---------------------------------');
  
   // console.log(clickSequence);
-  console.log('The slav is');
-  console.log(mySLAV);
+  // console.log('The slav is');
+  // console.log(mySLAV);
   // console.log('The ref is');
-
   pq = stepOneC(mySLAV, infEdges);
   console.log('---------------------------------')
   console.log('stepOneC completed without error.')
@@ -3250,6 +3277,19 @@ drawLine = function (endpt1,endpt2) {
   return ctx.stroke();
 };
 
+//For bisectors tracking
+drawBisector = function (lineorray) {
+  ctx.beginPath();
+  ctx.beginPath();
+  endpt1 = lineorray.origin;
+  endpt2 = lineorray.origin.plus(lineorray.dir);
+  ctx.moveTo(endpt1.x, c - endpt1.y - b);
+  ctx.lineTo(endpt2.x, c - endpt2.y - b);
+  ctx.fill();
+  ctx.strokeStyle = "blue";
+  ctx.lineWidth = 1;
+  return ctx.stroke();
+};
 
 drawCPEdge = function (edge, show) {
   var endpt1, endpt2;
@@ -3292,13 +3332,15 @@ drawCPEdge = function (edge, show) {
 testOutputFunction = function (clickSeq, show, skeletonOnly) {
   var out, CP, CPFaces, facesRelations, gEdges, gVtxs, infEdges, k, len, ref, ref1, skelEdges, skelVtxs, skelv, text, tmpSkeleton, tooManyPerps;
   if (skeletonOnly) {
-    ref = straightSkeleton(removeMarkers(clickSeq)), skelEdges = ref[0], skelVtxs = ref[1], infEdges = ref[2], gVtxs = ref[3], gEdges = ref[4];
+    ref = straightSkeleton(removeMarkers(clickSeq));
+    return; skelEdges = ref[0], skelVtxs = ref[1], infEdges = ref[2], gVtxs = ref[3], gEdges = ref[4];
+    
     tmpSkeleton = [];
     for (k = 0, len = skelVtxs.length; k < len; k++) {
       skelv = skelVtxs[k];
       tmpSkeleton.push(skelv[0]);
     }
-
+  
     CP = convert(skelEdges, tmpSkeleton, infEdges, gVtxs, gEdges, [], [], [], []);
  
     out = drawSkeleton(CP, gEdges, show);
