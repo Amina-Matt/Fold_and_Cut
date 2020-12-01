@@ -1,42 +1,21 @@
 // // // -------Testing computeI----//
 
- var p0 = new Point(200,100);
- var p1 = new Point(100,80);
- var p2 = new Point(150,50);
+ var p0 = new Point(200,200);
+ var p1 = new Point(450,350);
+ var p2 = new Point(600,250);
+ var p3 = new Point(620,150);
 inEdgeU = new DirectedSegment(p0, p1);
-outEdgeU = new DirectedSegment(p1,p2);
-// var clickSeqTest = [p0,p1,p2];
-// var LAVTEST;
-// var mySLAV;
+outEdgeU = new DirectedSegment(p0,p1);
+outEdgeU2 = new DirectedSegment(p1,p2);
+outEdgeU3 = new DirectedSegment(p2,p3);
+
 mySLAV = new SLAV();
 mysecondSLAV = new SLAV();
-// LAVTEST = new CircularDoublyLinkedList();
 LAVTESTDOUBLE = new DoublyLinkedList();
-// console.log('This is a vertex object:');
-// vertex = new Vertex(p0, inEdgeU, outEdgeU);
-
-
-// console.log(vertex);
-// console.log('This is a terminal vertex object:');
 vertexOne = new Vertex(p0, null, outEdgeU);
-vertexTwo = new Vertex(p1, inEdgeU, outEdgeU);
-vertexThree = new Vertex(p2, inEdgeU, null);
-// console.log(vertexOne);
-// LAVTEST.push(vertexOne);
-// oneCirc=LAVTEST;
-// // console.log('This is the CircularDoublyLinkedList() with one vertex object:');
-// // console.log(oneCirc);
-// LAVTEST.push(vertexTwo);
-// deuxCirc=LAVTEST;
-// // console.log('This is the CircularDoublyLinkedList() with two vertex objects:');
-// // console.log(deuxCirc);
-// LAVTEST.push(vertexThree);
-// threecirc=LAVTEST;
-// console.log('---------------------------');
-
-// console.log('This is the CircularlyDoublyLinkedList() with threee vertex object:');
-// console.log(threecirc);
-
+vertexTwo = new Vertex(p1, inEdgeU, outEdgeU2);
+vertexThree = new Vertex(p2, outEdgeU2, outEdgeU3);
+vertex4 = new Vertex(p3, outEdgeU3, null);
 LAVTESTDOUBLE.push(vertexOne);
 // // // console.log('This is the DoublyLinkedList() with one vertex object:');
 // // // console.log(onedouble);
@@ -45,19 +24,14 @@ LAVTESTDOUBLE.push(vertexTwo);
 // // // console.log('This is the DoublyLinkedList() with two vertex object:');
 // // // console.log(twodouble);
 LAVTESTDOUBLE.push(vertexThree);
+LAVTESTDOUBLE.push(vertex4);
+
 // // threedouble=LAVTESTDOUBLE;
 // // console.log('---------------------------');
 // // console.log('This is the DoublyLinkedList() with threee vertex object:');
 // // console.log(threedouble);
 // // LAVTESTDOUBLE.copy();
 console.log(LAVTESTDOUBLE);
-
-
-// mySLAV.pushLAV(LAVTEST);
-// console.log(mySLAV);
-// // console.log('This is the CircularlyDoublyLinkedList() all Nodes');
-// console.log(mySLAV.allNodes())
-
 
 mysecondSLAV.pushLAV(LAVTESTDOUBLE);
 console.log(mysecondSLAV);
@@ -66,10 +40,20 @@ console.log(ref = mysecondSLAV.allNodes())
 
 
 //bisector tracking
+allEdgeEvents =[];
 allBisectors = [];
-computeI(mySLAV, ref[0]);
+console.log('ref[2]');
+console.log(ref[2]);
+allEdgeEvents = computeI(mySLAV, ref[2]);
 console.log('allBisectors');
 console.log(allBisectors);
+drawPoint(p0.x,p0.y);
+drawPoint(p1.x,p1.y);
+drawPointGreen(p2.x,p2.y);
+drawPointGreen(p3.x,p3.y);
+
+console.log('allEdges events');
+console.log(allEdgeEvents);
 bb = allBisectors;
 bb.map(bb => drawBisector(bb,'green'));
 
@@ -109,4 +93,27 @@ bb.map(bb => drawBisector(bb,'green'));
 // // //     };
 // // // }
 // // // console.log(test(I))
+
+// console.log(vertexOne);
+// LAVTEST.push(vertexOne);
+// oneCirc=LAVTEST;
+// // console.log('This is the CircularDoublyLinkedList() with one vertex object:');
+// // console.log(oneCirc);
+// LAVTEST.push(vertexTwo);
+// deuxCirc=LAVTEST;
+// // console.log('This is the CircularDoublyLinkedList() with two vertex objects:');
+// // console.log(deuxCirc);
+// LAVTEST.push(vertexThree);
+// threecirc=LAVTEST;
+// console.log('---------------------------');
+
+// console.log('This is the CircularlyDoublyLinkedList() with threee vertex object:');
+// console.log(threecirc);
+
+
+
+// mySLAV.pushLAV(LAVTEST);
+// console.log(mySLAV);
+// // console.log('This is the CircularlyDoublyLinkedList() all Nodes');
+// console.log(mySLAV.allNodes())
 
