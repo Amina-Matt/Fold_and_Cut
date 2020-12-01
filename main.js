@@ -120,9 +120,10 @@ DoublyLinkedList = (function () {
         }
       }
     }
-    tmp = this.head;
-    this.head = this.tail;
-    this.tail = tmp;
+    //this.tail = ref[len-1];
+    //this.head = ref[0];
+    // this.tail = this.head;
+    // this.head = tmp;
     return this;
   };
 
@@ -131,9 +132,14 @@ DoublyLinkedList = (function () {
     copyDLL = new DoublyLinkedList();
     copyDLL.push(this.head.content.copy());
     elem = this.head.succ;
-    while (elem !== this.head && elem !== null) {
-      copyDLL.push(elem.content.copy());
-      elem = elem.succ;
+    console.log('elem')
+    console.log(elem)
+    while (elem !== this.head) {
+      if (elem != null){
+        copyDLL.push(elem.content.copy());
+        elem = elem.succ;
+      }
+     
     }
     return copyDLL;
   };
@@ -505,6 +511,8 @@ SLAV = (function () {
     var copySLAV, j, lav, len, ref;
     copySLAV = new SLAV();
     ref = this.allLAVs;
+    console.log('ref');
+    console.log(ref);
     for (j = 0, len = ref.length; j < len; j++) {
       lav = ref[j];
       copySLAV.pushLAV(lav.copy());
@@ -1680,12 +1688,7 @@ stepOneAB = function (clickSeq) {
         // console.log(outEdgeU)
         //newVertex = new Vertex(vtx, inEdgeU, outEdgeU);
         newVertex = new Vertex(vtx, null, outEdgeU);
-        // console.log('what is really newVertex')
-        // console.log(newVertex)
-        // console.log('#######')
-        // console.log(inEdgeU)
         newVertex.inEdge = null;
-        //console.log(newVertex)
         LAV.push(newVertex);
       }
       if (n >= 2) {
@@ -1702,26 +1705,27 @@ stepOneAB = function (clickSeq) {
           LAV.push(vertexFinal);
         }
       }
-      
       vertices.push(vtx);
       gVtxs.push(vtx);
     }
-    // console.log('------THIS IS THE LAV------');
-    // console.log(LAV);
-    // console.log('------THIS IS THE MYSLAV before PUSH------');
-    // console.log(mySLAV);
+    console.log('------THIS IS THE LAV------');
+    console.log(LAV);
+    console.log('------THIS IS THE MYSLAV before PUSH------');
+    console.log(mySLAV);
     mySLAV.pushLAV(LAV);
-    // console.log('------THIS IS THE MYSLAV after PUSH------');
-    // console.log(mySLAV);
+    console.log('------THIS IS THE MYSLAV after PUSH------');
+    console.log(mySLAV);
   }
   mySLAV.orient();
   gEdges = mySLAV.allEdges();
   // console.log('Copy');
   // console.log(mySLAV);
   copySLAV = mySLAV.copy();
-  // console.log('Copy');
-  // console.log(copySLAV);
-  copySLAV.reverse();
+  console.log('Copy');
+   console.log(copySLAV);
+  console.log('5');
+  //copySLAV.reverse();
+  console.log('6');
   mySLAV.join(copySLAV);
   return [mySLAV, gVtxs, gEdges];
 };
@@ -1733,11 +1737,12 @@ stepOneC = function (mySLAV, infEdges) {
   var i, len, node, pq, ref;
   pq = new PriorityQueue;
   ref = mySLAV.allNodes();
+
   for (i = 0, len = ref.length; i < len; i++) {
     node = ref[i];
     computeEvents(mySLAV, node, pq, infEdges);
   }
-  
+
   return pq;
 };
 //create a PriorityQueue object, initialized with allNodes.
@@ -1771,18 +1776,19 @@ computeEvents = function (mySLAV, node, pq, infEdges) {
 
 computeI = function (mySLAV, node) {
   var I1, I2, allEdgeEvents, d1, d2, e, u, v, w;
+  var one,two,three;
   allEdgeEvents = [];
   v = node.content;
-  allBisectors = [];
-  //add initial vertex case
+  //V is the initial vertex 
   if (node.pred == null) {
     console.log('IN INITIAL CASE');
     w = node.succ.content;
     e = line(v.outEdge);
     //-----bisector tracking---------//
-    allBisectors.push(v.bbbisector()[0]);
-    allBisectors.push(v.bbbisector()[1]);
-    allBisectors.push(w.bbbisector());
+    allBisectors.push(one=v.bbbisector()[0]);
+    allBisectors.push(two=v.bbbisector()[1]);
+    allBisectors.push(three=w.bbbisector());
+    console.log('Pushing bisectors from inital case');
     //-----bisector tracking---------//
 
     I1 = intersect(v.bbbisector()[0], w.bbbisector());
@@ -1799,25 +1805,18 @@ computeI = function (mySLAV, node) {
   //add final vertex case
   if (node.succ == null) {
     console.log('IN FINAL CASE');
-    console.log('v.inEdge');
-    console.log(v.inEdge);
     u = node.pred.content;
     e = line(v.inEdge);
-    console.log('e');
-    console.log(e);
 
       //-----bisector tracking---------//
       allBisectors.push(v.bbbisector()[0]);
       allBisectors.push(v.bbbisector()[1]);
       allBisectors.push(u.bbbisector());
+      console.log('Pushing bisectors from final case');
       //-----bisector tracking---------//
 
     I1 = intersect(v.bbbisector()[0], u.bbbisector());
-    console.log('I1');
-    console.log(I1);
     I2 = intersect(v.bbbisector()[1], u.bbbisector());
-    console.log('I2');
-    console.log(I2);
     if (I1 != null) {
       d1 = dist(I1, e);
       allEdgeEvents.push([["e", I1, node.pred, node], d1]);
@@ -1832,18 +1831,21 @@ computeI = function (mySLAV, node) {
     u = node.pred.content;
     w = node.succ.content;
     console.log('IN GENERAL CASE');
-
-         //-----bisector tracking---------//
-         allBisectors.push(v.bbbisector());
-        allBisectors.push(u.bbbisector());
-         //-----bisector tracking---------//
-
-
    // console.log('flag before error : in general case');
     e = line(v.inEdge);
     //Case where the vertex from inEdge is terminal
     if (u.bbbisector().length >= 2) {
       bis = u.bbbisector();
+
+      //-----bisector tracking---------//
+      console.log('IN GENERAL CASE with inedgeterminal');
+
+      allBisectors.push(u.bbbisector()[0]);
+      allBisectors.push(u.bbbisector()[1]);
+      allBisectors.push(v.bbbisector());
+      console.log('Pushing bisectors from general case');
+         //-----bisector tracking---------//
+
       I1array = bis.map(bis => intersect(bis, v.bbbisector()));
       //Push all the intersections
       for (i = 0, len = I1array.length; i < len; i++) {
@@ -1854,6 +1856,13 @@ computeI = function (mySLAV, node) {
         }
       }
     } else {
+      //-----bisector tracking---------//
+              console.log('IN GENERAL CASE with outEdge terminal');
+        allBisectors.push(u.bbbisector());
+        allBisectors.push(v.bbbisector());
+      console.log('Pushing bisectors from general case');
+   //-----bisector tracking---------//
+
       I1 = intersect(u.bbbisector(), v.bbbisector());
       if (I1 != null) {
         d1 = dist(I1, e);
@@ -1863,6 +1872,15 @@ computeI = function (mySLAV, node) {
 
     //Case where the vertex of outEdge is terminal
     if (w.bbbisector().length >= 2) {
+
+      //-----bisector tracking---------//
+      console.log('IN GENERAL CASE with outEdge terminal');
+      allBisectors.push(w.bbbisector()[0]);
+      allBisectors.push(w.bbbisector()[1]);
+      allBisectors.push(v.bbbisector());
+      console.log('Pushing bisectors from general case');
+         //-----bisector tracking---------//
+
       bis = w.bbbisector();
       I2array = bis.map(bis => intersect(v.bbbisector(), bis));
       //Push all the intersections
@@ -1874,6 +1892,14 @@ computeI = function (mySLAV, node) {
         }
       }
     } else {
+
+      //-----bisector tracking---------//
+      console.log('IN GENERAL CASE very general ');
+      allBisectors.push(w.bbbisector());
+      allBisectors.push(v.bbbisector());
+      console.log('Pushing bisectors from general case');
+         //-----bisector tracking---------//
+
       I2 = intersect(v.bbbisector(), w.bbbisector());
       if (I2 != null) {
         d2 = dist(I2, e);
@@ -1881,10 +1907,7 @@ computeI = function (mySLAV, node) {
       }
     }
   }
-  console.log('allBisectors');
-  console.log(allBisectors);
-  console.log(allBisectors[0]);
-  drawBisector(allBisectors[0]);
+  
   return allEdgeEvents;
 };
 
@@ -2355,17 +2378,17 @@ angleBisector = function (vert, inDirSeg, outDirSeg) {
     bisectorDir = new Point(Math.cos(theta / 2) * x - Math.sin(theta / 2) * y, Math.sin(theta / 2) * x + Math.cos(theta / 2) * y);
     return bisector = new LineOrRay(vert, vert.plus(bisectorDir), true);
   } else {
-    //initial vertex 
+    //final vertex 
     if (inDirSeg != null && outDirSeg == null) {
-      theta = 135 * Math.PI / 180;
+      theta = 45 * Math.PI / 180;
       x = inDirSeg.dir().x;
       y = inDirSeg.dir().y;
       bisectorDir1 = new Point(Math.cos(theta) * x - Math.sin(theta) * y, Math.sin(theta) * x + Math.cos(theta) * y);
-      theta = -135 * Math.PI / 180;
+      theta = -45 * Math.PI / 180;
       bisectorDir2 = new Point(Math.cos(theta) * x - Math.sin(theta) * y, Math.sin(theta) * x + Math.cos(theta) * y);
       return bisector = [new LineOrRay(vert, vert.plus(bisectorDir1), true), new LineOrRay(vert, vert.plus(bisectorDir2), true)]
     } else {
-      //final vertex
+      //initial vertex
       theta = 135 * Math.PI / 180;
       x = outDirSeg.dir().x;
       y = outDirSeg.dir().y;
@@ -3278,7 +3301,7 @@ drawLine = function (endpt1,endpt2) {
 };
 
 //For bisectors tracking
-drawBisector = function (lineorray) {
+drawBisector = function (lineorray,color) {
   ctx.beginPath();
   ctx.beginPath();
   endpt1 = lineorray.origin;
@@ -3286,7 +3309,7 @@ drawBisector = function (lineorray) {
   ctx.moveTo(endpt1.x, c - endpt1.y - b);
   ctx.lineTo(endpt2.x, c - endpt2.y - b);
   ctx.fill();
-  ctx.strokeStyle = "blue";
+  ctx.strokeStyle = color;
   ctx.lineWidth = 1;
   return ctx.stroke();
 };
