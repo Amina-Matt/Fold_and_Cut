@@ -16,81 +16,79 @@ nNode = (function() {
 
 DoublyLinkedList = (function () {
   function DoublyLinkedList(valuesList) {
-      var j, len, val;
-      //property
-      this.nodesList = [];
-      //fill the nodes list
-      if (valuesList != null) {
-          for (j = 0, len = valuesList.length; j < len; j++) {
-              val = valuesList[j];
-              this.push(val);
-          }
+    var j, len, val;
+    //property
+    this.nodesList = [];
+    //fill the nodes list
+    if (valuesList != null) {
+      for (j = 0, len = valuesList.length; j < len; j++) {
+        val = valuesList[j];
+        this.push(val);
       }
+    }
+  }
   // how to add a vertex the middle of a list
   DoublyLinkedList.prototype.push = function (val) {
-      if (this.head != null) {
-          //if the list already exist you just insert it
-          return this.insert(val, this.tail);
-      } else {
-          //if there isn't any list yet 
-          nood = new nNode(null, val,null);
-          this.head = nood;
-          this.tail = nood;
-          this.nodesList.push(this.head);
-          return ;
-      }
+    if (this.head != null) {
+      //if the list already exist you just insert it
+      return this.insert(val, this.tail);
+    } else {
+      //if there isn't any list yet 
+      nood = new nNode(null, val, null);
+      this.head = nood;
+      this.tail = nood;
+      this.nodesList.push(this.head);
+      return this.tail;
+    }
   };
 
   DoublyLinkedList.prototype.insert = function (val, prevnode) {
-      var nood, postnode;
-      nood = new nNode(prevnode, val, null);
-      //the new node points on the end, ie null
-      //its pred is the end of the existing list, this.tail == prevnode
-      //the nood before is now pointing to it
-      prevnode.succ = nood;
-      this.nodesList.push(nood);
-      this.tail = nood;
-      return nood;
+    var nood, postnode;
+    nood = new nNode(prevnode, val, null);
+    //the new node points on the end, ie null
+    //its pred is the end of the existing list, this.tail == prevnode
+    //the nood before is now pointing to it
+    prevnode.succ = nood;
+    this.nodesList.push(nood);
+    this.tail = nood;
+    return nood;
   };
-};
-
-DoublyLinkedList.prototype.allContents = function () {
-  var C, j, len, nood, ref;
-  C = [];
-  ref = this.nodesList;
-  for (j = 0, len = ref.length; j < len; j++) {
+  DoublyLinkedList.prototype.allContents = function () {
+    var C, j, len, nood, ref;
+    C = [];
+    ref = this.nodesList;
+    for (j = 0, len = ref.length; j < len; j++) {
       nood = ref[j];
       C.push(nood.content);
-  }
-  return C;
-};
+    }
+    return C;
+  };
 
-DoublyLinkedList.prototype.length = function () {
-  return this.nodesList.length;
-};
+  DoublyLinkedList.prototype.length = function () {
+    return this.nodesList.length;
+  };
 
-DoublyLinkedList.prototype.remove = function (nood) {
-  var postnode, prevnode;
-  if (this.length() === 0) {
+  DoublyLinkedList.prototype.remove = function (nood) {
+    var postnode, prevnode;
+    if (this.length() === 0) {
       return;
-  }
-  if (this.length() === 1 && nood === this.head) {
+    }
+    if (this.length() === 1 && nood === this.head) {
       this.nodesList = [];
       this.head = null;
       return this.tail = null;
-  } else {
+    } else {
       prevnode = nood.pred;
       postnode = nood.succ;
       prevnode.succ = postnode;
       postnode.pred = prevnode;
       this.nodesList.splice(this.nodesList.indexOf(nood), 1);
       if (nood === this.head) {
-          this.head = this.head.succ;
+        this.head = this.head.succ;
       }
-      return;
-  }
-};
-
+      return this.tail;
+    }
+  };
   DoublyLinkedList.prototype.reverse = function () {
     var j, len, nood, ref, tmp;
     ref = this.nodesList;
@@ -128,30 +126,30 @@ DoublyLinkedList.prototype.remove = function (nood) {
     return this;
   };
 
-DoublyLinkedList.prototype.copy = function () {
-  var copyDLL, elem;
-  copyDLL = new DoublyLinkedList();
-  copyDLL.push(this.head.content.copy());
-  elem = this.head.succ;
-  while (elem !== this.head && elem !== null) {
+  DoublyLinkedList.prototype.copy = function () {
+    var copyDLL, elem;
+    copyDLL = new DoublyLinkedList();
+    copyDLL.push(this.head.content.copy());
+    elem = this.head.succ;
+    while (elem !== this.head && elem !== null) {
       copyDLL.push(elem.content.copy());
       elem = elem.succ;
-  }
-  return copyDLL;
-};
+    }
+    return copyDLL;
+  };
 
-DoublyLinkedList.prototype.isInside = function (otherLAV) {
-  if (inside(this.head.content.point, otherLAV)) {
+  DoublyLinkedList.prototype.isInside = function (otherLAV) {
+    if (inside(this.head.content.point, otherLAV)) {
       return true;
-  }
-  return false;
-};
+    }
+    return false;
+  };
 
-DoublyLinkedList.prototype.orientation = function () {
-  var A, j, len, node, ref, v, w, x1, x2, y1, y2;
-  A = 0;
-  ref = this.nodesList;
-  for (j = 0, len = ref.length; j < len-1; j++) {
+  DoublyLinkedList.prototype.orientation = function () {
+    var A, j, len, node, ref, v, w, x1, x2, y1, y2;
+    A = 0;
+    ref = this.nodesList;
+    for (j = 0, len = ref.length; j < len - 1; j++) {
       node = ref[j];
       v = node.content.point;
       w = node.succ.content.point;
@@ -160,34 +158,33 @@ DoublyLinkedList.prototype.orientation = function () {
       y1 = v.y;
       y2 = w.y;
       A = A + (x2 - x1) * (y2 + y1);
-  }
-  if (A > 0) {
+    }
+    if (A > 0) {
       return -1;
-  }
-  return 1;
-};
+    }
+    return 1;
+  };
 
-DoublyLinkedList.prototype.positiveOrient = function () {
-  if (this.orientation() === -1) {
+  DoublyLinkedList.prototype.positiveOrient = function () {
+    if (this.orientation() === -1) {
       this.reverse();
-  }
-  return this;
-};
+    }
+    return this;
+  };
 
-DoublyLinkedList.prototype.print = function () {
-  var j, len, nood, ref, s;
-  s = " ";
-  ref = this.nodesList;
-  for (j = 0, len = ref.length; j < len; j++) {
+  DoublyLinkedList.prototype.print = function () {
+    var j, len, nood, ref, s;
+    s = " ";
+    ref = this.nodesList;
+    for (j = 0, len = ref.length; j < len; j++) {
       nood = ref[j];
       s = s + nood.content.print() + "\n ";
-  }
-  return s;
-};
+    }
+    return s;
+  };
 
-return DoublyLinkedList;
-
-}) ();
+  return DoublyLinkedList;
+})();
 
 CircularDoublyLinkedList = (function () {
   function CircularDoublyLinkedList(valuesList) {
@@ -395,7 +392,8 @@ PriorityQueue = (function () {
     for element in @list 
       s = s + s[0] + " ; "
       printing is weird the contents are gonna be weird
- */
+*/
+
 
 SLAV = (function () {
   function SLAV(setOfLAVs) {
